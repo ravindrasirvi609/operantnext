@@ -1,4 +1,4 @@
-import {connect} from "@/app/dbConfig/dbConfig";
+import {connect} from "@/dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/userModel";
 
