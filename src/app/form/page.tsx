@@ -1,22 +1,22 @@
 "use client";
-import Link from "next/link";
-import React, { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+
+import React, { useState, useRef } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
-import router from "next/router";
+import Swal from "sweetalert2";
 
 const AadhaarForm = () => {
   const formRef = useRef(null);
 
-  const [formData, setFormData] = React.useState({
+  const initialFormData = {
     name: "",
     dob: "",
     address: "",
     schoolName: "",
     collegeName: "",
     qualification: "",
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -26,43 +26,21 @@ const AadhaarForm = () => {
     }));
   };
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      dob: "",
-      address: "",
-      schoolName: "",
-      collegeName: "",
-      qualification: "",
-    });
-  };
-
-  const onLogin = async () => {
-    try {
-      const response = await axios.post("/api/users/form", formData);
-      console.log("form submitted successfully", response.data);
-      toast.success("form submitted successfully");
-      resetForm(); // Reset the form fields
-
-      router.push("/profile");
-    } catch (error: any) {
-      console.log("Login failed", error.message);
-      toast.error(error.message);
-    } finally {
-    }
-  };
-
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // Perform form submission or data processing here
-    console.log(formData);
-    onLogin();
+    try {
+      await axios.post("/api/users/form", formData);
+      Swal.fire("Good job!", "Form Successfully Submmited!", "success");
+      setFormData(initialFormData);
+    } catch (error) {
+      Swal.fire("Oops!", "Something went wrong", "error");
+    }
   };
 
   return (
     <div className="flex justify-center">
       <div className="w-1/2 p-6 bg-orange-600 rounded-lg">
-        <h1 className="text-2xl mb-4 justifly-center" >Operent Form</h1>
+        <h1 className="text-2xl mb-4 justifly-center">Operent Form</h1>
         <form id="onSubmit" onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="block mb-2 text-lg">
@@ -146,7 +124,7 @@ const AadhaarForm = () => {
           <div className="text-center">
             <button
               type="submit"
-              className= " mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              className=" mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
             >
               Submit
             </button>
