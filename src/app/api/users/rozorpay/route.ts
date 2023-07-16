@@ -1,19 +1,17 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import shortid from "shortid";
 
-
-export async function POST(req:NextApiRequest, res:NextApiResponse) {
+export async function POST(req: NextRequest) {
   console.log(req);
-  
-  if (req.method === 'POST') {
+
+  if (req.method === "POST") {
     // Initialize razorpay object
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY,
       key_secret: process.env.RAZORPAY_SECRET,
     });
-    console.log("razorpay",razorpay);
-    
+    console.log("razorpay", razorpay);
 
     // Create an order -> generate the OrderID -> Send it to the Front-end
     // Also, check the amount and currency on the backend (Security measure)
@@ -29,24 +27,23 @@ export async function POST(req:NextApiRequest, res:NextApiResponse) {
 
     try {
       const response = await razorpay.orders.create(options);
-      console.log("---------------------------------------------------",response);
+      console.log("---------------------------------------------------", response);
       const data = {
         id: response.id,
         currency: response.currency,
         amount: response.amount,
-      }
-      console.log("data",data);
-      
-      res.status(200).json({
+      };
+      console.log("data", data);
+
+     return NextResponse.json({
         id: response.id,
         currency: response.currency,
         amount: response.amount,
       });
     } catch (err) {
       console.log(err);
-      res.status(400).json(err);
     }
   } else {
-    // Handle any other HTTP method
+
   }
 }

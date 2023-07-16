@@ -22,22 +22,21 @@ export default function Home() {
     console.log(data);
     var options = {
       key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
-      name: "Manu Arora Pvt Ltd",
+      name: "OPF",
       currency: data.currency,
       amount: data.amount,
       order_id: data.id,
-      description: "Thankyou for your test donation",
-      image: "https://manuarora.in/logo.png",
-      handler: function (response) {
+      description: "Thankyou",
+      handler: function (response: { razorpay_payment_id: any; razorpay_order_id: any; razorpay_signature: any; }) {
         // Validate payment at server - using webhooks is a better idea.
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
         alert(response.razorpay_signature);
       },
       prefill: {
-        name: "Manu Arora",
-        email: "manuarorawork@gmail.com",
-        contact: "9999999999",
+        name: "Ravindra Choudhary",
+        email: "sirviravindra609@gmail.com",
+        contact: "8107199052",
       },
     };
 
