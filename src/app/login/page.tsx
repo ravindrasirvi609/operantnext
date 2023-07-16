@@ -40,6 +40,7 @@ export default function LoginPage() {
     }, [user]);
 
     return (
+        <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-[#31c14e] to-[#1a3e85]">
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
         <h1>{loading ? "Processing" : "Login"}</h1>
         <hr />
@@ -66,6 +67,7 @@ export default function LoginPage() {
             onClick={onLogin}
             className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">Login here</button>
             <Link href="/signup">Visit Signup page</Link>
+        </div>
         </div>
     )
 
