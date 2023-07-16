@@ -60,7 +60,7 @@ export default function Home() {
     });
   };
   return (
-    <div>
+    <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-[#31c14e] to-[#1a3e85]">
       <Head>
         <title>Integrate Payments 🔥</title>
         <meta
@@ -76,7 +76,7 @@ export default function Home() {
             <button
               onClick={makePayment}
               
-              
+              className="bg-gradient-to-r from-[#2E3137] to-[#1D2328] rounded-md w-full py-4 shadow-xl drop-shadow-2xl text-gray-300 font-bold"
             >
               payment 
             </button>
