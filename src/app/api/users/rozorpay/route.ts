@@ -6,9 +6,12 @@ export async function POST(req: NextRequest) {
   console.log(req);
 
   if (req.method === "POST") {
+    const keyId = process.env.RAZORPAY_KEY ?? "";
+    console.log("keyId", keyId);
+
     // Initialize razorpay object
     const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY,
+      key_id: keyId,
       key_secret: process.env.RAZORPAY_SECRET,
     });
     console.log("razorpay", razorpay);
@@ -35,7 +38,7 @@ export async function POST(req: NextRequest) {
       };
       console.log("data", data);
 
-     return NextResponse.json({
+      return NextResponse.json({
         id: response.id,
         currency: response.currency,
         amount: response.amount,

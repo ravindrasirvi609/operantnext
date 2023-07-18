@@ -2,33 +2,32 @@
 
 
 import Head from "next/head";
-import axios from "axios";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+
 
 export default function Home() {
-  const makePayment = async () => {
-    console.log("here...");
-    const res = await initializeRazorpay();
+  const [paymentInitialized, setPaymentInitialized] = useState(false);
 
-    if (!res) {
-      alert("Razorpay SDK Failed to load");
+  useEffect(() => {
+    initializeRazorpay();
+  }, []);
+
+  const makePayment = async () => {
+    if (!paymentInitialized) {
+      alert("Razorpay SDK failed to load");
       return;
     }
 
-    // Make API call to the serverless API
-    const data = await fetch("/api/users/rozorpay", { method: "POST" }).then((t) =>
-      t.json()
-    );
-    console.log(data);
-    var options = {
-      key: process.env.RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+    const data = await fetch("/api/users/rozorpay", { method: "POST" }).then((response) => response.json());
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
       name: "OPF",
       currency: data.currency,
       amount: data.amount,
       order_id: data.id,
-      description: "Thankyou",
-      handler: function (response: { razorpay_payment_id: any; razorpay_order_id: any; razorpay_signature: any; }) {
-        // Validate payment at server - using webhooks is a better idea.
+      description: "Thank you",
+      handler: function (response: any) {
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
         alert(response.razorpay_signature);
@@ -40,25 +39,22 @@ export default function Home() {
       },
     };
 
-    const paymentObject = new window.Razorpay(options);
+    const paymentObject = new (window as any).Razorpay(options);
     paymentObject.open();
   };
+
   const initializeRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      // document.body.appendChild(script);
-
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-
-      document.body.appendChild(script);
-    });
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => {
+      setPaymentInitialized(true);
+    };
+    script.onerror = () => {
+      setPaymentInitialized(false);
+    };
+    document.body.appendChild(script);
   };
+
   return (
     <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-[#31c14e] to-[#1a3e85]">
       <Head>
@@ -75,10 +71,9 @@ export default function Home() {
           <div className="bg-gradient-to-r from-[#3e4044] to-[#1D2328] p-[1px] rounded-md mb-4">
             <button
               onClick={makePayment}
-              
               className="bg-gradient-to-r from-[#2E3137] to-[#1D2328] rounded-md w-full py-4 shadow-xl drop-shadow-2xl text-gray-300 font-bold"
             >
-              payment 
+              payment
             </button>
           </div>
         </div>
