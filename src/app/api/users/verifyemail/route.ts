@@ -11,6 +11,8 @@ export async function POST(request: NextRequest){
 
     try {
         const reqBody = await request.json()
+        console.log("POST request body", reqBody);
+        
         const {token} = reqBody
         console.log(token);
 
