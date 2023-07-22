@@ -1,32 +1,32 @@
 "use client";
-
 import axios from "axios";
-import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function ResetPasswordPage() {
-
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [token, setToken] = useState("");
-  const [verified, setVerified] = useState(false);
-  const [error, setError] = useState(false);
-
-  const [user, setUser] = React.useState({
-    password: "",
-    confirmPassword: "",
-    token:token,
-  });
-
 
   const submit = async () => {
+    if (password !== confirmPassword) {
+      Swal.fire("Password and Confirm-Password Must Be Same!");
+      return;
+    }
     try {
-      const response = await axios.post("/api/users/resetpassword", user);
+      const requestData = {
+        password: password,
+        token: token,
+      };
+      const response = await axios.post(
+        "/api/users/resetpassword",
+        requestData
+      );
       Swal.fire("Good job!", "Password Reset Successfully!", "success");
       router.push("/login");
-    } catch (error: any) {
-      Swal.fire("Password Reset Failed", error.message, "error");
-    } finally {
+    } catch (error) {
+      Swal.fire("Password Reset Failed", "error", "error");
     }
   };
 
@@ -35,41 +35,35 @@ export default function ResetPasswordPage() {
     setToken(urlToken || "");
   }, []);
 
-//   useEffect(() => {
-//     if (token.length > 0) {
-//       verifyUserEmail();
-//     }
-//   }, [token]);
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1>Reset Your Password</h1>
 
-      <label htmlFor="password">password</label>
+      <label htmlFor="password">Password</label>
       <input
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
         id="password"
         type="password"
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        placeholder="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
       />
-      <label htmlFor="password">Confirm password</label>
+      <label htmlFor="password">Confirm Password</label>
       <input
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
         id="password"
         type="password"
-        value={user.confirmPassword}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="Confirm Password"
       />
+
       <button
-          onClick={submit}
-          className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-        >
-          Submit
-        </button>
+        onClick={submit}
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
+      >
+        Submit
+      </button>
     </div>
-    
   );
 }
