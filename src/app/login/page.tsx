@@ -18,6 +18,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
+
       Swal.fire("Good job!", "Login Successfully!", "success");
       router.push("/profile");
     } catch (error: any) {
@@ -44,17 +45,19 @@ export default function LoginPage() {
             const formdata = {
               email: login,
             };
-            const response = await axios.post("/api/users/forgotpassword", formdata);
-            console.log("res",response);
-
+            const response = await axios.post(
+              "/api/users/forgotpassword",
+              formdata
+            );
             if (response.data.message === "Success") {
-                console.log("res SuccessSuccess",response);
-                Swal.fire("success", "Please Check your mailbox for a new password", "success");
-
+              console.log("res SuccessSuccess", response);
+              Swal.fire(
+                "success",
+                "Please Check your mailbox for a new password",
+                "success"
+              );
               return response.data;
             } else {
-                console.log("res",response);
-
               throw new Error("Error creating a new password for the user");
             }
           } catch (error) {
@@ -63,17 +66,18 @@ export default function LoginPage() {
         },
         allowOutsideClick: () => !Swal.isLoading(),
       });
-  
+
       if (result.isConfirmed) {
-        Swal.fire("success", "Please Check your mailbox for a new password", "success");
-        // Handle the confirmed state if needed
+        Swal.fire(
+          "success",
+          "Please Check your mailbox for a new password",
+          "success"
+        );
       }
     } catch (error) {
       Swal.fire("error", "Forgot Password Failed", "error");
     }
   };
-  
-
   useEffect(() => {
     if (user.email.length > 0 && user.password.length > 0) {
       setButtonDisabled(false);

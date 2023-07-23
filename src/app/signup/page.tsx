@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -11,18 +12,32 @@ export default function SignupPage() {
   const [user, setUser] = React.useState({
     email: "",
     password: "",
+    confirmPassword: "",
     username: "",
   });
   const [buttonDisabled, setButtonDisabled] = React.useState(false);
   const onSighup = async () => {
     try {
+      if (user.password !== user.confirmPassword) {
+        Swal.fire("Password and Confirm-Password Must Be Same!");
+        return;
+      }
       setLoading(true);
       const response = await axios.post("api/users/signup", user);
-      console.log("response", response.data);
+      Swal.fire("User successfully Registered");
+      Swal.fire(
+        'User successfully Registered',
+        'Please Verify User From Mail Received mail',
+        'success'
+      )
       router.push("/login");
     } catch (error: any) {
       toast.error(error.message);
-      console.log("Failed to notify user about", error.message);
+      Swal.fire(
+        'User Registeration Failed!',
+        error.message,
+        'success'
+      )
     } finally {
       setLoading(false);
     }
@@ -43,7 +58,7 @@ export default function SignupPage() {
       <div className="flex flex-col items-center justify-center min-h-screen py-2 ">
         <h1>{loading ? "Loading..." : " Sign Up"}</h1>
         <hr />
-        <label htmlFor="username">username</label>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
           placeholder="username"
@@ -53,17 +68,7 @@ export default function SignupPage() {
           className="p-2 border border-gray-300 rounded-lg mb-4 focus-outline-none focus:before-gray-600 text-black"
         />
         <hr />
-        <label htmlFor="password">password</label>
-        <input
-          type="password"
-          placeholder="password"
-          id="password"
-          value={user.password}
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
-          className="p-2 border border-gray-300 rounded-lg mb-4 focus-outline-none focus:before-gray-600 text-black"
-        />
-        <hr />
-        <label htmlFor="email">email</label>
+        <label htmlFor="email">Email</label>
         <input
           type="email"
           placeholder="email"
@@ -72,6 +77,26 @@ export default function SignupPage() {
           onChange={(e) => setUser({ ...user, email: e.target.value })}
           className="p-2 border border-gray-300 rounded-lg mb-4 focus-outline-none focus:before-gray-600 text-black"
         />
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          placeholder="password"
+          id="password"
+          value={user.password}
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          className="p-2 border border-gray-300 rounded-lg mb-4 focus-outline-none focus:before-gray-600 text-black"
+        />
+        <label htmlFor="password">Confirm Password</label>
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          id="confirmPassword"
+          value={user.confirmPassword}
+          onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
+          className="p-2 border border-gray-300 rounded-lg mb-4 focus-outline-none focus:before-gray-600 text-black"
+        />
+        <hr />
+        
         <button
           onClick={onSighup}
           className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
