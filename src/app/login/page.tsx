@@ -90,7 +90,7 @@ export default function LoginPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <Image
           className="mx-auto h-15.5rem w-auto"
-          src="/opf.png"
+          src="/opflogo.png"
           alt="OPF Logo"
           height={1000} // The height of the image in pixels
           width={1000} // The width of the image in pixels

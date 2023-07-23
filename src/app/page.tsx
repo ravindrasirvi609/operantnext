@@ -40,8 +40,8 @@ export default function Home() {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Operant Pharmacy Federation</span>
               <Image
-                className="h-8 w-auto"
-                src="/OPF.png"
+                className="h-9 w-auto"
+                src="/opflogo.png"
                 alt=""
                 width={800}
                 height={500}
