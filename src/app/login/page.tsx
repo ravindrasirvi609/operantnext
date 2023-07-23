@@ -102,7 +102,7 @@ export default function LoginPage() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" action="#" method="POST">
+        <div className="space-y-6">
           <div>
             <label
               htmlFor="email"
@@ -164,7 +164,7 @@ export default function LoginPage() {
               Sign in
             </button>
           </div>
-        </form>
+        </div>
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Not a member?{" "}
