@@ -96,7 +96,7 @@ export default function LoginPage() {
           width={1000} // The width of the image in pixels
         />
 
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-lime-400	">
           {loading ? "Processing" : "Sign in to your account"}
         </h2>
       </div>
@@ -106,7 +106,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-gray-900"
+              className="block text-sm font-medium leading-6 text-lime-400"
             >
               Email address
             </label>
@@ -128,7 +128,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 text-lime-400	"
               >
                 Password
               </label>
