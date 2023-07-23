@@ -3,7 +3,6 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export default function SignupPage() {
@@ -24,20 +23,18 @@ export default function SignupPage() {
       }
       setLoading(true);
       const response = await axios.post("api/users/signup", user);
-      Swal.fire("User successfully Registered");
       Swal.fire(
-        'User successfully Registered',
-        'Please Verify User From Mail Received mail',
-        'success'
-      )
+        "User successfully Registered",
+        "Please Verify User From Received mail",
+        "success"
+      );
       router.push("/login");
     } catch (error: any) {
-      toast.error(error.message);
       Swal.fire(
-        'User Registeration Failed!',
-        error.message,
-        'success'
-      )
+        "User Registeration Failed!",
+        error.response.data.error,
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -92,11 +89,13 @@ export default function SignupPage() {
           placeholder="Confirm Password"
           id="confirmPassword"
           value={user.confirmPassword}
-          onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
+          onChange={(e) =>
+            setUser({ ...user, confirmPassword: e.target.value })
+          }
           className="p-2 border border-gray-300 rounded-lg mb-4 focus-outline-none focus:before-gray-600 text-black"
         />
         <hr />
-        
+
         <button
           onClick={onSighup}
           className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
