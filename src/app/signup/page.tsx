@@ -62,7 +62,7 @@ export default function SignupPage() {
           width={1000} // The width of the image in pixels
         />
 
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-lime-400	">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600	">
           {loading ? "Processing" : "Register Your Account"}
         </h2>
       </div>
@@ -72,7 +72,7 @@ export default function SignupPage() {
           <div>
             <label
               htmlFor="username"
-              className="block text-sm font-medium leading-6 text-lime-400"
+              className="block text-sm font-medium leading-6 text-indigo-600"
             >
               Username
             </label>
@@ -92,7 +92,7 @@ export default function SignupPage() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-lime-400"
+              className="block text-sm font-medium leading-6 text-indigo-600"
             >
               Email Address
             </label>
@@ -113,7 +113,7 @@ export default function SignupPage() {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-lime-400	"
+                className="block text-sm font-medium leading-6 text-indigo-600	"
               >
                 Password
               </label>
@@ -135,7 +135,7 @@ export default function SignupPage() {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium leading-6 text-lime-400	"
+                className="block text-sm font-medium leading-6 text-indigo-600	"
               >
                 Confirm Password
               </label>
@@ -146,7 +146,9 @@ export default function SignupPage() {
                 name="confirmPassword"
                 type="confirmPassword"
                 value={user.confirmPassword}
-                onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
+                onChange={(e) =>
+                  setUser({ ...user, confirmPassword: e.target.value })
+                }
                 autoComplete="current-password"
                 required
                 className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -162,7 +164,7 @@ export default function SignupPage() {
             >
               Register
             </button>
-          </div> 
+          </div>
         </div>
 
         <p className="mt-10 text-center text-sm text-gray-500">

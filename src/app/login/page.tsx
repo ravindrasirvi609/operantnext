@@ -96,7 +96,7 @@ export default function LoginPage() {
           width={1000} // The width of the image in pixels
         />
 
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-lime-400	">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600	">
           {loading ? "Processing" : "Sign in to your account"}
         </h2>
       </div>
@@ -106,7 +106,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium leading-6 text-lime-400"
+              className="block text-sm font-medium leading-6 text-indigo-600"
             >
               Email address
             </label>
@@ -128,14 +128,14 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium leading-6 text-lime-400	"
+                className="block text-sm font-medium leading-6 text-indigo-600	"
               >
                 Password
               </label>
               <div className="text-sm">
                 <button
                   onClick={ForgotPassword}
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  className="font-semibold text-indigo-300 hover:text-indigo-800"
                 >
                   Forgot password?
                 </button>

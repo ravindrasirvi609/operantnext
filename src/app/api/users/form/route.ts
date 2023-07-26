@@ -1,11 +1,16 @@
 import { connect } from "@/dbConfig/dbConfig";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 import UserForm from "@/models/userForm";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
+  console.log("POST", req);
+  
   try {
+    const userId = await getDataFromToken(req);
+    console.log("userId", userId);
     const response = await req.json();
     console.log("OK", response);
     const {
