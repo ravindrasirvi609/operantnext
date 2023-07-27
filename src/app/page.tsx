@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -15,19 +15,38 @@ const navigation = [
 ];
 
 export default function Home() {
-  const router = useRouter()
+  
+  const router = useRouter();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isVerified, setIsVerified] = useState(false); // Add this line to declare isVerified state
+
   const logout = async () => {
     try {
-        await axios.get('/api/users/logout')
-        toast.success('Logout successful')
-        router.push('/login')
-    } catch (error:any) {
-        console.log("my bame",error.message);
-        toast.error(error.message)
+      await axios.get("/api/users/logout");
+      toast.success("Logout successful");
+      router.push("/login");
+    } catch (error: any) {
+      console.log("my bame", error.message);
+      toast.error(error.message);
     }
-}
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/users/me");
+        const isVerified = response.data.data.isVerfied;
+        setIsVerified(isVerified);
+        // Check if the user is not verified and show a toast message
+        if (!isVerified) {
+          toast.error("User is not verified.");
+        }
+      } catch (error: any) {
+        console.log("Error fetching data:", error.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="bg-white">
@@ -73,7 +92,6 @@ export default function Home() {
             <a
               className="text-sm font-semibold leading-6 text-gray-900"
               onClick={logout}
-
             >
               Logout <span aria-hidden="true">&rarr;</span>
             </a>
@@ -147,7 +165,15 @@ export default function Home() {
             }}
           />
         </div>
+ 
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+        <div
+        className={`text-red-500 text-4xl font-bold sm:flex sm:justify-center bg-yellow-300	 ${
+          isVerified ? 'user-not-verified' : 'animate-scrolling-text'
+        }`}
+      >
+        The user is not verified.
+      </div>
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Announcing our next round of funding.{" "}
@@ -162,7 +188,8 @@ export default function Home() {
               Wellcome to the operant pharmacy
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-            Your path to wellness starts here - Operant Pharmacy, where quality care meets convenience for a healthier tomorrow.
+              Your path to wellness starts here - Operant Pharmacy, where
+              quality care meets convenience for a healthier tomorrow.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a

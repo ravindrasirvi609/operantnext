@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +23,7 @@ export default function ProfilePage() {
     console.log(res.data);
     setData(res.data.data.username);
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
