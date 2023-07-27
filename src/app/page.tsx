@@ -15,7 +15,6 @@ const navigation = [
 ];
 
 export default function Home() {
-  
   const router = useRouter();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -89,12 +88,12 @@ export default function Home() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
+            <button
               className="text-sm font-semibold leading-6 text-gray-900"
               onClick={logout}
             >
               Logout <span aria-hidden="true">&rarr;</span>
-            </a>
+            </button>
           </div>
         </nav>
         <Dialog
@@ -139,12 +138,12 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="py-6">
-                  <a
+                  <button
                     onClick={logout}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Logout
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -167,13 +166,11 @@ export default function Home() {
         </div>
  
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-        <div
-        className={`text-red-500 text-4xl font-bold sm:flex sm:justify-center bg-yellow-300	 ${
-          isVerified ? 'user-not-verified' : 'animate-scrolling-text'
-        }`}
-      >
-        The user is not verified.
+        {!isVerified ? (
+      <div className="text-red-500 text-4xl font-bold sm:flex sm:justify-center user-not-verified">
+        User is not verified.
       </div>
+    ) : null}
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Announcing our next round of funding.{" "}
