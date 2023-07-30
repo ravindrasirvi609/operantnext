@@ -19,6 +19,10 @@ const AadhaarForm = () => {
   const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
+    console.log("handleChange", e);
+    console.log("handleChange--------", e.target.value);
+
+    
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
