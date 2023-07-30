@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const navigation = [
   { name: "Profile", href: "/profile" },
@@ -35,13 +36,13 @@ export default function Home() {
       try {
         const response = await axios.get("/api/users/me");
         const isVerified = response.data.data.isVerfied;
-        setIsVerified(isVerified);
-        // Check if the user is not verified and show a toast message
         if (!isVerified) {
-          toast.error("User is not verified.");
+          Swal.fire("User is Not Verified");
+          logout();
         }
+        setIsVerified(isVerified);
       } catch (error: any) {
-        console.log("Error fetching data:", error.message);
+        Swal.fire(error.message);
       }
     };
     fetchData();
@@ -164,13 +165,13 @@ export default function Home() {
             }}
           />
         </div>
- 
+
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-        {!isVerified ? (
-      <div className="text-red-500 text-4xl font-bold sm:flex sm:justify-center user-not-verified">
-        User is not verified.
-      </div>
-    ) : null}
+          {!isVerified ? (
+            <div className="text-red-500 text-4xl font-bold sm:flex sm:justify-center user-not-verified">
+              User is not verified.
+            </div>
+          ) : null}
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Announcing our next round of funding.{" "}

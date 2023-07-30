@@ -6,7 +6,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Image from "next/image";
 
-// Define the type for validationErrors to allow indexing by any string
 type ValidationErrors = {
   [key: string]: string;
 };
@@ -60,7 +59,6 @@ export default function SignupPage() {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
 
-    // Perform validation for each field and update errors state
     const validationErrors: ValidationErrors = {
       email: "",
       password: "",
