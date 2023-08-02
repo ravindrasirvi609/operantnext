@@ -30,6 +30,8 @@ const AadhaarForm = () => {
     }));
   };
 
+
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
