@@ -8,12 +8,28 @@ const AadhaarForm = () => {
   const formRef = useRef(null);
 
   const initialFormData = {
-    name: "",
+    profileImage: null,
+    firstName: "",
+    lastName: "",
+    personalEmail: "",
+    mobileNo: "",
+    aadharNo: "",
     dob: "",
-    address: "",
-    schoolName: "",
-    collegeName: "",
-    qualification: "",
+    streetAddress: "",
+    town: "",
+    district: "",
+    state: "",
+    country: "",
+    secSclName: "",
+    secMarks: "",
+    srSecSclName: "",
+    srSecMarks: "",
+    ugColleageName: "",
+    ugCourseName: "",
+    ugMarks: "",
+    pgColleageName: "",
+    pgCourseName: "",
+    pgMarks: "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -22,15 +38,12 @@ const AadhaarForm = () => {
     console.log("handleChange", e);
     console.log("handleChange--------", e.target.value);
 
-    
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-
-
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -52,88 +65,324 @@ const AadhaarForm = () => {
           </h1>
           <form id="onSubmit" onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="name" className="block mb-2 text-lg">
-                Name:
+              <label htmlFor="profileImage" className="block mb-2 text-lg">
+                Profile Image:
               </label>
               <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                type="file"
+                id="profileImage"
+                name="profileImage"
                 onChange={handleChange}
-                required
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
 
-            <label htmlFor="dob" className="block mb-2 text-lg">
-              Date of Birth:
-            </label>
-            <input
-              type="date"
-              id="dob"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-              required
-            />
+            <div className="mb-4">
+              <label htmlFor="firstName" className="block mb-2 text-lg">
+                First Name:
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <label htmlFor="address" className="block mb-2 text-lg">
-              Address:
-            </label>
-            <textarea
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-              required
-            />
+            <div className="mb-4">
+              <label htmlFor="lastName" className="block mb-2 text-lg">
+                Last Name:
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <label htmlFor="schoolName" className="block mb-2 text-lg">
-              School Name:
-            </label>
-            <input
-              type="text"
-              id="schoolName"
-              name="schoolName"
-              value={formData.schoolName}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-              required
-            />
+            <div className="mb-4">
+              <label htmlFor="personalEmail" className="block mb-2 text-lg">
+                Email:
+              </label>
+              <input
+                type="email"
+                id="personalEmail"
+                name="personalEmail"
+                value={formData.personalEmail}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+              <p className="text-xs text-gray-600 mt-1">
+                * Active Email is required for Early Notification
+              </p>
+            </div>
 
-            <label htmlFor="collegeName" className="block mb-2 text-lg">
-              College Name:
-            </label>
-            <input
-              type="text"
-              id="collegeName"
-              name="collegeName"
-              value={formData.collegeName}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-              required
-            />
+            <div className="mb-4">
+              <label htmlFor="mobileNo" className="block mb-2 text-lg">
+                Mobile No.:
+              </label>
+              <input
+                type="tel"
+                id="mobileNo"
+                name="mobileNo"
+                value={formData.mobileNo}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-            <label htmlFor="qualification" className="block mb-2 text-lg">
-              Qualification:
-            </label>
-            <input
-              type="text"
-              id="qualification"
-              name="qualification"
-              value={formData.qualification}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-              required
-            />
+            <div className="mb-4">
+              <label htmlFor="aadharNo" className="block mb-2 text-lg">
+                Aadhar No.:
+              </label>
+              <input
+                type="number"
+                id="aadharNo"
+                name="aadharNo"
+                value={formData.aadharNo}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <p className="text-xs text-gray-600 mt-1">
+                * Aadhar is required for DigiLoker Certificate
+              </p>
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="dob" className="block mb-2 text-lg">
+                Date of Birth:
+              </label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="streetAddress" className="block mb-2 text-lg">
+                Street Address:
+              </label>
+              <input
+                type="text"
+                id="streetAddress"
+                name="streetAddress"
+                value={formData.streetAddress}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="town" className="block mb-2 text-lg">
+                Town:
+              </label>
+              <input
+                type="text"
+                id="town"
+                name="town"
+                value={formData.town}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="district" className="block mb-2 text-lg">
+                District:
+              </label>
+              <input
+                type="text"
+                id="district"
+                name="district"
+                value={formData.district}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="state" className="block mb-2 text-lg">
+                State:
+              </label>
+              <input
+                type="text"
+                id="state"
+                name="state"
+                value={formData.state}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="country" className="block mb-2 text-lg">
+                Country:
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="secSclName" className="block mb-2 text-lg">
+                10th School Name:
+              </label>
+              <input
+                type="text"
+                id="secSclName"
+                name="secSclName"
+                value={formData.secSclName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="secMarks" className="block mb-2 text-lg">
+                10th Percentage:
+              </label>
+              <input
+                type="number"
+                id="secMarks"
+                name="secMarks"
+                value={formData.secMarks}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="srSecSclName" className="block mb-2 text-lg">
+                12th School Name:
+              </label>
+              <input
+                type="text"
+                id="srSecSclName"
+                name="srSecSclName"
+                value={formData.srSecSclName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="srSecMarks" className="block mb-2 text-lg">
+                12th Percentage:
+              </label>
+              <input
+                type="number"
+                id="srSecMarks"
+                name="srSecMarks"
+                value={formData.srSecMarks}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="ugColleageName" className="block mb-2 text-lg">
+                College Name (UG):
+              </label>
+              <input
+                type="text"
+                id="ugColleageName"
+                name="ugColleageName"
+                value={formData.ugColleageName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="ugCourseName" className="block mb-2 text-lg">
+                Course Name (UG):
+              </label>
+              <input
+                type="text"
+                id="ugCourseName"
+                name="ugCourseName"
+                value={formData.ugCourseName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="ugMarks" className="block mb-2 text-lg">
+                CGPA (UG):
+              </label>
+              <input
+                type="number"
+                id="ugMarks"
+                name="ugMarks"
+                value={formData.ugMarks}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="pgColleageName" className="block mb-2 text-lg">
+                College Name (PG):
+              </label>
+              <input
+                type="text"
+                id="pgColleageName"
+                name="pgColleageName"
+                value={formData.pgColleageName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="pgCourseName" className="block mb-2 text-lg">
+                Course Name (PG):
+              </label>
+              <input
+                type="text"
+                id="pgCourseName"
+                name="pgCourseName"
+                value={formData.pgCourseName}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="pgMarks" className="block mb-2 text-lg">
+                CGPA (PG):
+              </label>
+              <input
+                type="number"
+                id="pgMarks"
+                name="pgMarks"
+                value={formData.pgMarks}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
             <div className="text-center">
               <button
                 type="submit"
-                className=" mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
               >
                 Submit
               </button>
