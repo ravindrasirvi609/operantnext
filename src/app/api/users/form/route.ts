@@ -8,10 +8,13 @@ connect();
 
 export async function POST(req: NextRequest) {
   console.log("POST", req);
-  
+
   try {
-    const userId = await getDataFromToken(req);
-    console.log("userId------", userId);
+    // Step 1: Obtain the logged-in user's ID
+  //  const _id = await getDataFromToken(req);
+  //  console.log("userId------", _id);
+
+    // Step 2: Get form data from request body
     const response = await req.json();
     console.log("OK", response);
     const {
@@ -38,9 +41,10 @@ export async function POST(req: NextRequest) {
       pgCourseName,
       pgMarks,
     } = response;
-    
-    const newUser = new UserForm({
-      
+
+    // Step 3: Create a new UserForm instance with associated userId
+    const newUserForm = new UserForm({
+   //   _id, // Associate the form data with the logged-in user's ID
       profileImage,
       firstName,
       lastName,
@@ -65,36 +69,14 @@ export async function POST(req: NextRequest) {
       pgMarks,
     });
 
-    const savedUser = await newUser.save();
-    console.log(savedUser);
+    // Step 4: Save the user form data to the database
+    const savedUserForm = await newUserForm.save();
+    console.log(savedUserForm);
 
-    return new NextResponse('User saved successfully', savedUser);
+    // Step 5: Return the response
+    return new NextResponse('User form saved successfully', savedUserForm);
   } catch (error) {
     console.log(error);
-    return new NextResponse('Error saving user', { status: 500 });
-  }
-
-
-  
-}
-export async function GET(request: NextRequest) {
-  try {
-    const reqBody = await request.json();
-    const { email } = reqBody;
-
-    // Fetch user based on email or any other identifier
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    // Return the user ID
-    return NextResponse.json({ userId: user });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return new NextResponse('Error saving user form', { status: 500 });
   }
 }
