@@ -1,27 +1,19 @@
 "use client";
-
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-
-interface UserData {
-  username: string;
-  email: string;
-  // Add other properties as needed based on the API response
-}
-const initialUserData: UserData | null = null;
 
 const AadhaarForm = () => {
   const formRef = useRef(null);
 
   const initialFormData = {
     profileImage: null,
-    firstName: "",
-    lastName: "",
+    firstName: "", // Set the default value to null
+    lastName: "", // Set the default value to null
     personalEmail: "",
     mobileNo: "",
     aadharNo: "",
-    dob: "",
+    dob: "", // Set dob format as "15/04/2018"
     streetAddress: "",
     town: "",
     district: "",
@@ -40,52 +32,48 @@ const AadhaarForm = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-  const [userData, setUserData] = useState<UserData | null>(initialUserData);
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
-    console.log("handleChange", e);
-    console.log("handleChange--------", e.target.value);
-
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/api/users/form");
-        const formData = response.data; // Assuming the API returns the form data directly
-        setFormData(formData);
-        console.log("userForm------***", response);
-
+        const receivedFormData = response.data;
+        console.log("received", receivedFormData);
+  
+        // Check if received data is valid
+        if (receivedFormData && receivedFormData.data) {
+          // Set the form data with the received data
+          setFormData({
+            ...initialFormData,
+            ...receivedFormData.data,
+          });
+  
+          // If firstName and lastName fields exist, you can log them if needed
+          console.log("FirstName: " + receivedFormData.data.firstName);
+          console.log("LastName: " + receivedFormData.data.lastName);
+        }
       } catch (error: any) {
         Swal.fire(error.message);
       }
     };
     fetchData();
   }, []);
+  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/users/me");
-        const userData: UserData = response.data.data;
-
-        setUserData(userData);
-      } catch (error: any) {
-        Swal.fire(error.message);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
       await axios.post("/api/users/form", formData);
-      Swal.fire("Good job!", "Form Successfully Submmited!", "success");
+      Swal.fire("Good job!", "Form Successfully Submitted!", "success");
       setFormData(initialFormData);
     } catch (error) {
       Swal.fire("Oops!", "Something went wrong", "error");
@@ -154,7 +142,7 @@ const AadhaarForm = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               /> */}
-               <input
+              <input
                 type="email"
                 id="personalEmail"
                 name="personalEmail"
@@ -162,7 +150,7 @@ const AadhaarForm = () => {
                 onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
-              /> 
+              />
               <p className="text-xs text-gray-600 mt-1">
                 * Active Email is required for Early Notification
               </p>
