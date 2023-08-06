@@ -47,7 +47,7 @@ const AadhaarForm = () => {
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
         console.log("received", receivedFormData);
-  
+
         // Check if received data is valid
         if (receivedFormData && receivedFormData.data) {
           // Set the form data with the received data
@@ -55,10 +55,6 @@ const AadhaarForm = () => {
             ...initialFormData,
             ...receivedFormData.data,
           });
-  
-          // If firstName and lastName fields exist, you can log them if needed
-          console.log("FirstName: " + receivedFormData.data.firstName);
-          console.log("LastName: " + receivedFormData.data.lastName);
         }
       } catch (error: any) {
         Swal.fire(error.message);
@@ -66,8 +62,6 @@ const AadhaarForm = () => {
     };
     fetchData();
   }, []);
-  
-
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
