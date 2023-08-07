@@ -84,12 +84,10 @@ const AadhaarForm = () => {
   };
 
   return (
-    <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-[#31c14e] to-[#1a3e85]">
-      <div className="flex justify-center">
-        <div className="w-1/2 p-6 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 rounded-lg">
-          <h1 className="text-2xl text-justify justify-center text-cyan-950 font-bold mb-4 flex justifly-center">
-            Operent Form
-          </h1>
+    <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-blue-200 to-blue-300">
+  <div className="flex justify-center">
+    <div className="w-2/3 p-6 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 rounded-lg">
+      <h1 className="text-3xl text-center text-blue-900 font-bold mb-8">Registration Form</h1>
           <form id="onSubmit" onSubmit={handleSubmit}>
             <div className="mb-4">
               <label htmlFor="profileImage" className="block mb-2 text-lg">
