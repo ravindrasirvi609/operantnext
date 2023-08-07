@@ -2,8 +2,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const AadhaarForm = () => {
+  const router = useRouter();
+
   const formRef = useRef(null);
 
   const initialFormData = {
@@ -77,6 +80,8 @@ const AadhaarForm = () => {
     try {
       await axios.post("/api/users/form", formData);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
+      router.push("/rozorpay");
+
       setFormData(initialFormData);
     } catch (error) {
       Swal.fire("Oops!", "Something went wrong", "error");
@@ -85,12 +90,17 @@ const AadhaarForm = () => {
 
   return (
     <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-blue-200 to-blue-300">
-  <div className="flex justify-center">
-    <div className="w-2/3 p-6 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 rounded-lg">
-      <h1 className="text-3xl text-center text-blue-900 font-bold mb-8">Registration Form</h1>
+      <div className="flex justify-center">
+        <div className="w-2/3 p-6 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 rounded-lg">
+          <h1 className="text-3xl text-center text-blue-900 font-bold mb-8">
+            Registration Form
+          </h1>
           <form id="onSubmit" onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="profileImage" className="block mb-2 text-lg">
+              <label
+                htmlFor="profileImage"
+                className="block mb-2 text-lg text-blue-900"
+              >
                 Profile Image:
               </label>
               <input

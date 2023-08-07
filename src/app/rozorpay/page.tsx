@@ -1,8 +1,10 @@
 "use client";
 
 
+import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 
 export default function Home() {
@@ -12,14 +14,28 @@ export default function Home() {
     initializeRazorpay();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/users/form");
+        const receivedFormData = response.data.data;
+        console.log("received", receivedFormData);
+        console.log("received first name and last", receivedFormData.firstName);
+        
+      } catch (error: any) {
+        Swal.fire(error.message);
+      }
+    };
+    fetchData();
+  }, []);
+
   const makePayment = async () => {
     if (!paymentInitialized) {
       alert("Razorpay SDK failed to load");
       return;
     }
 
-    const data = await fetch("/api/users/rozorpay", { method: "POST" }).then((response) => response.json());
-
+    const data = await fetch("/api/users/rozorpay", { method: "POST" }).then((response) => response.json());    
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
       name: "OPF",
@@ -56,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-[#31c14e] to-[#1a3e85]">
+    <div className="font-Inter h-screen overflow-auto bg-gradient-to-r from-blue-400 to-blue-500">
       <Head>
         <title>Integrate Payments 🔥</title>
         <meta
