@@ -17,11 +17,32 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const data = await fetch("/api/users/rozorpay", { method: "POST" }).then((response) => response.json());    
+
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data.data;
-        console.log("received", receivedFormData);
-        console.log("received first name and last", receivedFormData.firstName);
-        
+  
+        const options = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+          name: "OPF",
+          currency: data.currency,
+          amount: data.amount,
+          order_id: data.id,
+          description: "Thank you",
+          handler: function (response: any) {
+            alert(response.razorpay_payment_id);
+            alert(response.razorpay_order_id);
+            alert(response.razorpay_signature);
+          },
+          prefill: {
+            name: receivedFormData.firstName, // Set the first name here
+            email: receivedFormData.personalEmail, // Set the email here
+            contact: receivedFormData.mobileNo,
+          },
+        };
+  
+        const paymentObject = new (window as any).Razorpay(options);
+        paymentObject.open();
       } catch (error: any) {
         Swal.fire(error.message);
       }
