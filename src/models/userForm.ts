@@ -17,10 +17,10 @@ const userFormSchema = new mongoose.Schema({
   secMarks: { type: Number },
   srSecSclName: { type: String },
   srSecMarks: { type: Number },
-  ugCollegeName: { type: String },
+  ugColleageName: { type: String },
   ugCourseName: { type: String },
   ugMarks: { type: Number },
-  pgCollegeName: { type: String },
+  pgColleageName: { type: String },
   pgCourseName: { type: String },
   pgMarks: { type: Number },
 });

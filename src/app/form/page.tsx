@@ -8,12 +8,12 @@ const AadhaarForm = () => {
 
   const initialFormData = {
     profileImage: null,
-    firstName: "", // Set the default value to null
-    lastName: "", // Set the default value to null
+    firstName: "",
+    lastName: "",
     personalEmail: "",
     mobileNo: "",
     aadharNo: "",
-    dob: "", // Set dob format as "15/04/2018"
+    dob: "",
     streetAddress: "",
     town: "",
     district: "",
@@ -48,12 +48,21 @@ const AadhaarForm = () => {
         const receivedFormData = response.data;
         console.log("received", receivedFormData);
 
-        // Check if received data is valid
         if (receivedFormData && receivedFormData.data) {
-          // Set the form data with the received data
+          const parsedDate = new Date(receivedFormData.data.dob);
+
+          const formattedDate =
+            parsedDate.getDate() +
+            "/" +
+            (parsedDate.getMonth() + 1) +
+            "/" +
+            parsedDate.getFullYear();
+          console.log("formattedDate", formattedDate);
+
           setFormData({
             ...initialFormData,
             ...receivedFormData.data,
+            dob: formattedDate,
           });
         }
       } catch (error: any) {
@@ -127,15 +136,6 @@ const AadhaarForm = () => {
               <label htmlFor="personalEmail" className="block mb-2 text-lg">
                 Email:
               </label>
-              {/* <input
-                type="email"
-                id="personalEmail"
-                name="personalEmail"
-                value={userData?.email || ""} // Set the value to userData.email if it exists, otherwise use an empty string
-                readOnly // Add readOnly attribute to make it read-only
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              /> */}
               <input
                 type="email"
                 id="personalEmail"
