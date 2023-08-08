@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       key_secret: process.env.RAZORPAY_SECRET,
     });
     const payment_capture = 1;
-    const amount = 499;
+    const amount = 1;
     const currency = "INR";
     const options = {
       amount: (amount * 100).toString(),
@@ -35,3 +35,4 @@ export async function POST(req: NextRequest) {
     }
   }
 }
+
