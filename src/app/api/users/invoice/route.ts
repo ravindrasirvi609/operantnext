@@ -21,6 +21,8 @@ function generateInvoiceHtml(orderId: string /* ...other data... */): string {
 }
 
 export async function POST(req: NextRequest) {
+    console.log("POST request", req);
+    
   if (req.method === "POST") {
     try {
       // Extract order ID from the URL query parameters

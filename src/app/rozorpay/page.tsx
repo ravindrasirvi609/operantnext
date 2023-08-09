@@ -36,9 +36,7 @@ export default function Home() {
           // Download the invoice PDF
           try {
             const invoiceResponse = await axios.post(
-              `/api/users/invoice/${data.id}`,
-              {},
-              { responseType: "arraybuffer" }
+              "/api/users/invoice"
             );
             const blob = new Blob([invoiceResponse.data], {
               type: "application/pdf",
@@ -56,7 +54,7 @@ export default function Home() {
         },
         // ...rest of your options...
       };
-console.log("Invoice", options );
+      console.log("Invoice", options);
 
       const paymentObject = new (window as any).Razorpay(options);
       paymentObject.open();
