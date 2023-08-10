@@ -11,6 +11,8 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { email, password } = reqBody;
     const user = await User.findOne({ email });
+    console.log("user", user);
+
     if (!user) {
       return NextResponse.json(
         { error: "User Not Registered" },
@@ -24,20 +26,24 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    console.log("Password: " + user.isVerrified);
+
     const tokenData = {
       id: user._id,
       username: user.username,
       email: user.email,
+      isVerrified: user.isVerrified,
     };
+    console.log("token: " + tokenData);
+
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
       expiresIn: "1d",
     });
-    console.log("token: " + token);
-    
+
     const response = NextResponse.json({
-      message: "Login successful",
+      message: "Login successfully completed",
       success: true,
-      data : tokenData,
+      data: tokenData,
     });
     response.cookies.set("token", token, {
       httpOnly: true,
