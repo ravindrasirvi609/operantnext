@@ -11,7 +11,6 @@ import Swal from "sweetalert2";
 interface UserData {
   username: string;
   email: string;
-  // Add other properties as needed based on the API response
 }
 const initialUserData: UserData | null = null;
 
@@ -26,13 +25,12 @@ export default function Home() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isVerified, setIsVerified] = useState(false); // Add this line to declare isVerified state
 
   const logout = async () => {
     try {
       await axios.get("/api/users/logout");
-      toast.success("Logout successful");
       router.push("/login");
+      toast.success("Logout successful");
     } catch (error: any) {
       console.log("my bame", error.message);
       toast.error(error.message);
@@ -46,12 +44,7 @@ export default function Home() {
 
         // Set the user data to the state
         setUserData(userData);
-        const isVerified = response.data.data.isVerfied;
-        if (!isVerified) {
-          Swal.fire("User is Not Verified");
-          logout();
-        }
-        setIsVerified(isVerified);
+
       } catch (error: any) {
         Swal.fire(error.message);
       }

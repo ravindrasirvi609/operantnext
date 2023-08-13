@@ -11,8 +11,6 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { username, email, password } = reqBody;
-    console.log(reqBody);
-    // check if user already exists
     const user = await User.findOne({ email });
     if (user) {
       return NextResponse.json(
@@ -32,16 +30,14 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
     });
     const savedUser = await newUser.save();
-    console.log(savedUser);
-
     // Create the user in the "userForm" collection
-    const userForm = new UserForm({
-      _id: savedUser._id,
-      email:savedUser.email,
-      username:savedUser.username 
-      
-    });
-    await userForm.save();
+    // const userForm = new UserForm({
+    //   _id: savedUser._id,
+    //   email:savedUser.email,
+    //   username:savedUser.username
+
+    // });
+    // await userForm.save();
 
     // send verification email
     await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });

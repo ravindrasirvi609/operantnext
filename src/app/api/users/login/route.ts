@@ -26,13 +26,20 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    console.log("Password: " + user.isVerrified);
 
+    console.log("isVerified: " + user.isVerfied);
+
+    if (!user.isVerfied) {
+      return NextResponse.json(
+        { error: "User is not verified yet" },
+        { status: 400 }
+      );
+    }
     const tokenData = {
       id: user._id,
       username: user.username,
       email: user.email,
-      isVerrified: user.isVerrified,
+      isVerfied: user.isVerfied,
     };
     console.log("token: " + tokenData);
 
