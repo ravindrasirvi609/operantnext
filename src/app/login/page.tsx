@@ -19,8 +19,8 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
-      Swal.fire("Good job!", "Login Successfully!", "success");
       router.push("/");
+      Swal.fire("Good job!", "Login Successfully!", "success");
     } catch (error: any) {
       Swal.fire("Login failed", error.response.data.error, "error");
     } finally {
