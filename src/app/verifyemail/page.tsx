@@ -37,7 +37,7 @@ export default function VerifyEmailPage() {
           Verify Email
         </h1>
         <h2 className="p-2 bg-orange-500 text-black text-lg text-center font-semibold mb-4">
-          {token ? `${token}` : "No token"}
+          {token ? "token Available" : "No token"}
         </h2>
 
         {verified ? (
