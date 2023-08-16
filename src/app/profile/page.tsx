@@ -56,30 +56,34 @@ export default function ProfilePage() {
         {userData ? (
           <div>
             <h2 className="text-xl font-semibold mb-2">
-              {data === 'nothing' ? (
-                'Nothing'
+              {data === "nothing" ? (
+                "Nothing"
               ) : (
-                // <Link href={`/profile/${data}`}>
-                //   <a className="text-blue-500 hover:underline">{data}</a>
-                // </Link>
-                <Link href={`/profile/${data}`}>{data}</Link>
+                <a className="text-blue-500 hover:underline">
+                  <Link href={`/profile/${data}`}>{data}</Link>
+                </a>
               )}
             </h2>
             <p className="mb-2">
-              <span className="font-semibold">First Name:</span> {userData.firstName}
+              <span className="font-semibold">First Name:</span>{" "}
+              {userData.firstName}
             </p>
             <p className="mb-2">
-              <span className="font-semibold">Last Name:</span> {userData.lastName}
+              <span className="font-semibold">Last Name:</span>{" "}
+              {userData.lastName}
             </p>
             <p className="mb-2">
-              <span className="font-semibold">Email:</span> {userData.personalEmail}
+              <span className="font-semibold">Email:</span>{" "}
+              {userData.personalEmail}
             </p>
             <p className="mb-2">
-              <span className="font-semibold">Mobile No:</span> {userData.mobileNo}
+              <span className="font-semibold">Mobile No:</span>{" "}
+              {userData.mobileNo}
             </p>
             <p className="mb-2">
-              <span className="font-semibold">Address:</span> {userData.streetAddress},{' '}
-              {userData.town}, {userData.district}, {userData.state}, {userData.country}
+              <span className="font-semibold">Address:</span>{" "}
+              {userData.streetAddress}, {userData.town}, {userData.district},{" "}
+              {userData.state}, {userData.country}
             </p>
           </div>
         ) : (

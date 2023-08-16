@@ -91,7 +91,7 @@ const AadhaarForm = () => {
   return (
     <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-blue-200 to-blue-300">
       <div className="flex justify-center">
-        <div className="w-2/3 p-6 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 rounded-lg">
+        <div className=" p-6 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 rounded-lg">
           <h1 className="text-3xl text-center text-blue-900 font-bold mb-8">
             Registration Form
           </h1>
