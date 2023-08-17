@@ -35,6 +35,11 @@ const AadhaarForm = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (e: any) => {
+    setSelectedImage(e.target.files[0]);
+  };
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -47,6 +52,7 @@ const AadhaarForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
         console.log("received", receivedFormData);
@@ -77,7 +83,14 @@ const AadhaarForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    try {
+      try {
+       // const formData = new FormData();
+      //  formDataWithImage.append("profileImage1", selectedImage);
+    
+        // for (const key in formData) {
+        //   formDataWithImage.append(key, formData[key]);
+        // }
+    
       await axios.post("/api/users/form", formData);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
       router.push("/rozorpay");
@@ -107,7 +120,7 @@ const AadhaarForm = () => {
                 type="file"
                 id="profileImage"
                 name="profileImage"
-                onChange={handleChange}
+                onChange={handleImageChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>

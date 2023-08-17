@@ -7,19 +7,17 @@ import { NextRequest, NextResponse } from "next/server";
 connect();
 
 export async function POST(req: NextRequest) {
-
   try {
     const userId = await getDataFromToken(req);
-    console.log("userId------", userId);
-
-    // Step 2: Get form data from request body
+    // const data = await req.formData();
+    // const file: File | null = data.get("profileImage1") as unknown as File;
+    // const bytes = await file.arrayBuffer();
+    // const buffer = Buffer.from(bytes);
     const response = await req.json();
     console.log("OK", response);
 
-    // Step 3: Find the existing user form data based on the user's ID
     let userForm = await UserForm.findOne({ _id: userId });
 
-    // Step 4: If userForm exists, update the fields with the new data, otherwise create a new entry
     if (userForm) {
       userForm = await UserForm.findOneAndUpdate({ _id: userId }, response, {
         new: true,
@@ -52,13 +50,11 @@ export async function GET(req: NextRequest) {
     const resp = NextResponse.json({
       message: "data recieved successful",
       success: true,
-      data : userForm,
+      data: userForm,
     });
     console.log("response =", resp);
-    
+
     return resp;
-
-
   } catch (error) {
     console.log(error);
     return new NextResponse("Error fetching user form", { status: 500 });
