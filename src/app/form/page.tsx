@@ -134,7 +134,6 @@ const AadhaarForm = () => {
                 id="firstName"
                 name="firstName"
                 value={formData.firstName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -148,7 +147,6 @@ const AadhaarForm = () => {
                 id="lastName"
                 name="lastName"
                 value={formData.lastName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -162,7 +160,6 @@ const AadhaarForm = () => {
                 id="personalEmail"
                 name="personalEmail"
                 value={formData.personalEmail}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
@@ -180,7 +177,6 @@ const AadhaarForm = () => {
                 id="mobileNo"
                 name="mobileNo"
                 value={formData.mobileNo}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -194,7 +190,6 @@ const AadhaarForm = () => {
                 id="aadharNo"
                 name="aadharNo"
                 value={formData.aadharNo}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
               <p className="text-xs text-gray-600 mt-1">
@@ -226,7 +221,6 @@ const AadhaarForm = () => {
                 id="streetAddress"
                 name="streetAddress"
                 value={formData.streetAddress}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -240,7 +234,6 @@ const AadhaarForm = () => {
                 id="town"
                 name="town"
                 value={formData.town}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -254,7 +247,6 @@ const AadhaarForm = () => {
                 id="district"
                 name="district"
                 value={formData.district}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -268,7 +260,6 @@ const AadhaarForm = () => {
                 id="state"
                 name="state"
                 value={formData.state}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -282,7 +273,6 @@ const AadhaarForm = () => {
                 id="country"
                 name="country"
                 value={formData.country}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -296,7 +286,6 @@ const AadhaarForm = () => {
                 id="secSclName"
                 name="secSclName"
                 value={formData.secSclName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -310,7 +299,6 @@ const AadhaarForm = () => {
                 id="secMarks"
                 name="secMarks"
                 value={formData.secMarks}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -324,7 +312,6 @@ const AadhaarForm = () => {
                 id="srSecSclName"
                 name="srSecSclName"
                 value={formData.srSecSclName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -338,7 +325,6 @@ const AadhaarForm = () => {
                 id="srSecMarks"
                 name="srSecMarks"
                 value={formData.srSecMarks}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -352,7 +338,6 @@ const AadhaarForm = () => {
                 id="ugColleageName"
                 name="ugColleageName"
                 value={formData.ugColleageName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -366,7 +351,6 @@ const AadhaarForm = () => {
                 id="ugCourseName"
                 name="ugCourseName"
                 value={formData.ugCourseName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -380,7 +364,6 @@ const AadhaarForm = () => {
                 id="ugMarks"
                 name="ugMarks"
                 value={formData.ugMarks}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -394,7 +377,6 @@ const AadhaarForm = () => {
                 id="pgColleageName"
                 name="pgColleageName"
                 value={formData.pgColleageName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -408,7 +390,6 @@ const AadhaarForm = () => {
                 id="pgCourseName"
                 name="pgCourseName"
                 value={formData.pgCourseName}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -422,7 +403,6 @@ const AadhaarForm = () => {
                 id="pgMarks"
                 name="pgMarks"
                 value={formData.pgMarks}
-                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
