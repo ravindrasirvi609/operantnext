@@ -6,9 +6,7 @@ import { useRouter } from "next/navigation";
 
 const AadhaarForm = () => {
   const router = useRouter();
-
   const formRef = useRef(null);
-
   const initialFormData = {
     profileImage: null,
     firstName: "",
@@ -52,7 +50,6 @@ const AadhaarForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
         console.log("received", receivedFormData);
@@ -83,14 +80,14 @@ const AadhaarForm = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-      try {
-       // const formData = new FormData();
+    try {
+      // const formData = new FormData();
       //  formDataWithImage.append("profileImage1", selectedImage);
-    
-        // for (const key in formData) {
-        //   formDataWithImage.append(key, formData[key]);
-        // }
-    
+
+      // for (const key in formData) {
+      //   formDataWithImage.append(key, formData[key]);
+      // }
+
       await axios.post("/api/users/form", formData);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
       router.push("/rozorpay");
