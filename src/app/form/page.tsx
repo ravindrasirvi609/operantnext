@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 const AadhaarForm = () => {
   const router = useRouter();
-  const formRef = useRef(null);
   const initialFormData = {
     profileImage: null,
     firstName: "",

@@ -74,7 +74,6 @@ export default function SignupPage() {
       } else if (name === "email" && !/\S+@\S+\.\S+/.test(value)) {
         validationErrors.email = "Invalid email address.";
       } else if (name === "password") {
-        // Password must have at least 8 characters, one capital letter, one special symbol, and one number
         const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
         if (!passwordRegex.test(value)) {
           validationErrors.password =
@@ -92,7 +91,6 @@ export default function SignupPage() {
     setIsTouched(true);
     setIsSubmitted(true);
 
-    // Perform field validation before submitting the form
     const validationErrors: ValidationErrors = {
       email: "",
       password: "",
@@ -125,14 +123,13 @@ export default function SignupPage() {
 
     setErrors(validationErrors);
 
-    // If there are no validation errors, proceed with form submission
     if (
       !validationErrors.email &&
       !validationErrors.password &&
       !validationErrors.confirmPassword &&
       !validationErrors.username
     ) {
-      onSignup(); // Call the existing function to handle form submission
+      onSignup();
     }
   };
 
@@ -156,8 +153,8 @@ export default function SignupPage() {
           className="mx-auto h-15.5rem w-auto"
           src="/opflogo.png"
           alt="OPF Logo"
-          height={1000} // The height of the image in pixels
-          width={1000} // The width of the image in pixels
+          height={1000}
+          width={1000}
         />
 
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600">
