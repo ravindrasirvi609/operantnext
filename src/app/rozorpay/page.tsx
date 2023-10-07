@@ -35,9 +35,7 @@ export default function Home() {
 
           // Download the invoice PDF
           try {
-            const invoiceResponse = await axios.post(
-              "/api/users/invoice"
-            );
+            const invoiceResponse = await axios.post("/api/users/invoice");
             const blob = new Blob([invoiceResponse.data], {
               type: "application/pdf",
             });
