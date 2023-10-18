@@ -20,6 +20,8 @@ export default function Home() {
     try {
       const response = await axios.post("/api/users/rozorpay");
       const data = response.data;
+      console.log("data",data);
+      
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
@@ -36,6 +38,8 @@ export default function Home() {
           // Download the invoice PDF
           try {
             const invoiceResponse = await axios.post("/api/users/invoice");
+            console.log("Invoice PDF: " + invoiceResponse);
+            
             const blob = new Blob([invoiceResponse.data], {
               type: "application/pdf",
             });
