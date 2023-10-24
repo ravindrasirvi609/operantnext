@@ -3,11 +3,12 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const AadhaarForm = () => {
   const router = useRouter();
   const initialFormData = {
-    profileImage: null,
+    profileImage: "",
     firstName: "",
     lastName: "",
     personalEmail: "",
@@ -32,10 +33,15 @@ const AadhaarForm = () => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
 
-  const handleImageChange = (e: any) => {
-    setSelectedImage(e.target.files[0]);
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      formData.profileImage = imageUrl;
+    }
   };
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
@@ -101,317 +107,325 @@ const AadhaarForm = () => {
     <div className="bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 rounded-lg">
       <div className="flex justify-center flex-none ">
         <div className="grid-cols-2">
-        <h1 className="text-6xl text-black font-extrabold m-20 p-5">
-          Registration Form
-        </h1>
-        <form id="onSubmit" onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="profileImage"
-              className="block mb-2 text-lg"
-            >
-              Profile Image:
-            </label>
-            <input
-              type="file"
-              id="profileImage"
-              name="profileImage"
-              onChange={handleImageChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+          <h1 className="text-6xl text-black font-extrabold m-20 p-5">
+            Registration Form
+          </h1>
+          <form id="onSubmit" onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="profileImage" className="block mb-2 text-lg">
+                Profile Image:
+              </label>
+              <input
+                type="file"
+                id="profileImage"
+                name="profileImage"
+                onChange={handleImageChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <div className="mt-2">
+                {selectedImage && (
+                  <Image
+                    src={selectedImage}
+                    alt="Selected Image"
+                    className="w-32 h-32 rounded-full"
+                    width="20"
+                    height="20"
+                  />
+                )}
+              </div>
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="firstName" className="block mb-2 text-lg">
-              First Name:
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="firstName" className="block mb-2 text-lg">
+                First Name:
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block mb-2 text-lg">
-              Last Name:
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="lastName" className="block mb-2 text-lg">
+                Last Name:
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="personalEmail" className="block mb-2 text-lg">
-              Email:
-            </label>
-            <input
-              type="email"
-              id="personalEmail"
-              name="personalEmail"
-              value={formData.personalEmail}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-            <p className="text-xs text-gray-600 mt-1">
-              * Active Email is required for Early Notification
-            </p>
-          </div>
+            <div className="mb-4">
+              <label htmlFor="personalEmail" className="block mb-2 text-lg">
+                Email:
+              </label>
+              <input
+                type="email"
+                id="personalEmail"
+                name="personalEmail"
+                value={formData.personalEmail}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+              <p className="text-xs text-gray-600 mt-1">
+                * Active Email is required for Early Notification
+              </p>
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="mobileNo" className="block mb-2 text-lg">
-              Mobile No.:
-            </label>
-            <input
-              type="tel"
-              id="mobileNo"
-              name="mobileNo"
-              value={formData.mobileNo}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="mobileNo" className="block mb-2 text-lg">
+                Mobile No.:
+              </label>
+              <input
+                type="tel"
+                id="mobileNo"
+                name="mobileNo"
+                value={formData.mobileNo}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="aadharNo" className="block mb-2 text-lg">
-              Aadhar No.:
-            </label>
-            <input
-              type="number"
-              id="aadharNo"
-              name="aadharNo"
-              value={formData.aadharNo}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-            <p className="text-xs text-gray-600 mt-1">
-              * Aadhar is required for DigiLoker Certificate
-            </p>
-          </div>
+            <div className="mb-4">
+              <label htmlFor="aadharNo" className="block mb-2 text-lg">
+                Aadhar No.:
+              </label>
+              <input
+                type="number"
+                id="aadharNo"
+                name="aadharNo"
+                value={formData.aadharNo}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+              <p className="text-xs text-gray-600 mt-1">
+                * Aadhar is required for DigiLoker Certificate
+              </p>
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="dob" className="block mb-2 text-lg">
-              Date of Birth:
-            </label>
-            <input
-              type="date"
-              id="dob"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="dob" className="block mb-2 text-lg">
+                Date of Birth:
+              </label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="streetAddress" className="block mb-2 text-lg">
-              Street Address:
-            </label>
-            <input
-              type="text"
-              id="streetAddress"
-              name="streetAddress"
-              value={formData.streetAddress}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="streetAddress" className="block mb-2 text-lg">
+                Street Address:
+              </label>
+              <input
+                type="text"
+                id="streetAddress"
+                name="streetAddress"
+                value={formData.streetAddress}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="town" className="block mb-2 text-lg">
-              Town:
-            </label>
-            <input
-              type="text"
-              id="town"
-              name="town"
-              value={formData.town}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="town" className="block mb-2 text-lg">
+                Town:
+              </label>
+              <input
+                type="text"
+                id="town"
+                name="town"
+                value={formData.town}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="district" className="block mb-2 text-lg">
-              District:
-            </label>
-            <input
-              type="text"
-              id="district"
-              name="district"
-              value={formData.district}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="district" className="block mb-2 text-lg">
+                District:
+              </label>
+              <input
+                type="text"
+                id="district"
+                name="district"
+                value={formData.district}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="state" className="block mb-2 text-lg">
-              State:
-            </label>
-            <input
-              type="text"
-              id="state"
-              name="state"
-              value={formData.state}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="state" className="block mb-2 text-lg">
+                State:
+              </label>
+              <input
+                type="text"
+                id="state"
+                name="state"
+                value={formData.state}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="country" className="block mb-2 text-lg">
-              Country:
-            </label>
-            <input
-              type="text"
-              id="country"
-              name="country"
-              value={formData.country}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="country" className="block mb-2 text-lg">
+                Country:
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={formData.country}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="secSclName" className="block mb-2 text-lg">
-              10th School Name:
-            </label>
-            <input
-              type="text"
-              id="secSclName"
-              name="secSclName"
-              value={formData.secSclName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="secSclName" className="block mb-2 text-lg">
+                10th School Name:
+              </label>
+              <input
+                type="text"
+                id="secSclName"
+                name="secSclName"
+                value={formData.secSclName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="secMarks" className="block mb-2 text-lg">
-              10th Percentage:
-            </label>
-            <input
-              type="number"
-              id="secMarks"
-              name="secMarks"
-              value={formData.secMarks}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="secMarks" className="block mb-2 text-lg">
+                10th Percentage:
+              </label>
+              <input
+                type="number"
+                id="secMarks"
+                name="secMarks"
+                value={formData.secMarks}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="srSecSclName" className="block mb-2 text-lg">
-              12th School Name:
-            </label>
-            <input
-              type="text"
-              id="srSecSclName"
-              name="srSecSclName"
-              value={formData.srSecSclName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="srSecSclName" className="block mb-2 text-lg">
+                12th School Name:
+              </label>
+              <input
+                type="text"
+                id="srSecSclName"
+                name="srSecSclName"
+                value={formData.srSecSclName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="srSecMarks" className="block mb-2 text-lg">
-              12th Percentage:
-            </label>
-            <input
-              type="number"
-              id="srSecMarks"
-              name="srSecMarks"
-              value={formData.srSecMarks}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="srSecMarks" className="block mb-2 text-lg">
+                12th Percentage:
+              </label>
+              <input
+                type="number"
+                id="srSecMarks"
+                name="srSecMarks"
+                value={formData.srSecMarks}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="ugColleageName" className="block mb-2 text-lg">
-              College Name (UG):
-            </label>
-            <input
-              type="text"
-              id="ugColleageName"
-              name="ugColleageName"
-              value={formData.ugColleageName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="ugColleageName" className="block mb-2 text-lg">
+                College Name (UG):
+              </label>
+              <input
+                type="text"
+                id="ugColleageName"
+                name="ugColleageName"
+                value={formData.ugColleageName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="ugCourseName" className="block mb-2 text-lg">
-              Course Name (UG):
-            </label>
-            <input
-              type="text"
-              id="ugCourseName"
-              name="ugCourseName"
-              value={formData.ugCourseName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="ugCourseName" className="block mb-2 text-lg">
+                Course Name (UG):
+              </label>
+              <input
+                type="text"
+                id="ugCourseName"
+                name="ugCourseName"
+                value={formData.ugCourseName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="ugMarks" className="block mb-2 text-lg">
-              CGPA (UG):
-            </label>
-            <input
-              type="number"
-              id="ugMarks"
-              name="ugMarks"
-              value={formData.ugMarks}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="ugMarks" className="block mb-2 text-lg">
+                CGPA (UG):
+              </label>
+              <input
+                type="number"
+                id="ugMarks"
+                name="ugMarks"
+                value={formData.ugMarks}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="pgColleageName" className="block mb-2 text-lg">
-              College Name (PG):
-            </label>
-            <input
-              type="text"
-              id="pgColleageName"
-              name="pgColleageName"
-              value={formData.pgColleageName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="pgColleageName" className="block mb-2 text-lg">
+                College Name (PG):
+              </label>
+              <input
+                type="text"
+                id="pgColleageName"
+                name="pgColleageName"
+                value={formData.pgColleageName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="pgCourseName" className="block mb-2 text-lg">
-              Course Name (PG):
-            </label>
-            <input
-              type="text"
-              id="pgCourseName"
-              name="pgCourseName"
-              value={formData.pgCourseName}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="pgCourseName" className="block mb-2 text-lg">
+                Course Name (PG):
+              </label>
+              <input
+                type="text"
+                id="pgCourseName"
+                name="pgCourseName"
+                value={formData.pgCourseName}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="pgMarks" className="block mb-2 text-lg">
-              CGPA (PG):
-            </label>
-            <input
-              type="number"
-              id="pgMarks"
-              name="pgMarks"
-              value={formData.pgMarks}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="mb-4">
+              <label htmlFor="pgMarks" className="block mb-2 text-lg">
+                CGPA (PG):
+              </label>
+              <input
+                type="number"
+                id="pgMarks"
+                name="pgMarks"
+                value={formData.pgMarks}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              />
+            </div>
 
-          <div className="text-center">
-            <button
-              type="submit"
-              className=" bg-blue-800 hover:bg-black text-white font-bold py-2 px-4 rounded-full m-10 h-20 w-60"
-            >
-             <h1 className="text-2xl">Submit</h1> 
-            </button>
-          </div>
-        </form>
+            <div className="text-center">
+              <button
+                type="submit"
+                className=" bg-blue-800 hover:bg-black text-white font-bold py-2 px-4 rounded-full m-10 h-20 w-60"
+              >
+                <h1 className="text-2xl">Submit</h1>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
