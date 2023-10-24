@@ -37,10 +37,12 @@ const AadhaarForm = () => {
 
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
+    console.log("Image changed", file);
+    
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
-      formData.profileImage = imageUrl;
+      formData.profileImage = file;
     }
   };
 
@@ -57,7 +59,10 @@ const AadhaarForm = () => {
       try {
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
+        const receivedImage = receivedFormData.data.profileImage; // Create a variable for the received image URL
         console.log("received", receivedFormData);
+        setSelectedImage(receivedImage); // Update the selectedImage state
+
 
         if (receivedFormData && receivedFormData.data) {
           const parsedDate = new Date(receivedFormData.data.dob);
@@ -86,12 +91,11 @@ const AadhaarForm = () => {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      // const formData = new FormData();
-      //  formDataWithImage.append("profileImage1", selectedImage);
+       const formData = new FormData();
 
-      // for (const key in formData) {
-      //   formDataWithImage.append(key, formData[key]);
-      // }
+       for (const key in formData) {
+        formData.append(key, formData[key]);
+       }
 
       await axios.post("/api/users/form", formData);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
