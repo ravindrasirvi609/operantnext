@@ -9,10 +9,11 @@ connect();
 export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
-    // const data = await req.formData();
-    // const file: File | null = data.get("profileImage1") as unknown as File;
-    // const bytes = await file.arrayBuffer();
-    // const buffer = Buffer.from(bytes);
+     const data = await req.formData();
+     
+     const file: File | null = data.get("profileImage") as unknown as File;
+     
+
     const response = await req.json();
     console.log("OK", response);
 
