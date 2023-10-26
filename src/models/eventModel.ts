@@ -14,10 +14,10 @@ const eventSchema = new mongoose.Schema({
     country: { type: String },
   },
   image: { type: String }, // You can store the URL or path to the event image
-  organizer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Organizer", // Reference to an Organizer model
-  },
+//   organizer: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "Organizer", // Reference to an Organizer model
+//   },
   categories: [{ type: String }], // An array of event categories or tags
   capacity: { type: Number }, // If you want to limit the number of attendees
   attendees: [
