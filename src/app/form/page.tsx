@@ -94,7 +94,7 @@ const AadhaarForm = () => {
       const formData = new FormData();
   
       for (const key in initialFormData) {
-        formData.append(key, userForm[key] as string); // Use type assertion here
+      //  formData.append(key, userForm[key] as string); // Use type assertion here
       }
   
       await axios.post("/api/users/form", formData);
