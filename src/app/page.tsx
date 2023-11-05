@@ -16,7 +16,7 @@ const initialUserData: UserData | null = null;
 
 const navigation = [
   { name: "Profile", href: "/profile" },
-  { name: "Features", href: "#" },
+  { name: "Events", href: "/events" },
   { name: "Git-Hub", href: "https://github.com/ravindrasirvi609/operantnext" },
   { name: "Company", href: "https://opf.org.in/" },
 ];
