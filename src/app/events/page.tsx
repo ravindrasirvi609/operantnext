@@ -47,40 +47,66 @@ export default function EventList() {
   }, []);
 
   function formatDate(dateString: string | number | Date) {
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    return new Date(dateString).toLocaleDateString(undefined, options as any );
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options as any);
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen mt-2">
-      <h1 className="bg-purple-900 rounded-lg p-2 text-3xl font-semibold mb-4 text-white">Event List</h1>
-      <div className="bg-purple-400 rounded-lg p-6 shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
+      <h1 className="bg-purple-900 rounded-lg p-2 text-3xl font-semibold mb-4 text-white">
+        Event List
+      </h1>
+      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500	 rounded-lg p-6 shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
         {eventData ? (
           <div>
             {eventData.map((event, index) => (
               <div key={event._id}>
                 <p className="mb-2">
-                  <span className="font-semibold">Title:</span> {event.title}
+                  <h1 className="font-extrabold	 text-4xl	 text-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500	text-black	capitalize">
+                    {event.title}
+                  </h1>
                 </p>
+                <div className="flex justify-between">
+                  <p className="mb-3 p-2 bg-red-200 rounded-lg text-center	decoration-zinc-100	decoration-solid	underline-offset-auto	">
+                    <a
+                      href={event.registrationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-black"
+                    >
+                      Register here
+                    </a>
+                  </p>
+
+                  <p className="mb-2">
+                    <span className="font-semibold flex justify-end">
+                      {formatDate(event.date)}
+                    </span>
+                    <div>
+                      {" "}
+                      {event.location.address}, {event.location.city},{" "}
+                      {event.location.state},{event.location.country}
+                    </div>
+                  </p>
+                </div>
+                {event.isPaid ? (
+                  <p className="mb-2">
+                    <span className="font-semibold">Price:</span> {event.price}
+                  </p>
+                ) : (
+                  <p className="mb-2">
+                    <span className="font-semibold">Price:</span> Free
+                  </p>
+                )}
                 <p className="mb-2">
-                  <span className="font-semibold">Description:</span>{" "}
-                  {event.description}
+                  <span className="font-semibold">Categories</span>{" "}
+                  {event.categories}
                 </p>
-                <p className="mb-2">
-                  <span className="font-semibold">Date:</span>{" "}
-                  {formatDate(event.date)}
-                </p>
-                <p className="mb-2">
-                  <span className="font-semibold">Is Paid:</span>{" "}
-                  {event.isPaid.toString()}
-                </p>
-                <p className="mb-2">
-                  <span className="font-semibold">Price</span> {event.price}
-                </p>
-                <p className="mb-2">
-                  <span className="font-semibold">Registration</span>{" "}
-                  {event.registrationUrl}
-                </p>
+
                 <p className="mb-2">
                   <span className="font-semibold">Categories</span>{" "}
                   {event.categories}
@@ -89,11 +115,11 @@ export default function EventList() {
                   <span className="font-semibold">Capacity</span>{" "}
                   {event.capacity} Members
                 </p>
-                
+
                 <p className="mb-2">
-                  <span className="font-semibold">Address:</span>{" "}
-                  {event.location.address}, {event.location.city},{" "}
-                  {event.location.state},{event.location.country}
+                  <span className="font-semibold flex italic">
+                    {event.description}
+                  </span>
                 </p>
               </div>
             ))}
