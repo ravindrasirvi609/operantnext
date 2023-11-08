@@ -60,19 +60,19 @@ export default function EventList() {
       <h1 className="bg-purple-900 rounded-lg p-2 text-3xl font-semibold mb-4 text-white">
         Event List
       </h1>
-  
+
       {eventData ? (
         <div>
           {eventData.map((event) => (
             <div
               key={event._id}
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg p-6 shadow-md w-90 align-center  m-5"
+              className="bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-amber-700 via-orange-300 to-rose-800 rounded-lg p-6 shadow-md w-90 align-center  m-5"
             >
               <h1 className="font-extrabold text-4xl text-center text-black capitalize">
                 {event.title}
               </h1>
               <div className="flex justify-between">
-                <p className="mb-3 p-2 bg-red-200 rounded-lg text-center decoration-zinc-100 decoration-solid underline-offset-auto">
+                <p className="mb-3 p-2bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-lg text-center decoration-zinc-100 decoration-solid underline-offset-auto">
                   <a
                     href={event.registrationUrl}
                     target="_blank"
@@ -103,13 +103,15 @@ export default function EventList() {
               )}
               <p className="mb-2">
                 <span className="font-semibold">Categories:</span>{" "}
-                {event.categories.join(', ')}
+                {event.categories.join(", ")}
               </p>
               <p className="mb-2">
-                <span className="font-semibold">Capacity:</span> {event.capacity} Members
+                <span className="font-semibold">Capacity:</span>{" "}
+                {event.capacity} Members
               </p>
               <p className="mb-2">
-                <span className="font-semibold italic">Description:</span> {event.description}
+                <span className="font-semibold italic">Description:</span>{" "}
+                {event.description}
               </p>
             </div>
           ))}
@@ -119,5 +121,4 @@ export default function EventList() {
       )}
     </div>
   );
-  
 }
