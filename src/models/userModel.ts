@@ -27,6 +27,8 @@ const userSchema = new mongoose.Schema({
     forgotPasswordTokenExpiry: Date,
     verifyToken: String,
     verifyTokenExpiry: Date,
+    role: { type: String, enum: ['user', 'organization'], required: true },
+
 })
 
 const User = mongoose.models.users || mongoose.model("users", userSchema);

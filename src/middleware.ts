@@ -24,6 +24,7 @@ export const config = {
     '/signup',
     '/verifyemail',
     '/form',
-    '/rozorpay'
+    '/rozorpay',
+    '/events',
   ]
 }

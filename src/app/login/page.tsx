@@ -11,10 +11,15 @@ export default function LoginPage() {
   const [user, setUser] = React.useState({
     email: "",
     password: "",
+    role: "",
   });
   const [buttonDisabled, setButtonDisabled] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [isOptionsVisible, setIsOptionsVisible] = React.useState(false);
 
+  const toggleOptionsVisibility = () => {
+    setIsOptionsVisible(!isOptionsVisible);
+  };
   const onLogin = async () => {
     try {
       setLoading(true);
@@ -103,6 +108,23 @@ export default function LoginPage() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="space-y-6">
+          <div className="relative text-left">
+            <select
+              value={user.role}
+              onChange={(e) => setUser({ ...user, role: e.target.value })}
+              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <option value="" disabled>
+                Select a role
+              </option>
+              <option value="user">User</option>
+              <option value="organization">Organization</option>
+            </select>
+            {user.role === "" && (
+              <p className="text-red-500 text-xs mt-1">Role is required</p>
+            )}
+          </div>
+
           <div>
             <label
               htmlFor="email"
@@ -177,44 +199,5 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
-
-    // <div className="font-Inter h-screen overflow-auto bg-gradient-to-tr from-[#31c14e] to-[#1a3e85]">
-    //   <div className="flex flex-col items-center justify-center min-h-screen py-2">
-    //     <h1>{loading ? "Processing" : "Login"}</h1>
-    //     <hr />
-
-    //     <label htmlFor="email">email</label>
-    //     <input
-    //       className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-    //       id="email"
-    //       type="text"
-    //       value={user.email}
-    //       onChange={(e) => setUser({ ...user, email: e.target.value })}
-    //       placeholder="email"
-    //     />
-    //     <label htmlFor="password">password</label>
-    //     <input
-    //       className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
-    //       id="password"
-    //       type="password"
-    //       value={user.password}
-    //       onChange={(e) => setUser({ ...user, password: e.target.value })}
-    //       placeholder="password"
-    //     />
-    //     <button
-    //       onClick={onLogin}
-    //       className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-    //     >
-    //       Login here
-    //     </button>
-    //     <button
-    //       onClick={ForgotPassword}
-    //       className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600"
-    //     >
-    //       Forgot Password
-    //     </button>
-    //     <Link href="/signup">Visit Signup page</Link>
-    //   </div>
-    // </div>
   );
 }

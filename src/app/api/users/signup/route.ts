@@ -10,7 +10,7 @@ connect();
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { username, email, password } = reqBody;
+    const { username, email, password, role } = reqBody;
     const user = await User.findOne({ email });
     if (user) {
       return NextResponse.json(
@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
       username,
       email,
       password: hashedPassword,
+      role,
     });
     const savedUser = await newUser.save();
     // Create the user in the "userForm" collection

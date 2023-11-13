@@ -5,11 +5,10 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 connect();
-
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { email, password } = reqBody;
+    const { email, password, role } = reqBody;
     const user = await User.findOne({ email });
     console.log("user", user);
 
@@ -19,6 +18,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {
       return NextResponse.json(
@@ -27,21 +27,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("isVerified: " + user.isVerfied);
-
-    if (!user.isVerfied) {
+    if (!user.isVerified) {
       return NextResponse.json(
         { error: "User is not verified yet" },
         { status: 400 }
       );
     }
+
+    // Check user role
+    if (user.role !== role) {
+      return NextResponse.json(
+        { error: "Invalid Role for this User" },
+        { status: 403 } // 403 Forbidden status code
+      );
+    }
+
     const tokenData = {
       id: user._id,
       username: user.username,
       email: user.email,
-      isVerfied: user.isVerfied,
+      isVerified: user.isVerified,
+      role: user.role, // Include user role in the token data
     };
-    console.log("token: " + tokenData);
 
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
       expiresIn: "1d",
@@ -52,10 +59,12 @@ export async function POST(request: NextRequest) {
       success: true,
       data: tokenData,
     });
+
     response.cookies.set("token", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 24,
     });
+
     return response;
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
