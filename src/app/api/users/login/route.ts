@@ -10,7 +10,6 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { email, password, role } = reqBody;
     const user = await User.findOne({ email });
-    console.log("user", user);
 
     if (!user) {
       return NextResponse.json(
@@ -27,7 +26,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!user.isVerified) {
+    if (!user.isVerfied) {
       return NextResponse.json(
         { error: "User is not verified yet" },
         { status: 400 }

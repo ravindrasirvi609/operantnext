@@ -56,69 +56,70 @@ export default function EventList() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen mt-2">
-      <h1 className="bg-purple-900 rounded-lg p-2 text-3xl font-semibold mb-4 text-white">
-        Event List
-      </h1>
+    <div className="bg-white absolute inset-x-0 top-0 z-50">
+      <div className="flex flex-col items-center justify-center min-h-screen mt-2">
+        <h1 className=" p-2 text-3xl font-extrabold mb-4 text-green-600">
+          Upcoming Events
+        </h1>
 
-      {eventData ? (
-        <div>
-          {eventData.map((event) => (
-            <div
-              key={event._id}
-              className="bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-amber-700 via-orange-300 to-rose-800 rounded-lg p-6 shadow-md w-90 align-center  m-5"
-            >
-              <h1 className="font-extrabold text-4xl text-center text-black capitalize">
-                {event.title}
-              </h1>
-              <div className="flex justify-between">
-                <p className="mb-3 p-2bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-lg text-center decoration-zinc-100 decoration-solid underline-offset-auto">
-                  <a
-                    href={event.registrationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-black"
-                  >
-                    Register here
-                  </a>
+        {eventData ? (
+          <div>
+            {eventData.map((event) => (
+              <div
+                key={event._id}
+                className="text-black bg-slate-100 border-green-600 shadow-lg shadow-green-950	 border-2	 p-6 w-90 align-center  m-5"
+              >
+                <h1 className="font-extrabold text-4xl text-center text-black capitalize">
+                  {event.title}
+                </h1>
+                <div className="flex justify-between">
+                  <p className="m-3 p-2 bg-violet-700 rounded-lg	 font-extrabold hover:bg-violet-300 text-white hover:text-black">
+                    <a
+                      href={event.registrationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Register here
+                    </a>
+                  </p>
+                  <p className="mb-2">
+                    <span className="font-semibold flex justify-end">
+                      {formatDate(event.date)}
+                    </span>
+                    <div>
+                      {event.location.address}, {event.location.city},{" "}
+                      {event.location.state}, {event.location.country}
+                    </div>
+                  </p>
+                </div>
+                {event.isPaid ? (
+                  <p className="mb-2">
+                    <span className="font-semibold">Price:</span> {event.price}
+                  </p>
+                ) : (
+                  <p className="mb-2">
+                    <span className="font-semibold">Price:</span> Free
+                  </p>
+                )}
+                <p className="mb-2">
+                  <span className="font-semibold">Categories:</span>{" "}
+                  {event.categories.join(", ")}
                 </p>
                 <p className="mb-2">
-                  <span className="font-semibold flex justify-end">
-                    {formatDate(event.date)}
-                  </span>
-                  <div>
-                    {event.location.address}, {event.location.city},{" "}
-                    {event.location.state}, {event.location.country}
-                  </div>
+                  <span className="font-semibold">Capacity:</span>{" "}
+                  {event.capacity} Members
+                </p>
+                <p className="mb-2">
+                  <span className="font-semibold italic">Description:</span>{" "}
+                  {event.description}
                 </p>
               </div>
-              {event.isPaid ? (
-                <p className="mb-2">
-                  <span className="font-semibold">Price:</span> {event.price}
-                </p>
-              ) : (
-                <p className="mb-2">
-                  <span className="font-semibold">Price:</span> Free
-                </p>
-              )}
-              <p className="mb-2">
-                <span className="font-semibold">Categories:</span>{" "}
-                {event.categories.join(", ")}
-              </p>
-              <p className="mb-2">
-                <span className="font-semibold">Capacity:</span>{" "}
-                {event.capacity} Members
-              </p>
-              <p className="mb-2">
-                <span className="font-semibold italic">Description:</span>{" "}
-                {event.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>Loading event data...</p>
-      )}
+            ))}
+          </div>
+        ) : (
+          <p>Loading event data...</p>
+        )}
+      </div>
     </div>
   );
 }
