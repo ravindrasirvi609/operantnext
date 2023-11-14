@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 
 const userFormSchema = new mongoose.Schema({
   profileImage: { type: String }, // You can store the image URL or file path
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  firstName: { type: String },
+  lastName: { type: String },
+  userName: { type: String, required: true },
   personalEmail: { type: String, required: true, unique: true },
-  mobileNo: { type: String, required: true },
-  aadharNo: { type: String, required: true, unique: true },
-  dob: { type: Date, required: true },
+  mobileNo: { type: String },
+  aadharNo: { type: String },
+  // dob: { type: Date },
   streetAddress: { type: String },
   town: { type: String },
   district: { type: String },
@@ -23,8 +24,10 @@ const userFormSchema = new mongoose.Schema({
   pgColleageName: { type: String },
   pgCourseName: { type: String },
   pgMarks: { type: Number },
+  eventsAttended: [{ type: mongoose.Schema.Types.ObjectId, ref: "eventModel" }],
 });
 
-const UserForm = mongoose.models.usersform || mongoose.model("usersform", userFormSchema);
+const UserForm =
+  mongoose.models.usersform || mongoose.model("usersform", userFormSchema);
 
 export default UserForm;
