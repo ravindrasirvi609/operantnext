@@ -173,22 +173,22 @@ export default function SignupPage() {
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <div className="space-y-6">
           <div className="relative inline-block text-left">
-          <div className="relative text-left">
-            <select
-              value={user.role}
-              onChange={(e) => setUser({ ...user, role: e.target.value })}
-              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >
-              <option value="" disabled>
-                Select a role
-              </option>
-              <option value="user">User</option>
-              <option value="organization">Organization</option>
-            </select>
-            {user.role === "" && (
-              <p className="text-red-500 text-xs mt-1">Role is required</p>
-            )}
-          </div>
+            <div className="relative text-left">
+              <select
+                value={user.role}
+                onChange={(e) => setUser({ ...user, role: e.target.value })}
+                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                <option value="" disabled>
+                  Select a role
+                </option>
+                <option value="user">User</option>
+                <option value="organization">Organization</option>
+              </select>
+              {user.role === "" && (
+                <p className="text-red-500 text-xs mt-1">Role is required</p>
+              )}
+            </div>
           </div>
           <div>
             <label

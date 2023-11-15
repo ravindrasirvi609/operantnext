@@ -24,7 +24,9 @@ const navigation = [
 export default function Home() {
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
+  const [role, setRole] = useState<string | null>();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isOrganization = role === "organization";
 
   const logout = async () => {
     try {
@@ -32,7 +34,6 @@ export default function Home() {
       router.push("/login");
       toast.success("Logout successful");
     } catch (error: any) {
-      console.log("my bame", error.message);
       toast.error(error.message);
     }
   };
@@ -41,10 +42,10 @@ export default function Home() {
       try {
         const response = await axios.get("/api/users/me");
         const userData: UserData = response.data.data;
-
-        // Set the user data to the state
+        const role = localStorage.getItem("role");
+        // Set the user data and role to the state
         setUserData(userData);
-
+        setRole(role);
       } catch (error: any) {
         Swal.fire(error.message);
       }
@@ -82,15 +83,18 @@ export default function Home() {
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                {item.name}
-              </a>
-            ))}
+            {navigation.map((item) =>
+              // Use conditional rendering to hide the 'Events' link if the role is 'organization'
+              !isOrganization || item.name !== "Events" ? (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm font-semibold leading-6 text-gray-900"
+                >
+                  {item.name}
+                </a>
+              ) : null
+            )}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <button

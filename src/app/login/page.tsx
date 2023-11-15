@@ -24,6 +24,8 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
+      console.log(`Success`, response.data.data.role);
+      localStorage.setItem("role", response.data.data.role);  
       router.push("/");
       Swal.fire("Good job!", "Login Successfully!", "success");
     } catch (error: any) {
