@@ -14,6 +14,7 @@ const eventSchema = new mongoose.Schema({
     country: { type: String },
   },
   image: { type: String }, // You can store the URL or path to the event image
+  isJoined: { type: Boolean, default: false }, // This is for the current user
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Organizer", // Reference to an Organizer model

@@ -12,6 +12,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   try {
     // Step 1: Get the user's ID from the token
     const userId = await getDataFromToken(req);
+
     const eventData = await req.json();
     const eventId = eventData.id;
 
@@ -33,9 +34,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     // Check if the user is already registered for the event
-    if (event.attendees.includes(userId)) {
+    const isUserJoined = event.attendees.includes(userId);
+
+    if (isUserJoined) {
       return NextResponse.json(
-        { event, message: "User is already registered for the event" },
+        { event, isJoin: true, message: "User is already registered for the event" },
         { status: 400 }
       );
     }
@@ -47,20 +50,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const user = await UserModel.findById(userId);
     if (!user) {
       return NextResponse.json(
-        { event, message: "User not found" },
+        { event, isJoin: false, message: "User not found" },
         { status: 404 }
       );
     }
     user.eventsAttended.push(eventId);
     await user.save();
     return NextResponse.json(
-      { event, message: "User registered successfully" },
+      { event, isJoin: false, message: "User registered successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { event, message: "Internal server error" },
+      { event, isJoin: false, message: "Internal server error" },
       { status: 500 }
     );
   }

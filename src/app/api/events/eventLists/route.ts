@@ -11,7 +11,6 @@ export async function GET(req: NextRequest) {
     // Step 1: Get the user's ID from the token
     const userId = await getDataFromToken(req);
 
-    
     // Step 2: Check authentication
     if (!userId) {
       // Handle the case where the user is not authenticated or the token is invalid
@@ -27,8 +26,14 @@ export async function GET(req: NextRequest) {
       return new NextResponse("No events found", { status: 404 });
     }
 
-    // Step 4: Handle successful response
-    return new NextResponse(JSON.stringify(events), {
+    // Step 4: Check if the user has already joined each event
+    const eventsWithJoinStatus = events.map((event) => {
+      const isUserJoined = event.attendees.includes(userId);
+      return { ...event.toObject(), isJoin: isUserJoined };
+    });
+
+    // Step 5: Handle successful response
+    return new NextResponse(JSON.stringify(eventsWithJoinStatus), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +42,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error(error);
 
-    // Step 5: Handle errors gracefully
+    // Step 6: Handle errors gracefully
     return new NextResponse("Error retrieving events", { status: 500 });
   }
 }
