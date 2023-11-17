@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       amount,
       currency,
       status,
-      user: userId
+      user: userId,
     });
 
     // Save the transaction to the database
@@ -39,7 +39,10 @@ export async function POST(request: NextRequest) {
 
     // Respond with a success message
     return NextResponse.json(
-      { message: "Razorpay transaction saved successfully" },
+      {
+        message: "Razorpay transaction saved successfully",
+        transaction: razorpayTransaction.toObject(), // Convert to plain JavaScript object
+      },
       { status: 201 }
     );
   } catch (error) {

@@ -30,8 +30,6 @@ export default function Home() {
         order_id: data.id,
         description: "Thank you",
         handler: async function (response: any) {
-          console.log("response--------******", response);
-
           alert(response.razorpay_payment_id);
           alert(response.razorpay_order_id);
           alert(response.razorpay_signature);
@@ -46,18 +44,25 @@ export default function Home() {
           };
 
           // Send the payment details to your server for verification
-          const result = await axios.post(
+          const resultRes = await axios.post(
             "/api/payments/transaction",
             payment
           );
 
           // Download the invoice PDF
           try {
-            const invoiceResponse = await axios.post("/api/payments/invoice");
+            const json = {
+              orderId: resultRes.data.transaction.orderId,
+            };
+            const invoiceResponse = await axios.post(
+              "/api/payments/invoice",
+              json
+            );
             console.log("Invoice PDF: " + invoiceResponse);
 
             const blob = new Blob([invoiceResponse.data], {
               type: "application/pdf",
+              // END: abpxx6d04wxr
             });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
