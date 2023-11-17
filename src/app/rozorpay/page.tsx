@@ -18,10 +18,9 @@ export default function Home() {
     }
 
     try {
-      const response = await axios.post("/api/users/rozorpay");
+      const response = await axios.post("/api/payments/rozorpay");
       const data = response.data;
-      console.log("data",data);
-      
+      console.log("data", data);
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
@@ -31,15 +30,32 @@ export default function Home() {
         order_id: data.id,
         description: "Thank you",
         handler: async function (response: any) {
+          console.log("response--------******", response);
+
           alert(response.razorpay_payment_id);
           alert(response.razorpay_order_id);
           alert(response.razorpay_signature);
 
+          const payment = {
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            amount: data.amount,
+            currency: data.currency,
+            status: "success",
+          };
+
+          // Send the payment details to your server for verification
+          const result = await axios.post(
+            "/api/payments/transaction",
+            payment
+          );
+
           // Download the invoice PDF
           try {
-            const invoiceResponse = await axios.post("/api/users/invoice");
+            const invoiceResponse = await axios.post("/api/payments/invoice");
             console.log("Invoice PDF: " + invoiceResponse);
-            
+
             const blob = new Blob([invoiceResponse.data], {
               type: "application/pdf",
             });

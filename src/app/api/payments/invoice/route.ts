@@ -39,6 +39,8 @@ export async function POST(req: NextRequest) {
       // Extract order ID from the URL query parameters
       const url = new URL(req.url);
       const orderId = url.searchParams.get("id") || "defaultOrderId";
+      console.log("Extracting order ID from",orderId);
+      
       console.log("Extracting order ID from URL", url.searchParams);
       // Generate the invoice PDF using Puppeteer
       const invoiceHtml = generateInvoiceHtml(orderId /* ...other data... */);
