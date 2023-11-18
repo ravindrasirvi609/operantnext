@@ -74,10 +74,13 @@ export async function POST(req: NextRequest) {
     // Generate the invoice PDF using Puppeteer
     const browser = await puppeteer.launch({
       headless: true,
+      args: ["--no-sandbox"], // Add this line for running in certain environments
     });
     const page = await browser.newPage();
     await page.setContent(invoiceHtml);
     const pdfBuffer = await page.pdf();
+    console.log("PDF generated successfully", pdfBuffer);
+    
     await browser.close();
 
     return new NextResponse(pdfBuffer, {

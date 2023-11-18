@@ -30,10 +30,6 @@ export default function Home() {
         order_id: data.id,
         description: "Thank you",
         handler: async function (response: any) {
-          alert(response.razorpay_payment_id);
-          alert(response.razorpay_order_id);
-          alert(response.razorpay_signature);
-
           const payment = {
             paymentId: response.razorpay_payment_id,
             orderId: response.razorpay_order_id,
@@ -56,20 +52,30 @@ export default function Home() {
             };
             const invoiceResponse = await axios.post(
               "/api/payments/invoice",
-              json
+              json,
+              { responseType: "arraybuffer" } // Set the response type to arraybuffer
             );
-            console.log("Invoice PDF: " + invoiceResponse);
 
+            // Create a Blob from the received data
             const blob = new Blob([invoiceResponse.data], {
               type: "application/pdf",
-              // END: abpxx6d04wxr
             });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `invoice_${data.id}.pdf`;
-            a.click();
-            URL.revokeObjectURL(url);
+
+            // Create a link element and trigger a download
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `invoice_${data.id}.pdf`;
+
+            // Append the link to the document body and trigger a click
+            document.body.appendChild(link);
+            setTimeout(() => {
+              // Trigger a click to start the download
+              link.click();
+
+              // Remove the link from the document body after the click
+              document.body.removeChild(link);
+            }, 1000);
+            // Remove the link from the document body
           } catch (error) {
             console.error("Error downloading invoice:", error);
             Swal.fire("An error occurred while downloading the invoice.");

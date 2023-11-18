@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 export const getDataFromToken = (request: NextRequest) => {
   try {
@@ -16,11 +16,11 @@ export const getDataFromToken = (request: NextRequest) => {
     }
 
     return decodedToken.id;
-  } catch (error) {
+  } catch (error: any) {
     // Handle different error scenarios
-    if (error instanceof jwt.JsonWebTokenError) {
+    if (error instanceof JsonWebTokenError) {
       throw new Error("Invalid token: " + error.message);
-    } else if (error instanceof jwt.TokenExpiredError) {
+    } else if (error instanceof TokenExpiredError) {
       throw new Error("Token has expired: " + error.message);
     } else {
       throw new Error("Token decoding failed: " + error.message);

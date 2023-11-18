@@ -9,14 +9,12 @@ const RazorpayTransactionSchema = new mongoose.Schema({
   currency: { type: String, required: true },
   status: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Assuming you have a User model
-
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Assuming you have a User model
 });
 
 // Define the RazorpayTransaction model
-const RazorpayTransaction = mongoose.model(
-  "RazorpayTransaction",
-  RazorpayTransactionSchema
-);
+const RazorpayTransaction =
+  mongoose.models.RazorpayTransaction ||
+  mongoose.model("RazorpayTransaction", RazorpayTransactionSchema);
 
 export default RazorpayTransaction;
