@@ -2,17 +2,17 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import UserForm from "@/models/userForm";
+import uploadMiddleware from "@/multer.middleware";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
 export async function POST(req: NextRequest) {
   try {
+    await uploadMiddleware(req); // Add middleware invocation
+
     const userId = await getDataFromToken(req);
-     const data = await req.formData();
-     
-     const file: File | null = data.get("profileImage") as unknown as File;
-     
+    const data = await req.formData();
 
     const response = await req.json();
     console.log("OK", response);
@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
     return new NextResponse("Error saving user form", { status: 500 });
   }
 }
+
 
 // GET API to fetch user form data
 export async function GET(req: NextRequest) {
