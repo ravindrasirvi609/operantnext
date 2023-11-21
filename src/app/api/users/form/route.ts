@@ -9,7 +9,7 @@ connect();
 
 export async function POST(req: NextRequest) {
   try {
-    await uploadMiddleware(req); // Add middleware invocation
+  const userAvatar = await uploadMiddleware(req); // Add middleware invocation
 
     const userId = await getDataFromToken(req);
     const data = await req.formData();
