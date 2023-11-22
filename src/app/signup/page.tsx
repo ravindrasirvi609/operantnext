@@ -155,164 +155,181 @@ export default function SignupPage() {
   }, [user]);
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <Image
-          className="mx-auto h-15.5rem w-auto"
-          src="/opflogo.png"
-          alt="OPF Logo"
-          height={1000}
-          width={1000}
-        />
+    <>
+      <div className="relative h-screen">
+        <video
+          className="absolute top-0 left-0 object-cover w-full h-full"
+          autoPlay
+          muted
+          loop
+        >
+          <source src={`loginV.mp4`} type="video/mp4" />
+        </video>
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+              <Image
+                className="mx-auto h-15.5rem w-auto"
+                src="/opflogo.png"
+                alt="OPF Logo"
+                height={1000}
+                width={1000}
+              />
+            </div>
 
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600">
-          {loading ? "Processing" : "Register Your Account"}
-        </h2>
-      </div>
+            <div className="border border-lime-600 bg-opacity-30	bg-lime-300">
+              <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600">
+                {loading ? "Processing" : "Register Your Account"}
+              </h2>
+              <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                <div className="space-y-6">
+                  <div className="relative text-left">
+                    <select
+                      value={user.role}
+                      onChange={(e) =>
+                        setUser({ ...user, role: e.target.value })
+                      }
+                      className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <option value="" disabled>
+                        Select a role
+                      </option>
+                      <option value="user">User</option>
+                      <option value="organization">Organization</option>
+                    </select>
+                    {user.role === "" && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Role is required
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="username"
+                      className="block text-sm font-medium leading-6 text-indigo-600"
+                    >
+                      Username
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        id="username"
+                        value={user.username}
+                        onChange={handleInputChange}
+                        name="username"
+                        type="text"
+                        autoComplete="username"
+                        required
+                        className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                      {isTouched && errors.username && isSubmitted && (
+                        <p className="text-red-500">{errors.username}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium leading-6 text-indigo-600"
+                    >
+                      Email Address
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        id="email"
+                        value={user.email}
+                        onChange={handleInputChange}
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                      {isTouched && errors.email && isSubmitted && (
+                        <p className="text-red-500">{errors.email}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor="password"
+                        className="block text-sm font-medium leading-6 text-indigo-600"
+                      >
+                        Password
+                      </label>
+                    </div>
+                    <div className="mt-2">
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={user.password}
+                        onChange={handleInputChange}
+                        autoComplete="new-password"
+                        required
+                        className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                      {isTouched && errors.password && isSubmitted && (
+                        <p className="text-red-500">{errors.password}</p>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor="confirmPassword"
+                        className="block text-sm font-medium leading-6 text-indigo-600"
+                      >
+                        Confirm Password
+                      </label>
+                    </div>
+                    <div className="mt-2">
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={user.confirmPassword}
+                        onChange={handleInputChange}
+                        autoComplete="new-password"
+                        required
+                        className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                      {isTouched && errors.confirmPassword && isSubmitted && (
+                        <p className="text-red-500">{errors.confirmPassword}</p>
+                      )}
+                    </div>
+                  </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <div className="space-y-6">
-          <div className="relative inline-block text-left">
-            <div className="relative text-left">
-              <select
-                value={user.role}
-                onChange={(e) => setUser({ ...user, role: e.target.value })}
-                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                <option value="" disabled>
-                  Select a role
-                </option>
-                <option value="user">User</option>
-                <option value="organization">Organization</option>
-              </select>
-              {user.role === "" && (
-                <p className="text-red-500 text-xs mt-1">Role is required</p>
-              )}
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium leading-6 text-indigo-600"
-            >
-              Username
-            </label>
-            <div className="mt-2">
-              <input
-                id="username"
-                value={user.username}
-                onChange={handleInputChange}
-                name="username"
-                type="text"
-                autoComplete="username"
-                required
-                className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              {isTouched && errors.username && isSubmitted && (
-                <p className="text-red-500">{errors.username}</p>
-              )}
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium leading-6 text-indigo-600"
-            >
-              Email Address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                value={user.email}
-                onChange={handleInputChange}
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              {isTouched && errors.email && isSubmitted && (
-                <p className="text-red-500">{errors.email}</p>
-              )}
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-indigo-600"
-              >
-                Password
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={user.password}
-                onChange={handleInputChange}
-                autoComplete="new-password"
-                required
-                className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              {isTouched && errors.password && isSubmitted && (
-                <p className="text-red-500">{errors.password}</p>
-              )}
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium leading-6 text-indigo-600"
-              >
-                Confirm Password
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                value={user.confirmPassword}
-                onChange={handleInputChange}
-                autoComplete="new-password"
-                required
-                className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              {isTouched && errors.confirmPassword && isSubmitted && (
-                <p className="text-red-500">{errors.confirmPassword}</p>
-              )}
-            </div>
-          </div>
+                  <div>
+                    <button
+                      onClick={handleSubmit}
+                      type="submit"
+                      className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                        buttonDisabled
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-indigo-500"
+                      } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                      disabled={buttonDisabled}
+                    >
+                      {loading ? "Processing" : "Register"}
+                    </button>
+                  </div>
+                </div>
 
-          <div>
-            <button
-              onClick={handleSubmit}
-              type="submit"
-              className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
-                buttonDisabled
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-indigo-500"
-              } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-              disabled={buttonDisabled}
-            >
-              {loading ? "Processing" : "Register"}
-            </button>
+                <p className="mt-10 text-center text-sm text-gray-500">
+                  Already a member?{" "}
+                  <Link
+                    href="/login"
+                    className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                  >
+                    Login
+                  </Link>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-
-        <p className="mt-10 text-center text-sm text-gray-500">
-          Already a member?{" "}
-          <Link
-            href="/login"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >
-            Login
-          </Link>
-        </p>
       </div>
-    </div>
+    </>
   );
 }
