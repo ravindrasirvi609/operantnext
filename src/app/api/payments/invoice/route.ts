@@ -18,31 +18,73 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
     }
 
     const invoiceHtml = `
-      <html>
-        <head>
-          <style>
-            /* Your CSS styles */
-            body {
-              font-family: Arial, sans-serif;
-            }
-            .invoice-header {
-              text-align: center;
-              margin-bottom: 20px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="invoice-header">
-            <h1>Invoice for Order ${orderId}</h1>
-          </div>
-          <div class="invoice-details">
-            <p>Order ID: ${orderId}</p>
-            <p>Payment ID: ${transactionData.paymentId}</p>
-            <p>Signature: ${transactionData.signature}</p>
-            <!-- Add other transaction details as needed -->
-          </div>
-        </body>
-      </html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body {
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+        }
+    
+        .invoice {
+          max-width: 600px;
+          margin: 20px auto;
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .invoice-header {
+          text-align: center;
+          background-color: #007bff;
+          color: #fff;
+          padding: 20px;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+    
+        .invoice-details {
+          padding: 20px;
+        }
+    
+        .invoice-details p {
+          margin: 5px 0;
+        }
+    
+        .invoice-footer {
+          text-align: center;
+          padding: 20px;
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+          background-color: #007bff;
+          color: #fff;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="invoice">
+        <div class="invoice-header">
+          <h1>Invoice for Order ${orderId}</h1>
+          <p>Date: ${new Date().toLocaleDateString()}</p>
+        </div>
+        <div class="invoice-details">
+          <p>Order ID: ${orderId}</p>
+          <p>Payment ID: ${transactionData.paymentId}</p>
+          <p>Signature: ${transactionData.signature}</p>
+          <!-- Add other transaction details as needed -->
+        </div>
+        <div class="invoice-footer">
+          <p>Thank you for your purchase!</p>
+        </div>
+      </div>
+    </body>
+    </html>
+    
     `;
 
     return invoiceHtml;
