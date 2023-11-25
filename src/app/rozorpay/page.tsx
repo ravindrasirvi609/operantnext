@@ -23,7 +23,7 @@ export default function Home() {
       console.log("data", data);
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+       // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
         name: "OPF",
         currency: data.currency,
         amount: data.amount,
@@ -111,7 +111,7 @@ export default function Home() {
           <div className="bg-gradient-to-r from-[#3e4044] to-[#1D2328] p-[1px] rounded-md mb-4">
             <button
               onClick={makePayment}
-              className="bg-gradient-to-r from-[#2E3137] to-[#1D2328] rounded-md w-full py-4 shadow-xl drop-shadow-2xl text-gray-300 font-bold"
+              className="bg-gradient-to-r from-[#2E3137] to-[#1D2328] rounded-md w-full py-4 shadow-xl drop-shadow-2xl text-gray-300 font-bold" data-payment_button_id="pl_N4jERjvSTSsI91"
             >
               payment
             </button>

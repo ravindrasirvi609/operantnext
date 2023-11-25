@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     await page.setContent(invoiceHtml);
     const pdfBuffer = await page.pdf();
     console.log("PDF generated successfully", pdfBuffer);
-    
+
     await browser.close();
 
     return new NextResponse(pdfBuffer, {

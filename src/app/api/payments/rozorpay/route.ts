@@ -5,6 +5,7 @@ import shortid from "shortid";
 export async function POST(req: NextRequest) {
   if (req.method === "POST") {
     const keyId = process.env.RAZORPAY_KEY ?? "";
+    console.log("keyId", keyId);
     const razorpay = new Razorpay({
       key_id: keyId,
       key_secret: process.env.RAZORPAY_SECRET,
