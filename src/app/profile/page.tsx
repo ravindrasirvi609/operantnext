@@ -49,54 +49,121 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-3xl font-semibold mb-4">Profile</h1>
-      <hr className="w-1/4 mb-6 border-t-2 border-gray-300" />
-      <div className="bg-black rounded-lg p-6 shadow-md w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
-        {userData ? (
-          <div>
-            <h2 className="text-xl font-semibold mb-2">
-              {data === "nothing" ? (
-                "Nothing"
-              ) : (
-                <a className="text-blue-500 hover:underline">
-                  <Link href={`/profile/${data}`}>{data}</Link>
-                </a>
-              )}
-            </h2>
-            <p className="mb-2">
-              <span className="font-semibold">First Name:</span>{" "}
-              {userData.firstName}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Last Name:</span>{" "}
-              {userData.lastName}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Email:</span>{" "}
-              {userData.personalEmail}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Mobile No:</span>{" "}
-              {userData.mobileNo}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Address:</span>{" "}
-              {userData.streetAddress}, {userData.town}, {userData.district},{" "}
-              {userData.state}, {userData.country}
-            </p>
+    <>
+      <div className="bg-lime-100">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-32">
+          <div className="px-4 py-6 sm:px-6">
+            <h1 className="text-3xl font-bold leading-tight text-gray-900">
+              Profile
+            </h1>
           </div>
-        ) : (
-          <p>Loading user data...</p>
-        )}
+        </div>
+        <div className="flex items-center justify-center">
+          <div className="w-2/12 py-6 mx-3">
+            <div className="bg-white shadow-2xl p-3 overflow-hidden sm:rounded-lg">
+              <div className="w-1/2 mx-auto mb-4">
+                <div className="bg-sky-200 rounded-full w-36 h-36 items-center "></div>
+              </div>
+              <div className="text-center font-bold">
+                {" "}
+                {userData?.firstName} {userData?.lastName}
+              </div>
+              <div className="text-center text-sm text-gray-500 ">
+                dynamic Headline here ... Lorem ipsum dolor sit amet consectetur
+              </div>
+              <div className="flex items-center justify-center mt-3">
+                <button className="bg-sky-200 text-black px-4 py-2 rounded-full">
+                  Edit Profile
+                </button>
+              </div>
+              <div className="flex items-center justify-center mt-3">
+                <button
+                  className="bg-sky-200 text-black px-4 py-2 rounded-full"
+                  onClick={logout}
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="w-9/12 mx-12 py-6 sm:px-6 lg:px-8">
+            <div className="bg-white shadow-2xl overflow-hidden sm:rounded-lg">
+              <div className="px-4 py-5 sm:px-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  User Information
+                </h3>
+                <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                  Personal details and application.
+                </p>
+              </div>
+              <div className="border-t border-sky-200">
+                <dl>
+                  <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Full name
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.firstName} {userData?.lastName}
+                    </dd>
+                  </div>
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Email address
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.personalEmail}
+                    </dd>
+                  </div>
+                  <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Mobile Number
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.mobileNo}
+                    </dd>
+                  </div>
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Street Address
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.streetAddress}
+                    </dd>
+                  </div>
+                  <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">Town</dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.town}
+                    </dd>
+                  </div>
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">
+                      District
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.district}
+                    </dd>
+                  </div>
+                  <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt className="text-sm font-medium text-gray-500">State</dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.state}
+                    </dd>
+                  </div>
+                  <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
+                    <dt className="text-sm font-medium text-gray-500">
+                      Country
+                    </dt>
+                    <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {userData?.country}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <hr className="w-1/4 mt-6 border-t-2 border-gray-300" />
-      <button
-        onClick={logout}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-6"
-      >
-        Logout
-      </button>
-    </div>
+    </>
   );
 }

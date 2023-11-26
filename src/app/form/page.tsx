@@ -59,22 +59,17 @@ const AadhaarForm = () => {
       try {
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
-        const receivedImage = receivedFormData.data.profileImage; // Create a variable for the received image URL
+        const receivedImage = receivedFormData.data.profileImage;
         console.log("received", receivedFormData);
-        setSelectedImage(receivedImage); // Update the selectedImage state
-
-
+        setSelectedImage(receivedImage);
+  
         if (receivedFormData && receivedFormData.data) {
           const parsedDate = new Date(receivedFormData.data.dob);
-
-          const formattedDate =
-            parsedDate.getDate() +
-            "/" +
-            (parsedDate.getMonth() + 1) +
-            "/" +
-            parsedDate.getFullYear();
+          const formattedDate = `${parsedDate.getDate()}/${
+            parsedDate.getMonth() + 1
+          }/${parsedDate.getFullYear()}`;
           console.log("formattedDate", formattedDate);
-
+  
           setFormData({
             ...initialFormData,
             ...receivedFormData.data,
@@ -85,6 +80,7 @@ const AadhaarForm = () => {
         Swal.fire(error.message);
       }
     };
+  
     fetchData();
   }, []);
 
@@ -92,11 +88,12 @@ const AadhaarForm = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-  
-      for (const key in initialFormData) {
-      //  formData.append(key, userForm[key] as string); // Use type assertion here
-      }
-  
+    console.log("userForm", userForm);
+    
+
+ //   for (const key in userForm) {
+ //     formData.append(key, userForm[key] as string);
+  //  }
       await axios.post("/api/users/form", formData);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
       router.push("/rozorpay");
@@ -148,6 +145,7 @@ const AadhaarForm = () => {
                 id="firstName"
                 name="firstName"
                 value={userForm.firstName}
+                onChange={handleChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -161,6 +159,8 @@ const AadhaarForm = () => {
                 id="lastName"
                 name="lastName"
                 value={userForm.lastName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -174,6 +174,8 @@ const AadhaarForm = () => {
                 id="personalEmail"
                 name="personalEmail"
                 value={userForm.personalEmail}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               />
@@ -191,6 +193,8 @@ const AadhaarForm = () => {
                 id="mobileNo"
                 name="mobileNo"
                 value={userForm.mobileNo}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -204,6 +208,8 @@ const AadhaarForm = () => {
                 id="aadharNo"
                 name="aadharNo"
                 value={userForm.aadharNo}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
               <p className="text-xs text-gray-600 mt-1">
@@ -235,6 +241,8 @@ const AadhaarForm = () => {
                 id="streetAddress"
                 name="streetAddress"
                 value={userForm.streetAddress}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -248,6 +256,8 @@ const AadhaarForm = () => {
                 id="town"
                 name="town"
                 value={userForm.town}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -261,6 +271,8 @@ const AadhaarForm = () => {
                 id="district"
                 name="district"
                 value={userForm.district}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -274,6 +286,8 @@ const AadhaarForm = () => {
                 id="state"
                 name="state"
                 value={userForm.state}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -287,6 +301,8 @@ const AadhaarForm = () => {
                 id="country"
                 name="country"
                 value={userForm.country}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -300,6 +316,8 @@ const AadhaarForm = () => {
                 id="secSclName"
                 name="secSclName"
                 value={userForm.secSclName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -313,6 +331,8 @@ const AadhaarForm = () => {
                 id="secMarks"
                 name="secMarks"
                 value={userForm.secMarks}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -326,6 +346,8 @@ const AadhaarForm = () => {
                 id="srSecSclName"
                 name="srSecSclName"
                 value={userForm.srSecSclName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -339,6 +361,8 @@ const AadhaarForm = () => {
                 id="srSecMarks"
                 name="srSecMarks"
                 value={userForm.srSecMarks}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -352,6 +376,8 @@ const AadhaarForm = () => {
                 id="ugColleageName"
                 name="ugColleageName"
                 value={userForm.ugColleageName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -365,6 +391,8 @@ const AadhaarForm = () => {
                 id="ugCourseName"
                 name="ugCourseName"
                 value={userForm.ugCourseName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -391,6 +419,8 @@ const AadhaarForm = () => {
                 id="pgColleageName"
                 name="pgColleageName"
                 value={userForm.pgColleageName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -404,6 +434,8 @@ const AadhaarForm = () => {
                 id="pgCourseName"
                 name="pgCourseName"
                 value={userForm.pgCourseName}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -417,6 +449,8 @@ const AadhaarForm = () => {
                 id="pgMarks"
                 name="pgMarks"
                 value={userForm.pgMarks}
+                onChange={handleChange}
+
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
