@@ -9,56 +9,54 @@ connect();
 
 export async function POST(req: NextRequest) {
   try {
-  const userAvatar = await uploadMiddleware(req); // Add middleware invocation
-
     const userId = await getDataFromToken(req);
-    const data = await req.formData();
+    const formData = await req.formData();
 
-    const response = await req.json();
-    console.log("OK", response);
+    // Create a new NextRequest object and assign the necessary properties
+    // const nextReq: NextRequest = {
+    //   ...req,
+    //   body: formData,
+    // };
+
+    // Use the uploadMiddleware by passing the parsed form data
+    await uploadMiddleware(formData);
 
     let userForm = await UserForm.findOne({ _id: userId });
+    console.log("userForm", userForm);
 
     if (userForm) {
-      userForm = await UserForm.findOneAndUpdate({ _id: userId }, response, {
-        new: true,
-      });
+      userForm = await UserForm.findOneAndUpdate({ _id: userId }, { $set: formData }, { new: true });
     } else {
-      userForm = new UserForm({ _id: userId, ...response });
+      userForm = new UserForm({ _id: userId, ...formData });
+      console.log("userForm", userForm);
       await userForm.save();
     }
 
-    // Step 5: Return the response
     return new NextResponse("User form saved successfully", userForm);
   } catch (error) {
-    console.log(error);
-    return new NextResponse("Error saving user form", { status: 500 });
+    console.error("Error in POST handler:", error);
+    return new NextResponse("Error processing the request", { status: 500 });
   }
 }
-
 
 // GET API to fetch user form data
 export async function GET(req: NextRequest) {
   try {
     // Step 1: Obtain the logged-in user's ID from the token
     const userId = await getDataFromToken(req);
-    console.log("userId--", userId);
 
     // Step 2: Fetch the user form data from the database based on the user's ID
     const userForm = await UserForm.findOne({ _id: userId });
-    console.log("userForm-", userForm);
 
     // Step 3: Return the response
     const resp = NextResponse.json({
-      message: "data recieved successful",
+      message: "data received successfully",
       success: true,
       data: userForm,
     });
-    console.log("response =", resp);
 
     return resp;
   } catch (error) {
-    console.log(error);
     return new NextResponse("Error fetching user form", { status: 500 });
   }
 }

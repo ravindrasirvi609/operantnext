@@ -4,6 +4,32 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+interface UserFormData {
+  profileImage: string;
+  firstName: string;
+  lastName: string;
+  personalEmail: string;
+  mobileNo: string;
+  aadharNo: string;
+  dob: string;
+  streetAddress: string;
+  town: string;
+  district: string;
+  state: string;
+  country: string;
+  secSclName: string;
+  secMarks: string;
+  srSecSclName: string;
+  srSecMarks: string;
+  ugColleageName: string;
+  ugCourseName: string;
+  ugMarks: string;
+  pgColleageName: string;
+  pgCourseName: string;
+  pgMarks: string;
+  [key: string]: string | File | undefined;
+
+}
 
 const AadhaarForm = () => {
   const router = useRouter();
@@ -32,7 +58,7 @@ const AadhaarForm = () => {
     pgMarks: "",
   };
 
-  const [userForm, setFormData] = useState(initialFormData);
+  const [userForm, setFormData] = useState<UserFormData>(initialFormData);
   const [selectedImage, setSelectedImage] = useState("");
 
   const handleImageChange = (event: any) => {
@@ -88,12 +114,13 @@ const AadhaarForm = () => {
     e.preventDefault();
     try {
       const formData = new FormData();
-    console.log("userForm", userForm);
-    
-
- //   for (const key in userForm) {
- //     formData.append(key, userForm[key] as string);
-  //  }
+      for (const key in initialFormData) {
+        formData.append(key, userForm[key] as string); // Use type assertion here
+      }
+  
+      // Append the profile image separately
+      formData.append("profileImage", userForm.profileImage);
+  
       await axios.post("/api/users/form", formData);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
       router.push("/rozorpay");
