@@ -8,7 +8,7 @@ const userFormSchema = new mongoose.Schema({
   personalEmail: { type: String, required: true, unique: true },
   mobileNo: { type: String },
   aadharNo: { type: String },
-  // dob: { type: Date },
+   dob: { type: Date },
   streetAddress: { type: String },
   town: { type: String },
   district: { type: String },

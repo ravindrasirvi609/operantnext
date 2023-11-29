@@ -28,7 +28,7 @@ interface UserFormData {
   pgCourseName: string;
   pgMarks: string;
   [key: string]: string | File | undefined;
-
+  
 }
 
 const AadhaarForm = () => {

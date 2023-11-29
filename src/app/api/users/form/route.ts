@@ -7,30 +7,24 @@ import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
+
 export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
     const formData = await req.formData();
 
-    // Create a new NextRequest object and assign the necessary properties
-    // const nextReq: NextRequest = {
-    //   ...req,
-    //   body: formData,
-    // };
-
-    // Use the uploadMiddleware by passing the parsed form data
-    await uploadMiddleware(formData);
+    console.log("POST request", userId, formData);
+    
 
     let userForm = await UserForm.findOne({ _id: userId });
-    console.log("userForm", userForm);
 
     if (userForm) {
-      userForm = await UserForm.findOneAndUpdate({ _id: userId }, { $set: formData }, { new: true });
+      userForm.set(formData);
     } else {
       userForm = new UserForm({ _id: userId, ...formData });
-      console.log("userForm", userForm);
-      await userForm.save();
     }
+
+    await userForm.save();
 
     return new NextResponse("User form saved successfully", userForm);
   } catch (error) {
@@ -38,6 +32,7 @@ export async function POST(req: NextRequest) {
     return new NextResponse("Error processing the request", { status: 500 });
   }
 }
+
 
 // GET API to fetch user form data
 export async function GET(req: NextRequest) {
