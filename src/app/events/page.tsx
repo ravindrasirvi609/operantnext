@@ -56,9 +56,9 @@ export default function EventList() {
   }
 
   return (
-    <div className="bg-white absolute inset-x-0 top-0 z-50">
+    <div className="bg-lime-100 absolute inset-x-0 top-0 z-50">
       <div className="flex flex-col items-center justify-center min-h-screen mt-2">
-        <h1 className=" p-2 text-3xl font-extrabold mb-4 text-green-600">
+        <h1 className=" p-2 text-3xl font-extrabold mb-4 text-sky-800">
           Upcoming Events
         </h1>
 
@@ -67,20 +67,14 @@ export default function EventList() {
             {eventData.map((event) => (
               <div
                 key={event._id}
-                className="text-black bg-slate-100 border-green-600 shadow-lg shadow-green-950	 border-2	 p-6 w-90 align-center  m-5"
+                className="text-black bg-sky-200 border-green-600 shadow-lg shadow-green-950	 border-2	 p-6 w-90 align-center  m-5"
               >
                 <h1 className="font-extrabold text-4xl text-center text-black capitalize">
                   {event.title}
                 </h1>
                 <div className="flex justify-between">
                   <p className="m-3 p-2 bg-violet-700 rounded-lg	 font-extrabold hover:bg-violet-300 text-white hover:text-black">
-                    <a
-                      href={event.registrationUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Register here
-                    </a>
+                    <Link href="/rozorpay">Join here</Link>
                   </p>
                   <p className="mb-2">
                     <span className="font-semibold flex justify-end">
