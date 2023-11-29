@@ -191,7 +191,7 @@ export default function SignupPage() {
                     <option value="" disabled>
                       Select a role
                     </option>
-                    <option value="user">User</option>
+                    <option value="user">Student</option>
                     <option value="organization">Organization</option>
                   </select>
                   {user.role === "" && (
