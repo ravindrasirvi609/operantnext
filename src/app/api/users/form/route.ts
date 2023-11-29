@@ -7,14 +7,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 connect();
 
-
 export async function POST(req: NextRequest) {
   try {
     const userId = await getDataFromToken(req);
-    const formData = await req.formData();
+    const formData = await req.json();
 
     console.log("POST request", userId, formData);
-    
 
     let userForm = await UserForm.findOne({ _id: userId });
 
@@ -32,7 +30,6 @@ export async function POST(req: NextRequest) {
     return new NextResponse("Error processing the request", { status: 500 });
   }
 }
-
 
 // GET API to fetch user form data
 export async function GET(req: NextRequest) {
