@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import Image from "next/image";
 
 interface UserData {
   _id: string;
@@ -44,6 +45,10 @@ export default function ProfilePage() {
     }
   };
 
+ const editProfileRoutinting = () => {
+    router.push("/form");
+  }
+
   useEffect(() => {
     getUserDetails();
   }, []);
@@ -53,8 +58,8 @@ export default function ProfilePage() {
       <div className="bg-lime-100">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-32">
           <div className="px-4 py-6 sm:px-6">
-            <h1 className="text-3xl font-bold leading-tight text-gray-900">
-              Profile
+            <h1 className="text-3xl font-bold leading-tight text-sky-800">
+              Student Profile
             </h1>
           </div>
         </div>
@@ -62,9 +67,19 @@ export default function ProfilePage() {
           <div className="w-2/12 py-6 mx-3">
             <div className="bg-white shadow-2xl p-3 overflow-hidden sm:rounded-lg">
               <div className="w-1/2 mx-auto mb-4">
-                <div className="bg-sky-200 rounded-full w-36 h-36 items-center "></div>
+                <div className="bg-sky-200 rounded-full w-36 h-36 items-center ">
+                  <Image
+                    
+                      className="rounded-full"
+                      src="/user.png"
+                      alt=""
+                      width={144}
+                      height={144}
+                    />
+                
+                </div>
               </div>
-              <div className="text-center font-bold">
+              <div className="text-center font-bold text-sky-900 mt-16">
                 {" "}
                 {userData?.firstName} {userData?.lastName}
               </div>
@@ -72,7 +87,7 @@ export default function ProfilePage() {
                 dynamic Headline here ... Lorem ipsum dolor sit amet consectetur
               </div>
               <div className="flex items-center justify-center mt-3">
-                <button className="bg-sky-200 text-black px-4 py-2 rounded-full">
+                <button className="bg-sky-200 text-black px-4 py-2 rounded-full" onClick={editProfileRoutinting}>
                   Edit Profile
                 </button>
               </div>

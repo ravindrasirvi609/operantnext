@@ -122,7 +122,7 @@ const AadhaarForm = () => {
 
       await axios.post("/api/users/form", userForm);
       Swal.fire("Good job!", "Form Successfully Submitted!", "success");
-      router.push("/rozorpay");
+      router.push("/profile");
 
       setFormData(initialFormData);
     } catch (error) {
@@ -131,11 +131,11 @@ const AadhaarForm = () => {
   };
 
   return (
-    <div className="bg-gray-700">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-32">
+    <div className="bg-lime-100">
+      <div className="max-w-7xl mx-auto py-16 sm:px-6 lg:px-32">
         <div className="px-4 py-6 sm:px-6">
-          <h1 className="text-3xl font-bold leading-tight text-gray-900">
-            Edit your account here
+          <h1 className="text-3xl font-bold flex  justify-center leading-tight text-sky-900">
+            Edit your account
           </h1>
         </div>
       </div>
@@ -244,8 +244,8 @@ const AadhaarForm = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-full px-3">
+          <div className="flex justify-center flex-wrap -mx-3 mb-6">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label
                 htmlFor="aadharNo"
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -264,94 +264,114 @@ const AadhaarForm = () => {
                 * Aadhar is required for DigiLoker Certificate
               </p>
             </div>
+
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="dob"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                Date of Birth:
+              </label>
+              <input
+                type="date"
+                id="dob"
+                name="dob"
+                value={userForm.dob}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                required
+              />
+            </div>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="dob" className="block mb-2 text-lg">
-              Date of Birth:
-            </label>
-            <input
-              type="date"
-              id="dob"
-              name="dob"
-              value={userForm.dob}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
+          <div className="flex flex-wrap -mx-3 mb-2">
+            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="streetAddress"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                Street Address:
+              </label>
+              <input
+                type="text"
+                id="streetAddress"
+                name="streetAddress"
+                value={userForm.streetAddress}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+
+            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="town"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                Town:
+              </label>
+              <input
+                type="text"
+                id="town"
+                name="town"
+                value={userForm.town}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+
+            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="district"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                District:
+              </label>
+              <input
+                type="text"
+                id="district"
+                name="district"
+                value={userForm.district}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+
+            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 mt-4">
+              <label
+                htmlFor="state"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                State:
+              </label>
+              <input
+                type="text"
+                id="state"
+                name="state"
+                value={userForm.state}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+
+            <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0 mt-4">
+              <label
+                htmlFor="country"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                Country:
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                value={userForm.country}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="streetAddress" className="block mb-2 text-lg">
-              Street Address:
-            </label>
-            <input
-              type="text"
-              id="streetAddress"
-              name="streetAddress"
-              value={userForm.streetAddress}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="town" className="block mb-2 text-lg">
-              Town:
-            </label>
-            <input
-              type="text"
-              id="town"
-              name="town"
-              value={userForm.town}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="district" className="block mb-2 text-lg">
-              District:
-            </label>
-            <input
-              type="text"
-              id="district"
-              name="district"
-              value={userForm.district}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="state" className="block mb-2 text-lg">
-              State:
-            </label>
-            <input
-              type="text"
-              id="state"
-              name="state"
-              value={userForm.state}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="country" className="block mb-2 text-lg">
-              Country:
-            </label>
-            <input
-              type="text"
-              id="country"
-              name="country"
-              value={userForm.country}
-              onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="secSclName" className="block mb-2 text-lg">
               10th School Name:
             </label>
@@ -361,7 +381,7 @@ const AadhaarForm = () => {
               name="secSclName"
               value={userForm.secSclName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -375,7 +395,7 @@ const AadhaarForm = () => {
               name="secMarks"
               value={userForm.secMarks}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -389,7 +409,7 @@ const AadhaarForm = () => {
               name="srSecSclName"
               value={userForm.srSecSclName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -403,7 +423,7 @@ const AadhaarForm = () => {
               name="srSecMarks"
               value={userForm.srSecMarks}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -417,7 +437,7 @@ const AadhaarForm = () => {
               name="ugColleageName"
               value={userForm.ugColleageName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -431,7 +451,7 @@ const AadhaarForm = () => {
               name="ugCourseName"
               value={userForm.ugCourseName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -444,7 +464,7 @@ const AadhaarForm = () => {
               id="ugMarks"
               name="ugMarks"
               value={userForm.ugMarks}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -458,7 +478,7 @@ const AadhaarForm = () => {
               name="pgColleageName"
               value={userForm.pgColleageName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -472,7 +492,7 @@ const AadhaarForm = () => {
               name="pgCourseName"
               value={userForm.pgCourseName}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
           </div>
 
@@ -486,16 +506,16 @@ const AadhaarForm = () => {
               name="pgMarks"
               value={userForm.pgMarks}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             />
-          </div>
+          </div> */}
 
           <div className="text-center">
             <button
               type="submit"
-              className=" bg-blue-800 hover:bg-black text-white font-bold py-2 px-4 rounded-full m-10 h-20 w-60"
+              className=" bg-sky-300 hover:bg-black text-white font-bold py-2 px-4 rounded-full m-10 h-12 w-26"
             >
-              <h1 className="text-2xl">Submit</h1>
+              <h1 className="text-xl">Submit</h1>
             </button>
           </div>
         </form>
