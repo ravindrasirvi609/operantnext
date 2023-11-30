@@ -80,14 +80,24 @@ export default function EventList() {
                     <Link href={`/events/${event._id}`}>Details & RSVP</Link>
                   </p>
                   <p className="mb-2">
-                    <span className="font-semibold flex justify-end mb-2">
+                    <span className="font-semibold flex justify-end mb-2 text-center">
                       {formatDate(event.date)}
                     </span>
-                    <div className="text-gray-400">
+                    <div className="text-gray-400 text-center">
                       {event.location.address}, {event.location.city},{" "}
                       {event.location.state}, {event.location.country}
                     </div>
                   </p>
+                  <p>
+                  <div>
+                    {event.attendees.length}{" "}
+                    {event.attendees.length === 1 ? "person" : "people"} going
+                  </div>
+                  <div className="m-3 p-2 bg-indigo-700 rounded-lg font-extrabold hover:bg-indigo-300 text-white hover:text-black">
+                    <Link href={`/rozorpay/${event._id}`}>join this event</Link>
+                  </div>
+                  </p>
+                
                 </div>
                 {event.isPaid ? (
                   <p className="mb-2 m-3">
