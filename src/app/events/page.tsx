@@ -94,7 +94,7 @@ export default function EventList() {
                     {event.attendees.length === 1 ? "person" : "people"} going
                   </div>
                   <div className="m-3 p-2 bg-indigo-700 rounded-lg font-extrabold hover:bg-indigo-300 text-white hover:text-black">
-                    <Link href={`/rozorpay/${event._id}`}>join this event</Link>
+                    <Link href={`/rozorpay`}>join this event</Link>
                   </div>
                   </p>
                 

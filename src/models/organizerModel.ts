@@ -14,3 +14,4 @@ const Organizer =
   mongoose.models.Organizer || mongoose.model("Organizer", organizerSchema);
 
 export default Organizer;
+  

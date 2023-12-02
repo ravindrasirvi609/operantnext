@@ -4,12 +4,35 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+interface planDetails {
+  planId?: string;
+  price: number;
+  currency: string;
+}
+
 export default function Home() {
   const [paymentInitialized, setPaymentInitialized] = useState(false);
+  const [planDetails, setPlanDetails] = useState<planDetails>();
+
 
   useEffect(() => {
+    GetPlansDetails();
     initializeRazorpay();
   }, []);
+
+  const GetPlansDetails = async () => {
+    const payload = {
+      planId: "656abe776c566036dad189d7",
+    }
+    const response = await axios.post(  
+      "/api/plans/plandetails", payload
+    );
+    const data = response.data;
+    console.log("data", data);
+    console.log("response", data.price , data.currency);
+    setPlanDetails(data);
+
+  };
 
   const makePayment = async () => {
     if (!paymentInitialized) {
@@ -19,8 +42,8 @@ export default function Home() {
 
     try {
       const payload = {
-        amount: 55,
-        currency: "INR",
+        amount: planDetails?.price,
+        currency: planDetails?.currency,
         payment_capture: 1,
       };
       const response = await axios.post("/api/payments/rozorpay", payload);
@@ -48,6 +71,12 @@ export default function Home() {
           const resultRes = await axios.post(
             "/api/payments/transaction",
             payment
+          );
+
+          // join Event API After the payment has been Completed 
+          const joinEvent = await axios.post(
+            "/api/events/joinEvent",
+            { id: "655266302eb91bdc1da242de" }
           );
 
           // Download the invoice PDF
