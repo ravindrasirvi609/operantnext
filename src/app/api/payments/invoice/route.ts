@@ -534,12 +534,12 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
         <div class="footer">
           <div class="contact">
             <div class="bill-to">Contact:</div>
-            <div class="bill-to1">Phone: +91 8250 XXX XXX</div>
-            <div class="bill-to1">Email: ashishbiz@pm.me</div>
+            <div class="bill-to1">Phone: +91 8107199052</div>
+            <div class="bill-to1">Email: sirviravirandra609@gmail.com</div>
           </div>
           <div class="payment">
             <div class="bill-to">Payment:</div>
-            <div class="bill-to1">Payable to Ashish Sharma</div>
+            <div class="bill-to1">Payable to Ravindra Choudhary</div>
             <div class="bill-to1">Account number, Bank</div>
             <div class="bill-to6">*Please make payment before due date</div>
           </div>
@@ -689,12 +689,12 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
         <div class="footer">
           <div class="contact">
             <div class="bill-to">Contact:</div>
-            <div class="bill-to1">Phone: +91 8250 XXX XXX</div>
-            <div class="bill-to1">Email: ashishbiz@pm.me</div>
+            <div class="bill-to1">Phone: +91 8107199052</div>
+            <div class="bill-to1">Email: sirviravirandra609@gmail.com</div>
           </div>
           <div class="payment">
             <div class="bill-to">Payment:</div>
-            <div class="bill-to1">Payable to Ashish Sharma</div>
+            <div class="bill-to1">Payable to Ravindra Choudhary</div>
             <div class="bill-to1">Account number, Bank</div>
             <div class="bill-to6">*Please make payment before due date</div>
           </div>

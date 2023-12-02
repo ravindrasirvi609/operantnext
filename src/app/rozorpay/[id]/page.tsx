@@ -73,6 +73,15 @@ export default function EventPayment({ params }: any) {
             id: planDetails?.eventId,
           });
 
+          if (joinEvent) {
+            Swal.fire({
+              icon: "success",
+              title: "Payment successful",
+              text: "You have successfully joined the event",
+            });
+          }
+
+
           // Download the invoice PDF
           try {
             const json = {

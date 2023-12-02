@@ -9,6 +9,8 @@ connect();
 export async function POST(req: NextRequest) {
   try {
     // Step 1: Get the user's ID from the token
+    console.log("Request ----------------------------------------------------------------");
+    
     const userId = await getDataFromToken(req);
 
     // Step 2: Ensure the user is authenticated
@@ -23,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     // Step 4: Create a new event document in the database
     const event = await eventModel.create({ ...eventData, organizer: userId });
-    console.log("event", event);
+    console.log("Event", event);
 
     // Step 5: Return the created event as a JSON response
     return new NextResponse(JSON.stringify(event), {
@@ -32,8 +34,15 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return new NextResponse("Error creating the event", { status: 500 });
+
+    if (error.name === "ValidationError") {
+      // Handle validation errors (e.g., required fields missing)
+      return new NextResponse(JSON.stringify({ error: error.message }), { status: 400 });
+    } else {
+      // Handle other errors
+      return new NextResponse("Error creating the event", { status: 500 });
+    }
   }
 }

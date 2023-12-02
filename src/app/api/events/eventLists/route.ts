@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
           if (!organizer) {
             console.log(`Organizer not found for event ${event._id}`);
-            return null; // or handle the case where organizer is not found
+            throw new Error(`Organizer not found for event ${event._id}`);
           }
 
           const organizerName = organizer.userName; // Use the correct field from your schema
@@ -53,18 +53,20 @@ export async function GET(req: NextRequest) {
               email: organizerEmail,
             },
           };
-        } catch (error) {
+        } catch (error :any) {
           console.error(`Error fetching organizer for event ${event._id}:`, error);
-          return null;
+          // Return the event with an error field
+          return {
+            ...event.toObject(),
+            isJoin: isUserJoined,
+            error: `Error fetching organizer: ${error.message}`,
+          };
         }
       })
     );
 
-    // Filter out null values (events without organizers)
-    const validEvents = eventsWithJoinStatus.filter((event) => event !== null);
-
     // Step 5: Handle successful response
-    return new NextResponse(JSON.stringify(validEvents), {
+    return new NextResponse(JSON.stringify(eventsWithJoinStatus), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

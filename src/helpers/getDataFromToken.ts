@@ -3,13 +3,14 @@ import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 export const getDataFromToken = (request: NextRequest) => {
   try {
-    const token = request.cookies.get('token')?.value || '';
+    const token = request.cookies.get('token')?.value || '';    
 
     if (!token) {
       throw new Error("Token not found in cookies");
     }
 
     const decodedToken: any = jwt.verify(token, process.env.TOKEN_SECRET!);
+    
 
     if (!decodedToken || typeof decodedToken.id !== 'string') {
       throw new Error("Invalid or missing 'id' in the token payload");

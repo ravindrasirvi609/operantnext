@@ -42,6 +42,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
+console.log("event", userId, eventId);
+
+    console.log("event", event.attendees);
+    
 
     // Register the user for the event
     event.attendees.push(userId);
@@ -54,8 +58,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 404 }
       );
     }
-    user.eventsAttended.push(eventId);
-    await user.save();
+    console.log("user events Attended", user.eventsAttended, eventId);
+    
+  //  user.eventsAttended.push(eventId);
+//   await user.save();
     return NextResponse.json(
       { event, isJoin: false, message: "User registered successfully" },
       { status: 200 }
