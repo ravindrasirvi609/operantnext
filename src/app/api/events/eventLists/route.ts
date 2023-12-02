@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
           };
         } catch (error) {
           console.error(`Error fetching organizer for event ${event._id}:`, error);
-          return null; // or handle the error case
+          return null;
         }
       })
     );

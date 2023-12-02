@@ -27,6 +27,14 @@ const eventSchema = new mongoose.Schema({
       ref: "User", // Reference to a User model for tracking attendees
     },
   ],
+  planDetails: 
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Plans", // Reference to a Plan model for tracking plans
+    },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+
 });
 
 const eventModel =
