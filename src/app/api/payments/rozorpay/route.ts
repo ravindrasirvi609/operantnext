@@ -5,14 +5,14 @@ import shortid from "shortid";
 export async function POST(req: NextRequest) {
   if (req.method === "POST") {
     const keyId = process.env.RAZORPAY_KEY ?? "";
-    console.log("keyId", keyId);
+    const requestBody = await req.json();
     const razorpay = new Razorpay({
       key_id: keyId,
       key_secret: process.env.RAZORPAY_SECRET,
     });
-    const payment_capture = 1;
-    const amount = 1;
-    const currency = "INR";
+    const payment_capture = requestBody.payment_capture;
+    const amount = requestBody.amount;
+    const currency = requestBody.currency;
     const options = {
       amount: (amount * 100).toString(),
       currency,
@@ -36,4 +36,3 @@ export async function POST(req: NextRequest) {
     }
   }
 }
-

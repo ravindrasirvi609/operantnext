@@ -18,12 +18,17 @@ export default function Home() {
     }
 
     try {
-      const response = await axios.post("/api/payments/rozorpay");
+      const payload = {
+        amount: 55,
+        currency: "INR",
+        payment_capture: 1,
+      };
+      const response = await axios.post("/api/payments/rozorpay", payload);
       const data = response.data;
       console.log("data", data);
 
       const options = {
-       // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
+        // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
         name: "OPF",
         currency: data.currency,
         amount: data.amount,
@@ -108,24 +113,16 @@ export default function Home() {
     <div className="font-Inter h-screen overflow-auto bg-gradient-to-r from-blue-400 to-blue-500">
       <div className="relative z-10 flex flex-col md:flex-row mt-10 items-center max-w-6xl justify-evenly mx-auto">
         <div className="md:w-1/3 mb-20 md:mb-0 mx-10">
-        <div className="bg-gradient-to-r from-[#3e4044] to-[#1D2328] p-[1px] rounded-md mb-4">
-      <form>
-        <script
-          src="https://checkout.razorpay.com/v1/payment-button.js"
-          data-payment_button_id="pl_N4jERjvSTSsI91"
-          async
-          onLoad={() => setPaymentInitialized(true)}
-        ></script>
-        {paymentInitialized && (
-          <button
-            onClick={makePayment}
-            className="bg-gradient-to-r from-[#2E3137] to-[#1D2328] rounded-md w-full py-4 shadow-xl drop-shadow-2xl text-gray-300 font-bold"
-          >
-            Payment
-          </button>
-        )}
-      </form>
-    </div>
+          <div className="bg-gradient-to-r from-[#3e4044] to-[#1D2328] p-[1px] rounded-md mb-4">
+            {paymentInitialized && (
+              <button
+                onClick={makePayment}
+                className="bg-gradient-to-r from-[#2E3137] to-[#1D2328] rounded-md w-full py-4 shadow-xl drop-shadow-2xl text-gray-300 font-bold"
+              >
+                Payment
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

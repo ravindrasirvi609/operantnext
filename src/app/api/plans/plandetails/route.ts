@@ -1,6 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-import eventModel from "@/models/eventModel";
+import plan from "@/models/pricePlansModel";
 import { NextRequest, NextResponse } from "next/server";
 
 // Initialize the database connection
@@ -12,15 +12,15 @@ export async function GET(req: NextRequest) {
     if (!userId) {
       return new NextResponse("Authentication required", { status: 401 });
     }
-    const eventData = await req.json();
-    const eventId = eventData.id;
-    const event = await eventModel.findById(eventId);
+    const planData = await req.json();
+    const planId = planData.id;
+    const planDetails = await plan.findById(planId);
 
-    if (!event) {
-      return NextResponse.json(event, { status: 200 });
+    if (!planDetails) {
+      return NextResponse.json(planDetails, { status: 200 });
     }
   } catch (error) {
     console.error(error);
-    return new NextResponse("Error retrieving event details", { status: 500 });
+    return new NextResponse("Error retrieving Plan details", { status: 500 });
   }
 }
