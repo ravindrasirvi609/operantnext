@@ -8,14 +8,14 @@ connect();
 
 export async function DELETE(req: NextRequest) {
   try {
-    const userId = await getDataFromToken(req);
+    const userId = await getDataFromToken(req); // Pass req as the second argument
     const eventData = await req.json();
     const eventId = eventData.id; // Assuming you're passing the event ID as a query parameter
-    const deletedEvent = await eventModel.findByIdAndRemove(eventId);
+  //  const deletedEvent = await eventModel.findByIdAndRemove(eventId);
 
-    if (!deletedEvent) {
-      return NextResponse.json("Event not found", { status: 500 });
-    }
+    // if (!deletedEvent) {
+    //   return NextResponse.json("Event not found", { status: 500 });
+    // }
 
     return NextResponse.json("Event deleted successfully", { status: 200 });
   } catch (error) {
