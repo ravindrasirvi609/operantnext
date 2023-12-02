@@ -11,7 +11,11 @@ export async function DELETE(req: NextRequest) {
     const userId = await getDataFromToken(req); // Pass req as the second argument
     const eventData = await req.json();
     const eventId = eventData.id; // Assuming you're passing the event ID as a query parameter
-  //  const deletedEvent = await eventModel.findByIdAndRemove(eventId);
+
+    // TODO: This should probably be a function need to check if the event--------------------------
+    // TODO: This should be SOFT DELETE----------------------------------------------------------------
+
+    //  const deletedEvent = await eventModel.findByIdAndRemove(eventId);
 
     // if (!deletedEvent) {
     //   return NextResponse.json("Event not found", { status: 500 });
