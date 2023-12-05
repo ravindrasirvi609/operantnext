@@ -24,7 +24,6 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
-      console.log(`Success`, response.data.data.role);
       localStorage.setItem("role", response.data.data.role);
       router.push("/");
       Swal.fire("Good job!", "Login Successfully!", "success");
@@ -56,7 +55,6 @@ export default function LoginPage() {
               formdata
             );
             if (response.data.message === "Success") {
-              console.log("res SuccessSuccess", response);
               Swal.fire(
                 "success",
                 "Please Check your mailbox for a new password",

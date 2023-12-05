@@ -85,7 +85,6 @@ const AadhaarForm = () => {
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
         const receivedImage = receivedFormData.data.profileImage;
-        console.log("received", receivedFormData);
         setSelectedImage(receivedImage);
 
         if (receivedFormData && receivedFormData.data) {
@@ -93,7 +92,6 @@ const AadhaarForm = () => {
           const formattedDate = `${parsedDate.getDate()}/${
             parsedDate.getMonth() + 1
           }/${parsedDate.getFullYear()}`;
-          console.log("formattedDate", formattedDate);
 
           setFormData({
             ...initialFormData,

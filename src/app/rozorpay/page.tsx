@@ -28,8 +28,6 @@ export default function Home() {
       "/api/plans/plandetails", payload
     );
     const data = response.data;
-    console.log("data", data);
-    console.log("response", data.price , data.currency);
     setPlanDetails(data);
 
   };
@@ -48,7 +46,6 @@ export default function Home() {
       };
       const response = await axios.post("/api/payments/rozorpay", payload);
       const data = response.data;
-      console.log("data", data);
 
       const options = {
         // key: process.env.NEXT_PUBLIC_RAZORPAY_KEY,
@@ -117,8 +114,6 @@ export default function Home() {
         },
         // ...rest of your options...
       };
-      console.log("Invoice", options);
-
       const paymentObject = new (window as any).Razorpay(options);
       paymentObject.open();
     } catch (error: any) {
