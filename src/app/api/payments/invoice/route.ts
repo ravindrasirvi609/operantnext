@@ -17,83 +17,9 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
       throw new Error(`No transaction data found for order ID ${orderId}`);
     }
 
-    // const invoiceHtml = `
-    // <!DOCTYPE html>
-    // <html lang="en">
-    // <head>
-    //   <meta charset="UTF-8">
-    //   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    //   <style>
-    //     body {
-    //       font-family: 'Arial', sans-serif;
-    //       margin: 0;
-    //       padding: 0;
-    //       background-color: #f4f4f4;
-    //     }
-    
-    //     .invoice {
-    //       max-width: 600px;
-    //       margin: 20px auto;
-    //       background-color: #fff;
-    //       border-radius: 8px;
-    //       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    //     }
-    
-    //     .invoice-header {
-    //       text-align: center;
-    //       background-color: #007bff;
-    //       color: #fff;
-    //       padding: 20px;
-    //       border-top-left-radius: 8px;
-    //       border-top-right-radius: 8px;
-    //     }
-    
-    //     .invoice-details {
-    //       padding: 20px;
-    //     }
-    
-    //     .invoice-details p {
-    //       margin: 5px 0;
-    //     }
-    
-    //     .invoice-footer {
-    //       text-align: center;
-    //       padding: 20px;
-    //       border-bottom-left-radius: 8px;
-    //       border-bottom-right-radius: 8px;
-    //       background-color: #007bff;
-    //       color: #fff;
-    //     }
-    //   </style>
-    // </head>
-    // <body>
-    //   <div class="invoice">
-    //     <div class="invoice-header">
-    //       <h1>Invoice for Order ${orderId}</h1>
-    //       <p>Date: ${new Date().toLocaleDateString()}</p>
-    //     </div>
-    //     <div class="invoice-details">
-    //       <p>Order ID: ${orderId}</p>
-    //       <p>Payment ID: ${transactionData.paymentId}</p>
-    //       <p>Signature: ${transactionData.signature}</p>
-    //       <!-- Add other transaction details as needed -->
-    //     </div>
-    //     <div class="invoice-footer">
-    //       <p>Thank you for your purchase!</p>
-    //     </div>
-    //   </div>
-    // </body>
-    // </html>
-    
-    // `;
-
     const invoiceHtml = `
-    <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, width=device-width" />
-
     <style>
     .bill-to {
       font-weight: 600;
@@ -109,7 +35,52 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      gap: var(--gap-11xs);
+
+      // ...
+
+      // Define a function to generate the invoice PDF
+      async function generateInvoicePdf(orderId: string): Promise<Uint8Array> {
+        try {
+          // Fetch data from RazorpayTransaction based on the provided order ID
+          const transactionData = await RazorpayTransaction.findOne({
+            orderId,
+          }).exec();
+
+      
+
+          // Create a new PDF document
+          const pdfDoc = await PDFDocument.create();
+
+          // Set the document metadata
+          pdfDoc.setTitle("Invoice");
+          pdfDoc.setAuthor("Your Company");
+
+          // Add a new page with A4 size
+          const page = pdfDoc.addPage([595.276, 841.890]);
+
+          // Load the font
+          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+          // Set the font size and color
+          page.setFont(font);
+          page.setFontSize(12);
+          page.setTextColor(rgb(0, 0, 0));
+
+          // Draw the invoice content on the page
+          page.drawText("Invoice Content", {
+            x: 50,
+            y: 700,
+          });
+
+          // Generate the PDF as a Uint8Array
+          const pdfBytes = await pdfDoc.save();
+
+          return pdfBytes;
+        } catch (error) {
+          console.error("Error generating invoice PDF:", error);
+          throw error;
+        }
+      }
     }
     .bill-to6 {
       position: relative;
@@ -543,11 +514,6 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
             <div class="bill-to1">Account number, Bank</div>
             <div class="bill-to6">*Please make payment before due date</div>
           </div>
-          <img
-            class="ashishsharma-biolink-1-icon"
-            alt=""
-            src="./public/ashishsharmabiolink-1@2x.png"
-          />
         </div>
         <div class="auto-layout">
           <div class="header">
@@ -685,166 +651,11 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
           </div>
         </div>
       </div>
-      <div class="property-1variant2">
-        <div class="footer">
-          <div class="contact">
-            <div class="bill-to">Contact:</div>
-            <div class="bill-to1">Phone: +91 8107199052</div>
-            <div class="bill-to1">Email: sirviravirandra609@gmail.com</div>
-          </div>
-          <div class="payment">
-            <div class="bill-to">Payment:</div>
-            <div class="bill-to1">Payable to Ravindra Choudhary</div>
-            <div class="bill-to1">Account number, Bank</div>
-            <div class="bill-to6">*Please make payment before due date</div>
-          </div>
-          <img
-            class="ashishsharma-biolink-1-icon"
-            alt=""
-            src="./public/ashishsharmabiolink-1@2x.png"
-          />
-        </div>
-        <div class="auto-layout">
-          <div class="header">
-            <div class="sender">
-              <div class="title">Invoice</div>
-              <div class="subject">
-                <p class="from">
-                  <b>From:</b>
-                </p>
-                <p class="from">Your name - UI/UX Design & Development</p>
-                <p class="from">Your Address</p>
-              </div>
-            </div>
-            <div class="invoice-details">
-              <div class="invoice-number-title-parent">
-                <div class="invoice-number-title">Invoice #</div>
-                <div class="issue-date-title">Issue Date</div>
-                <div class="invoice-number-title">Due Date</div>
-              </div>
-              <div class="invoice-number-parent">
-                <div class="invoice-number">DES00100</div>
-                <div class="invoice-number">April 17, 2023</div>
-                <div class="invoice-number">April 25, 2023</div>
-              </div>
-            </div>
-          </div>
-          <div class="client">
-            <div class="contact">
-              <div class="bill-to">Bill To:</div>
-              <div class="bill-to8">Client Name</div>
-              <div class="bill-to8">Client Address</div>
-              <div class="bill-to8">
-                Phone: [enter phone number], Email: [enter email address]
-              </div>
-            </div>
-            <div class="total-due">
-              <div class="total-due-title">Total Due:</div>
-              <div class="total-due-title1">₹0</div>
-            </div>
-          </div>
-          <div class="items-list">
-            <div class="index1">
-              <div class="deliverables">
-                <b class="charges">deliverables</b>
-              </div>
-              <div class="quantity">
-                <b class="charges">Quantity</b>
-              </div>
-              <div class="charges1">
-                <b class="charges">charges</b>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description">
-                  <div class="title1">Hero section stock image</div>
-                  <div class="description">
-                    Third round of feedback requested by the client
-                  </div>
-                </div>
-              </div>
-              <div class="quantity2">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges2">
-                <div class="quantity3">₹30,000</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description">
-                  <div class="title1">Hero section stock image</div>
-                  <div class="description">
-                    Third round of feedback requested by the client
-                  </div>
-                </div>
-              </div>
-              <div class="quantity2">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges2">
-                <div class="quantity3">₹30,000</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description2">
-                  <div class="title1">Responsive web pages designs</div>
-                  <div class="description2">
-                    Add more specific details in bullet points or numbers list
-                  </div>
-                </div>
-              </div>
-              <div class="quantity6">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges4">
-                <div class="quantity3">₹1,50,000</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description">
-                  <div class="title1">Font: Helvetica</div>
-                  <div class="description">
-                    Third round of feedback requested by the client
-                  </div>
-                </div>
-              </div>
-              <div class="quantity2">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges2">
-                <div class="quantity3">₹60,000</div>
-              </div>
-            </div>
-            <div class="total5">
-              <div class="spacer"></div>
-              <div class="total6">
-                <div class="total-row">
-                  <div class="title5">Subtotal</div>
-                  <div class="amount">₹0.00</div>
-                </div>
-                <div class="total-row">
-                  <div class="title5">Discount (0%)</div>
-                  <div class="amount">₹0.00</div>
-                </div>
-                <div class="total-child"></div>
-                <div class="total7">
-                  <div class="title7">Total</div>
-                  <div class="amount2">₹21,000.00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </body>
 </html>
 
-    `
+    `;
     return invoiceHtml;
   } catch (error) {
     console.error("Error generating invoice HTML:", error);

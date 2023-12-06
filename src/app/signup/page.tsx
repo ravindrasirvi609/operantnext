@@ -156,7 +156,7 @@ export default function SignupPage() {
 
   return (
     <>
-      <div className="relative h-screen">
+      <div className="relative min-h-screen">
         <video
           className="absolute top-0 left-0 object-cover w-full h-full"
           autoPlay
@@ -166,8 +166,8 @@ export default function SignupPage() {
           <source src={`loginV.mp4`} type="video/mp4" />
         </video>
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-          <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <div className="flex flex-col justify-center px-4 py-8 lg:px-8 w-full max-w-md mx-auto">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-4">
               <Image
                 className="mx-auto h-15.5rem w-auto"
                 src="/opflogo.png"
@@ -177,10 +177,11 @@ export default function SignupPage() {
               />
             </div>
 
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight px-8	text-indigo-600">
+            <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600">
               {loading ? "Processing" : "Register Your Account"}
             </h2>
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
+            <div className="mt-6">
               <div className="space-y-6">
                 <div className="relative text-left">
                   <select
@@ -313,7 +314,7 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <p className="mt-10 text-center text-sm text-gray-500">
+              <p className="mt-6 text-center text-sm text-gray-500">
                 Already a member?{" "}
                 <Link
                   href="/login"
