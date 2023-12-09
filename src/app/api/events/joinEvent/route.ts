@@ -1,6 +1,7 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import eventModel from "@/models/eventModel";
+import User from "@/models/userModel";
 import UserModel from "@/models/userModel";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -12,6 +13,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
   try {
     // Step 1: Get the user's ID from the token
     const userId = await getDataFromToken(req);
+
+    const userObject = await User.findById(userId);
+    if (userObject.role === "organization") {
+      return NextResponse.json(
+        { message: "Organization cannot Join any Event" },
+        { status: 404 }
+      );
+    }
 
     const eventData = await req.json();
     const eventId = eventData.id;
@@ -38,15 +47,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     if (isUserJoined) {
       return NextResponse.json(
-        { event, isJoin: true, message: "User is already registered for the event" },
+        {
+          event,
+          isJoin: true,
+          message: "User is already registered for the event",
+        },
         { status: 400 }
       );
     }
-console.log("event", userId, eventId);
-
-    console.log("event", event.attendees);
-    
-
     // Register the user for the event
     event.attendees.push(userId);
     await event.save();
@@ -58,10 +66,9 @@ console.log("event", userId, eventId);
         { status: 404 }
       );
     }
-    console.log("user events Attended", user.eventsAttended, eventId);
-    
-  //  user.eventsAttended.push(eventId);
-//   await user.save();
+
+    //  user.eventsAttended.push(eventId);
+    //   await user.save();
     return NextResponse.json(
       { event, isJoin: false, message: "User registered successfully" },
       { status: 200 }
