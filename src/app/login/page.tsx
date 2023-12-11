@@ -54,7 +54,7 @@ export default function LoginPage() {
               "/api/users/forgotpassword",
               formdata
             );
-            if (response.data.message === "Success") {
+            if (response.data.sendEmail) {
               Swal.fire(
                 "success",
                 "Please Check your mailbox for a new password",

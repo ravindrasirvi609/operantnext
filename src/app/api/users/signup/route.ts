@@ -1,4 +1,3 @@
-// Import your additional models
 import UserForm from "@/models/userForm";
 import Organizer from "@/models/organizerModel";
 import User from "@/models/userModel";
@@ -7,22 +6,31 @@ import { sendEmail } from "@/helpers/mailer";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
+
+const SALT_ROUNDS = 10;
+
 connect();
 
-// ... (other imports and setup code)
-
 export async function POST(request: NextRequest) {
-  try {    
+  try {
     const reqBody = await request.json();
-    const { username, email, password, role } = reqBody;
 
-    // Check if the user already exists
-    console.log("email", email);
-    
+    // Validate request data
+    if (
+      !reqBody.username ||
+      !reqBody.email ||
+      !reqBody.password ||
+      !reqBody.role
+    ) {
+      return NextResponse.json(
+        { error: "Incomplete request data" },
+        { status: 400 }
+      );
+    }
+
+    const { username, email, password, role } = reqBody;
     const existingUser = await User.findOne({ email });
 
-    console.log("existingUser", existingUser);
-    
     if (existingUser) {
       return NextResponse.json(
         { error: "User already exists" },
@@ -30,47 +38,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash the password
-    const salt = await bcryptjs.genSalt(10);
+    const salt = await bcryptjs.genSalt(SALT_ROUNDS);
     const hashedPassword = await bcryptjs.hash(password, salt);
 
-    // Create the user in the "users" collection
-    const newUser = new User({
-      username,
-      email,
-      password: hashedPassword,
-      role,
-    });
-    console.log("newUser", newUser);
+    const savedUser = await createUser(username, email, hashedPassword, role);
 
-    const savedUser = await newUser.save();
-    console.log("savedUser", savedUser);
-
-    // Conditionally create records in other models based on the user's role
     if (role === "user") {
-      const userForm = new UserForm({
-        _id: savedUser._id,
-        personalEmail: savedUser.email,
-        userName: savedUser.username,
-        // Other userForm fields
-      });
-      console.log("userForm", userForm);
-
-      await userForm.save();
+      await createUserForm(savedUser._id, savedUser.email, savedUser.username);
     } else if (role === "organization") {
-      const organizer = new Organizer({
-        _id: savedUser._id,
-        email: savedUser.email,
-        userName: savedUser.username,
-        // Other organizer fields
-      });
-      console.log("organizer", organizer);
-
-      await organizer.save();
+      await createOrganizer(savedUser._id, savedUser.email, savedUser.username);
     }
 
-    // Send verification email
-    await sendEmail({ email, emailType: "VERIFY", userId: savedUser._id });
+    await sendVerificationEmail(savedUser.email, savedUser._id);
 
     return NextResponse.json({
       message: "User created successfully",
@@ -80,4 +59,52 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+}
+
+async function createUser(
+  username: string,
+  email: string,
+  password: string,
+  role: string
+) {
+  const newUser = new User({
+    username,
+    email,
+    password,
+    role,
+  });
+
+  return await newUser.save();
+}
+
+async function createUserForm(
+  userId: string,
+  personalEmail: string,
+  userName: string
+) {
+  const userForm = new UserForm({
+    _id: userId,
+    personalEmail,
+    userName,
+  });
+
+  return await userForm.save();
+}
+
+async function createOrganizer(
+  userId: string,
+  email: string,
+  userName: string
+) {
+  const organizer = new Organizer({
+    _id: userId,
+    email,
+    userName,
+  });
+
+  return await organizer.save();
+}
+
+async function sendVerificationEmail(email: string, userId: string) {
+  await sendEmail({ email, emailType: "VERIFY", userId });
 }

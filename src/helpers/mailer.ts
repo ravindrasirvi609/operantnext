@@ -310,7 +310,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         service: "Gmail",
         auth: {
           user: "sirviravindra609@gmail.com", // Replace with your Gmail email address
-          pass: "ehcw fbeo vplz gpyh", // Replace with your Gmail password or app password
+          pass: "ozuq slvq vtwv tujr", // Replace with your Gmail password or app password
         },
       });
 
