@@ -156,18 +156,10 @@ export default function SignupPage() {
 
   return (
     <>
-      <div className="relative min-h-screen">
-        <video
-          className="absolute top-0 left-0 object-cover w-full h-full"
-          autoPlay
-          muted
-          loop
-        >
-          <source src={`loginV.mp4`} type="video/mp4" />
-        </video>
+      <div className="relative min-h-screen	  bg-gradient-to-r from-blue-200 to-cyan-200">
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
           <div className="flex flex-col justify-center px-4 py-8 lg:px-8 w-full max-w-md mx-auto">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-4">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-36">
               <Image
                 className="mx-auto h-15.5rem w-auto"
                 src="/opflogo.png"

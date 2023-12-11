@@ -92,16 +92,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="relative h-screen">
-        <video
-          className="absolute top-0 left-0 object-cover w-full h-full"
-          autoPlay
-          muted
-          loop
-        >
-          <source src={`loginV.mp4`} type="video/mp4" />
-        </video>
-
+      <div className="relative h-screen bg-gradient-to-r from-blue-200 to-cyan-200">
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
           <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
