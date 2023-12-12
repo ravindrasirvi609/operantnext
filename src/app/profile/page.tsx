@@ -6,6 +6,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import HeaderNav from "../header";
 
 interface UserData {
   _id: string;
@@ -56,6 +57,8 @@ export default function ProfilePage() {
   return (
     <>
       <div className="bg-lime-100">
+      <HeaderNav />
+
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-32">
           <div className="px-4 py-6 sm:px-6">
             <h1 className="text-3xl font-bold leading-tight text-sky-800">
