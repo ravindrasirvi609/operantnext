@@ -80,7 +80,6 @@ export default function ResetPasswordPage() {
               placeholder="Confirm your password"
             />
           </div>
-
           <button onClick={submit} className="btn-primary w-full bg-amber-600 rounded-full">
             Submit
           </button>
