@@ -40,16 +40,13 @@ export async function GET(req: NextRequest) {
             throw new Error(`Organizer not found for event ${event._id}`);
           }
 
-          const organizerName = organizer.userName; // Use the correct field from your schema
           const organizerEmail = organizer.email;
 
-          console.log("Organizer name", organizerName);
 
           return {
             ...event.toObject(),
             isJoin: isUserJoined,
             organizerDetails: {
-              name: organizerName,
               email: organizerEmail,
             },
           };

@@ -44,9 +44,9 @@ export async function POST(request: NextRequest) {
     const savedUser = await createUser(username, email, hashedPassword, role);
 
     if (role === "user") {
-      await createUserForm(savedUser._id, savedUser.email, savedUser.username);
+      await createUserForm(savedUser._id, savedUser.email);
     } else if (role === "organization") {
-      await createOrganizer(savedUser._id, savedUser.email, savedUser.username);
+      await createOrganizer(savedUser._id, savedUser.emailcs);
     }
 
     await sendVerificationEmail(savedUser.email, savedUser._id);
@@ -79,13 +79,11 @@ async function createUser(
 
 async function createUserForm(
   userId: string,
-  personalEmail: string,
-  userName: string
+  personalEmail: string
 ) {
   const userForm = new UserForm({
     _id: userId,
     personalEmail,
-    userName,
   });
 
   return await userForm.save();
@@ -94,12 +92,10 @@ async function createUserForm(
 async function createOrganizer(
   userId: string,
   email: string,
-  userName: string
 ) {
   const organizer = new Organizer({
     _id: userId,
     email,
-    userName,
   });
 
   return await organizer.save();

@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 const navigation = [
       { name: "Profile", href: "/profile" },
-      { name: "Events", href: "/events" },
+      { name: "Confrences", href: "/events" },
       { name: "Git-Hub", href: "https://github.com/ravindrasirvi609/operantnext" },
       { name: "Company", href: "https://opf.org.in/" },
     ];

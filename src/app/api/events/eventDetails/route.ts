@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
       const currency = plan.currency; // Use the correct field from your schema
 
       const attendees = users.map((user) => ({
-        userName: user.userName,
         personalEmail: user.personalEmail,
         firstName: user.firstName,
         lastName: user.lastName,

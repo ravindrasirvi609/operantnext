@@ -4,7 +4,7 @@ const userFormSchema = new mongoose.Schema({
   profileImage: { type: String }, // You can store the image URL or file path
   firstName: { type: String },
   lastName: { type: String },
-  userName: { type: String, required: true },
+  userTagLine: { type: String },
   personalEmail: { type: String, required: true, unique: true },
   mobileNo: { type: String },
   aadharNo: { type: String },

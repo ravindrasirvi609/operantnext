@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const organizerSchema = new mongoose.Schema({
   collegeName: { type: String, maxlength: 100 },
-  userName: { type: String, required: true },
   location: { type: String },
   mobileNo: { type: String },
   email: { type: String, unique: true, validate: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
