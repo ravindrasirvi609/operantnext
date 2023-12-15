@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 const navigation = [
       { name: "Profile", href: "/profile" },
       { name: "Confrences", href: "/events" },
-      { name: "Git-Hub", href: "https://github.com/ravindrasirvi609/operantnext" },
+      { name: "Jobs", href: "/jobs" },
       { name: "Company", href: "https://opf.org.in/" },
     ];
 
