@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+
 interface UserFormData {
-  //  profileImage: string;
   firstName: string;
   lastName: string;
   personalEmail: string;
@@ -17,23 +17,13 @@ interface UserFormData {
   district: string;
   state: string;
   country: string;
-  secSclName: string;
-  secMarks: string;
-  srSecSclName: string;
-  srSecMarks: string;
-  ugColleageName: string;
-  ugCourseName: string;
-  ugMarks: string;
-  pgColleageName: string;
-  pgCourseName: string;
-  pgMarks: string;
-  //  [key: string]: string | File | undefined;
+  highestQualification: string;
+  university: string;
 }
 
 const AadhaarForm = () => {
   const router = useRouter();
-  const initialFormData = {
-    // profileImage: "",
+  const initialFormData: UserFormData = {
     firstName: "",
     lastName: "",
     personalEmail: "",
@@ -45,53 +35,25 @@ const AadhaarForm = () => {
     district: "",
     state: "",
     country: "",
-    secSclName: "",
-    secMarks: "",
-    srSecSclName: "",
-    srSecMarks: "",
-    ugColleageName: "",
-    ugCourseName: "",
-    ugMarks: "",
-    pgColleageName: "",
-    pgCourseName: "",
-    pgMarks: "",
+    highestQualification: "",
+    university: "",
   };
 
   const [userForm, setFormData] = useState<UserFormData>(initialFormData);
-  const [selectedImage, setSelectedImage] = useState("");
-
-  // const handleImageChange = (event: any) => {
-  //   const file = event.target.files[0];
-  //   console.log("Image changed", file);
-
-  //   if (file) {
-  //     const imageUrl = URL.createObjectURL(file);
-  //     setSelectedImage(imageUrl);
-  //     userForm.profileImage = file;
-  //   }
-  // };
-
-  const handleChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/api/users/form");
         const receivedFormData = response.data;
-        const receivedImage = receivedFormData.data.profileImage;
-        setSelectedImage(receivedImage);
-
         if (receivedFormData && receivedFormData.data) {
           const parsedDate = new Date(receivedFormData.data.dob);
-          const formattedDate = `${parsedDate.getDate()}/${
-            parsedDate.getMonth() + 1
-          }/${parsedDate.getFullYear()}`;
+          const formattedDate = parsedDate.toISOString().split("T")[0];
 
           setFormData({
             ...initialFormData,
@@ -100,31 +62,28 @@ const AadhaarForm = () => {
           });
         }
       } catch (error: any) {
-        Swal.fire(error.message);
+        Swal.fire("Error", error.message, "error");
       }
     };
 
     fetchData();
   }, []);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const Submit = async (data: any) => {
     try {
-      //  const formData = new FormData();
-      // for (const key in initialFormData) {
-      //   formData.append(key, userForm[key] as string); // Use type assertion here
-      // }
-
-      // Append the profile image separately
-      //  formData.append("profileImage", userForm.profileImage);
-
-      await axios.post("/api/users/form", userForm);
-      Swal.fire("Good job!", "Form Successfully Submitted!", "success");
+      await axios.post("/api/users/form", data);
+      Swal.fire("Success", "Form Successfully Submitted!", "success");
       router.push("/profile");
-
-      setFormData(initialFormData);
     } catch (error) {
-      Swal.fire("Oops!", "Something went wrong", "error");
+      Swal.fire("Error", "Something went wrong", "error");
     }
   };
 
@@ -142,31 +101,7 @@ const AadhaarForm = () => {
         className="mx-auto justify-center w-3/6
 "
       >
-        <form id="onSubmit" onSubmit={handleSubmit} className="w-full">
-          {/* <div className="m-4">
-           <label htmlFor="profileImage" className="block mb-2 text-lg">
-                Profile Image:
-              </label>
-              <input
-                type="file"
-                id="profileImage"
-                name="profileImage"
-                onChange={handleImageChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              /> 
-          <div className="mt-2">
-            {selectedImage && (
-              <Image
-                src={selectedImage}
-                alt="Selected Image"
-                className="w-32 h-32 rounded-full"
-                width="20"
-                height="20"
-              />
-            )}
-          </div>
-        </div> */}
-
+        <form id="onSubmit" onSubmit={handleSubmit(Submit)} className="w-full">
           <div className="flex justify-center flex-wrap -mx-3 mb-6">
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label
@@ -178,11 +113,16 @@ const AadhaarForm = () => {
               <input
                 type="text"
                 id="firstName"
-                name="firstName"
                 value={userForm.firstName}
+                {...register("firstName", { required: true })}
                 onChange={handleChange}
-                className="appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${
+                  errors.firstName ? "border-red-500" : ""
+                }`}
               />
+              {errors.firstName && errors.firstName.type === "required" && (
+                <p className="text-red-500">First Name is required</p>
+              )}
             </div>
 
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -195,10 +135,10 @@ const AadhaarForm = () => {
               <input
                 type="text"
                 id="lastName"
-                name="lastName"
                 value={userForm.lastName}
+                {...register("lastName", { required: true })}
                 onChange={handleChange}
-                className="appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${errors.lastName ? "border-red-500" : ""}`}
               />
             </div>
           </div>
@@ -214,11 +154,18 @@ const AadhaarForm = () => {
               <input
                 type="text"
                 id="personalEmail"
-                name="personalEmail"
                 value={userForm.personalEmail}
+                {...register("personalEmail", {
+                  required: true,
+                  pattern: /^\S+@\S+$/i || "Invalid Email",
+                })}
                 onChange={handleChange}
-                className="appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${
+                  errors.personalEmail ? "border-red-500" : ""
+                
+                }`}
               />
+
               <p className="text-xs text-gray-600 mt-1">
                 * Active Email is required for Early Notification
               </p>
@@ -234,8 +181,11 @@ const AadhaarForm = () => {
               <input
                 type="text"
                 id="mobileNo"
-                name="mobileNo"
                 value={userForm.mobileNo}
+                {...register("mobileNo", {
+                  required: true,
+                  pattern: /^[6-9]\d{9}$/ || "Invalid Mobile Number",
+                })}
                 onChange={handleChange}
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               />
@@ -253,8 +203,13 @@ const AadhaarForm = () => {
               <input
                 type="number"
                 id="aadharNo"
-                name="aadharNo"
                 value={userForm.aadharNo}
+                {...register("aadharNo", {
+                  required: true,
+                  pattern:
+                    /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/ ||
+                    "Invalid Aadhar Number",
+                })}
                 onChange={handleChange}
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               />
@@ -273,8 +228,8 @@ const AadhaarForm = () => {
               <input
                 type="date"
                 id="dob"
-                name="dob"
                 value={userForm.dob}
+                {...register("dob", { required: true })}
                 onChange={handleChange}
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 required
@@ -363,6 +318,42 @@ const AadhaarForm = () => {
                 id="country"
                 name="country"
                 value={userForm.country}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-center flex-wrap -mx-3 my-10">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="secSclName"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                HIGHEST QUALIFICATION:
+              </label>
+              <input
+                type="text"
+                id="highestQualification"
+                value={userForm.highestQualification}
+                {...register("highestQualification", { required: true })}
+                onChange={handleChange}
+                className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              />
+            </div>
+
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="secMarks"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                UNIVERSITY/INSTUTION:
+              </label>
+              <input
+                type="text"
+                id="university"
+                value={userForm.university}
+                {...register("university", { required: true })}
                 onChange={handleChange}
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               />
@@ -511,7 +502,7 @@ const AadhaarForm = () => {
           <div className="text-center">
             <button
               type="submit"
-              className=" bg-sky-300 hover:bg-black text-white font-bold py-2 px-4 rounded-full m-10 h-12 w-26"
+              className=" bg-sky-300 hover:bg-black text-white font-bold py-1 px-4 rounded-full m-10 h-10 w-26"
             >
               <h1 className="text-xl">Submit</h1>
             </button>
