@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 interface UserFormData {
+  [key: string]: string;
   firstName: string;
   lastName: string;
   personalEmail: string;
@@ -19,7 +20,6 @@ interface UserFormData {
   country: string;
   highestQualification: string;
   university: string;
-  
 }
 
 const AadhaarForm = () => {
@@ -45,7 +45,11 @@ const AadhaarForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    setValue,
+    watch,
+  } = useForm({defaultValues: initialFormData});
+  console.log(watch("firstName"));
+  console.log(errors?.firstName);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +74,11 @@ const AadhaarForm = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    Object.keys(userForm).forEach((key) => {
+      setValue(key, userForm[key]);
+    });
+  }, [userForm, setValue]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -115,15 +124,35 @@ const AadhaarForm = () => {
                 type="text"
                 id="firstName"
                 value={userForm.firstName}
-                {...register("firstName", { required: true })}
+                {...register("firstName", {
+                  required: true,
+                  maxLength: 80,
+                  minLength: 3,
+                })}
                 onChange={handleChange}
+                name="firstName"
                 className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${
-                  errors.firstName ? "border-red-500" : ""
+                  errors?.firstName ? "border-red-500" : ""
                 }`}
               />
-              {errors.firstName && errors.firstName.type === "required" && (
-                <p className="text-red-500">First Name is required</p>
-              )}
+
+              {[
+                errors?.firstName && errors?.firstName?.type === "required" && (
+                  <p className="text-red-500">First Name is required</p>
+                ),
+                errors?.firstName &&
+                  errors?.firstName?.type === "maxLength" && (
+                    <p className="text-red-500">
+                      First Name cannot exceed 80 characters
+                    </p>
+                  ),
+                errors?.firstName &&
+                  errors?.firstName?.type === "minLength" && (
+                    <p className="text-red-500">
+                      First Name must be at least 3 characters
+                    </p>
+                  ),
+              ]}
             </div>
 
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -139,7 +168,10 @@ const AadhaarForm = () => {
                 value={userForm.lastName}
                 {...register("lastName", { required: true })}
                 onChange={handleChange}
-                className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${errors.lastName ? "border-red-500" : ""}`}
+                name="lastName"
+                className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${
+                  errors.lastName ? "border border-red-500 bg-red-400" : ""
+                }`}
               />
             </div>
           </div>
@@ -161,9 +193,9 @@ const AadhaarForm = () => {
                   pattern: /^\S+@\S+$/i || "Invalid Email",
                 })}
                 onChange={handleChange}
+                name="personalEmail"
                 className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${
                   errors.personalEmail ? "border-red-500" : ""
-                
                 }`}
               />
 
@@ -188,6 +220,7 @@ const AadhaarForm = () => {
                   pattern: /^[6-9]\d{9}$/ || "Invalid Mobile Number",
                 })}
                 onChange={handleChange}
+                name="mobileNo"
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               />
             </div>
@@ -212,6 +245,7 @@ const AadhaarForm = () => {
                     "Invalid Aadhar Number",
                 })}
                 onChange={handleChange}
+                name="aadharNo"
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               />
               <p className="text-xs text-gray-600 mt-1">
@@ -232,6 +266,7 @@ const AadhaarForm = () => {
                 value={userForm.dob}
                 {...register("dob", { required: true })}
                 onChange={handleChange}
+                name="dob"
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 required
               />
