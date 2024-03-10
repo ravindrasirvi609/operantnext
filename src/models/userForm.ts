@@ -24,6 +24,9 @@ const userFormSchema = new mongoose.Schema({
   pgColleageName: { type: String },
   pgCourseName: { type: String },
   pgMarks: { type: Number },
+  highestQualification : { type: String },
+  university: { type: String },
+  workExperience: { type: Number },
   eventsAttended: [{ type: mongoose.Schema.Types.ObjectId, ref: "eventModel" }],
 });
 

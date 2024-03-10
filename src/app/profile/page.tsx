@@ -19,6 +19,9 @@ interface UserData {
   district: string;
   state: string;
   country: string;
+  highestQualification: string;
+  university: string;
+  workExperience: number;
 }
 
 export default function ProfilePage() {
@@ -197,7 +200,7 @@ export default function ProfilePage() {
                       Highest Qualification
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      B.Tech
+                      {userData?.highestQualification}
                     </dd>
                   </div>
                   <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
@@ -205,7 +208,7 @@ export default function ProfilePage() {
                       University/Institution
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      Anna University
+                       {userData?.university}
                     </dd>
                   </div>
                 </dl>
