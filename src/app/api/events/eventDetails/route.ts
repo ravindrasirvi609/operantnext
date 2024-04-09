@@ -5,7 +5,6 @@ import Plans from "@/models/pricePlansModel";
 import UserForm from "@/models/userForm";
 import { NextRequest, NextResponse } from "next/server";
 
-// Initialize the database connection
 connect();
 
 export async function POST(req: NextRequest) {
@@ -64,7 +63,7 @@ export async function POST(req: NextRequest) {
         attendees: attendees,
       };
 
-      return new NextResponse((JSON.stringify(responsePayload))) ;
+      return new NextResponse(JSON.stringify(responsePayload));
     } catch (error) {
       console.error(`Error fetching plan for event ${event._id}:`, error);
       return new NextResponse("Error fetching plan details", { status: 500 });

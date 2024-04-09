@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [token, setToken] = useState("");
@@ -80,7 +79,10 @@ export default function ResetPasswordPage() {
               placeholder="Confirm your password"
             />
           </div>
-          <button onClick={submit} className="btn-primary w-full bg-amber-600 rounded-full">
+          <button
+            onClick={submit}
+            className="btn-primary w-full bg-amber-600 rounded-full"
+          >
             Submit
           </button>
         </form>

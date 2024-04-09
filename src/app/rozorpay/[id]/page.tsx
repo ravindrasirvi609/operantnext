@@ -19,7 +19,7 @@ export default function EventPayment({ params }: any) {
   useEffect(() => {
     getEventDetails(pramsId);
     initializeRazorpay();
-  }, []);
+  }, [pramsId]);
 
   const getEventDetails = async (id: string) => {
     const response = await axios.post("/api/events/eventDetails", id);
@@ -80,7 +80,6 @@ export default function EventPayment({ params }: any) {
               text: "You have successfully joined the event",
             });
           }
-
 
           // Download the invoice PDF
           try {
