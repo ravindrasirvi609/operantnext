@@ -1,37 +1,38 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Image from "next/image";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import { DropdownMenuDemo } from "@/components/dropdown";
 
 const navigation = [
-      { name: "Profile", href: "/profile" },
-      { name: "Confrences", href: "/events" },
-      { name: "Jobs", href: "/jobs" },
-      { name: "Company", href: "https://opf.org.in/" },
-    ];
+  { name: "Profile", href: "/profile" },
+  { name: "Confrences", href: "/events" },
+  { name: "Jobs", href: "/jobs" },
+  { name: "Company", href: "https://opf.org.in/" },
+];
 
 export default function HeaderNav() {
-      const router = useRouter();
-      const [role, setRole] = useState<string | null>();
-      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-      const isOrganization = role === "organization";
+  const router = useRouter();
+  const [role, setRole] = useState<string | null>();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isOrganization = role === "organization";
 
-      const logout = async () => {
-            try {
-              await axios.get("/api/users/logout");
-              router.push("/login");
-              toast.success("Logout successful");
-            } catch (error: any) {
-              toast.error(error.message);
-            }
-          };
+  const logout = async () => {
+    try {
+      await axios.get("/api/users/logout");
+      router.push("/login");
+      toast.success("Logout successful");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   return (
-      <header className="absolute inset-x-0 top-0 z-50">
+    <header className="absolute inset-x-0 top-0 z-50">
       <nav
         className="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -73,12 +74,13 @@ export default function HeaderNav() {
           )}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <button
+          <DropdownMenuDemo />
+          {/* <button
             className="text-sm font-semibold leading-6 text-gray-900"
             onClick={logout}
           >
             Logout <span aria-hidden="true">&rarr;</span>
-          </button>
+          </button> */}
         </div>
       </nav>
       <Dialog
@@ -123,12 +125,7 @@ export default function HeaderNav() {
                 ))}
               </div>
               <div className="py-6">
-                <button
-                  onClick={logout}
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Logout
-                </button>
+                <DropdownMenuDemo />
               </div>
             </div>
           </div>
@@ -137,4 +134,3 @@ export default function HeaderNav() {
     </header>
   );
 }
-

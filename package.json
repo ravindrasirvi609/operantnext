@@ -11,6 +11,8 @@
   "dependencies": {
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-slot": "^1.0.2",
     "@types/node": "20.3.3",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -26,7 +28,7 @@
     "html-pdf": "^1.5.0",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.0",
-    "lucide-react": "^0.350.0",
+    "lucide-react": "^0.366.0",
     "mongoose": "^7.3.1",
     "multer": "^1.4.5-lts.1",
     "multiparty": "^4.2.3",
@@ -41,8 +43,8 @@
     "react-hot-toast": "^2.4.1",
     "shortid": "^2.2.16",
     "sweetalert2": "^11.6.13",
-    "tailwind-merge": "^2.2.1",
-    "tailwindcss": "^3.3.2",
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss": "^3.4.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.1.6"
   },
