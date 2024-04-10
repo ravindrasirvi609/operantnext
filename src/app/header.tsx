@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { DropdownMenuDemo } from "@/components/dropdown";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const navigation = [
   { name: "Profile", href: "/profile" },
@@ -74,7 +75,9 @@ export default function HeaderNav() {
           )}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <DropdownMenuDemo />
+          <Router>
+            <DropdownMenuDemo />
+          </Router>
           {/* <button
             className="text-sm font-semibold leading-6 text-gray-900"
             onClick={logout}

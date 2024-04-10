@@ -13,8 +13,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 export function DropdownMenuDemo() {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +30,7 @@ export function DropdownMenuDemo() {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleProfileClick}>
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
