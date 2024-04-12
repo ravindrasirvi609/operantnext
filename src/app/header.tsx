@@ -16,7 +16,9 @@ const navigation = [
   { name: "Company", href: "https://opf.org.in/" },
 ];
 
-export default function HeaderNav() {
+export default function HeaderNav(prop: any) {
+  console.log(prop.userData);
+
   const router = useRouter();
   const [role, setRole] = useState<string | null>();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,7 +41,7 @@ export default function HeaderNav() {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Operant Pharmacy Federation</span>
             <Image
               className="h-9 w-auto"
@@ -76,7 +78,7 @@ export default function HeaderNav() {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Router>
-            <DropdownMenuDemo />
+            <DropdownMenuDemo userData={prop} />
           </Router>
           {/* <button
             className="text-sm font-semibold leading-6 text-gray-900"

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import HeaderNav from "./header";
 
-interface UserData {
+export interface UserData {
   username: string;
   email: string;
 }
@@ -38,7 +38,7 @@ export default function Home() {
 
   return (
     <div className="bg-white">
-      <HeaderNav />
+      <HeaderNav userData={userData as any} />
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
