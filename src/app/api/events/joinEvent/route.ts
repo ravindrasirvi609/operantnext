@@ -10,10 +10,6 @@ connect();
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
     const userId = await getDataFromToken(req);
 
     const userObject = await User.findById(userId);

@@ -9,10 +9,6 @@ connect();
 
 export async function GET(req: NextRequest) {
   try {
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
     const userId = await getDataFromToken(req);
 
     // Step 2: Check authentication
