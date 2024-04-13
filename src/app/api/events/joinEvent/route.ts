@@ -6,12 +6,14 @@ import UserModel from "@/models/userModel";
 
 import { NextRequest, NextResponse } from "next/server";
 
-// Initialize the database connection
 connect();
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
-    // Step 1: Get the user's ID from the token
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const userId = await getDataFromToken(req);
 
     const userObject = await User.findById(userId);
@@ -25,7 +27,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const eventData = await req.json();
     const eventId = eventData.id;
 
-    // Step 2: Ensure the user is authenticated
     const event = await eventModel.findById(eventId);
     if (!event) {
       return NextResponse.json(
@@ -34,7 +35,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    // Check if the event is full (optional, depending on your requirements)
     if (event.capacity && event.attendees.length >= event.capacity) {
       return NextResponse.json(
         { event, message: "Event is full" },
@@ -42,7 +42,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    // Check if the user is already registered for the event
     const isUserJoined = event.attendees.includes(userId);
 
     if (isUserJoined) {
@@ -55,7 +54,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
-    // Register the user for the event
     event.attendees.push(userId);
     await event.save();
 
@@ -67,8 +65,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
-    //  user.eventsAttended.push(eventId);
-    //   await user.save();
     return NextResponse.json(
       { event, isJoin: false, message: "User registered successfully" },
       { status: 200 }

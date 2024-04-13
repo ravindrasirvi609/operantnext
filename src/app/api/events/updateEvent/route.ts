@@ -16,7 +16,7 @@ export async function PUT(req: NextRequest) {
     }
 
     // Assuming you have authentication and authorization logic
-    const user = getDataFromToken(req);
+    const user = await getDataFromToken(req);
     console.log("User: " + user);
 
     if (!user) {

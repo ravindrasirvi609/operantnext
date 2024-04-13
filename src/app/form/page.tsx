@@ -1,9 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import router from "next/router";
 
 interface UserFormData {
   [key: string]: string;
@@ -23,22 +24,24 @@ interface UserFormData {
 }
 
 const AadhaarForm = () => {
-  const router = useRouter();
-  const initialFormData: UserFormData = {
-    firstName: "",
-    lastName: "",
-    personalEmail: "",
-    mobileNo: "",
-    aadharNo: "",
-    dob: "",
-    streetAddress: "",
-    town: "",
-    district: "",
-    state: "",
-    country: "",
-    highestQualification: "",
-    university: "",
-  };
+  const initialFormData: UserFormData = useMemo(
+    () => ({
+      firstName: "",
+      lastName: "",
+      personalEmail: "",
+      mobileNo: "",
+      aadharNo: "",
+      dob: "",
+      streetAddress: "",
+      town: "",
+      district: "",
+      state: "",
+      country: "",
+      highestQualification: "",
+      university: "",
+    }),
+    []
+  );
 
   const [userForm, setFormData] = useState<UserFormData>(initialFormData);
   const {
@@ -47,7 +50,7 @@ const AadhaarForm = () => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm({defaultValues: initialFormData});
+  } = useForm({ defaultValues: initialFormData });
   console.log(watch("firstName"));
   console.log(errors?.firstName);
 
@@ -72,7 +75,7 @@ const AadhaarForm = () => {
     };
 
     fetchData();
-  }, []);
+  }, [initialFormData]);
 
   useEffect(() => {
     Object.keys(userForm).forEach((key) => {

@@ -9,7 +9,10 @@ connect();
 
 export async function GET(req: NextRequest) {
   try {
-    // Step 1: Get the user's ID from the token
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     const userId = await getDataFromToken(req);
 
     // Step 2: Check authentication
@@ -42,7 +45,6 @@ export async function GET(req: NextRequest) {
 
           const organizerEmail = organizer.email;
 
-
           return {
             ...event.toObject(),
             isJoin: isUserJoined,
@@ -50,8 +52,11 @@ export async function GET(req: NextRequest) {
               email: organizerEmail,
             },
           };
-        } catch (error :any) {
-          console.error(`Error fetching organizer for event ${event._id}:`, error);
+        } catch (error: any) {
+          console.error(
+            `Error fetching organizer for event ${event._id}:`,
+            error
+          );
           // Return the event with an error field
           return {
             ...event.toObject(),
