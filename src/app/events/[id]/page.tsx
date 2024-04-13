@@ -63,9 +63,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-orange-300">
-      <h1 className="text-3xl font-semibold text-center mb-8">
-        {event?.title}
-      </h1>
+      <h1 className="text-3xl font-bold text-center mb-8">{event?.title}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
           <Image
