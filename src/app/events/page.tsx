@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import Image from "next/image";
 
 interface Event {
   location: {
@@ -59,99 +60,38 @@ export default function EventList() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-purple-500 to-blue-600 absolute inset-x-0 top-0 z-50">
-      <div className="flex flex-col items-center justify-center min-h-screen mt-2">
-        <h1 className="p-4 text-5xl font-extrabold mb-6 text-white">
-          Discover Upcoming Events
-        </h1>
-
-        {eventData ? (
-          <div>
-            {eventData.map((event) => (
-              <div
-                key={event._id}
-                className="text-white bg-gray-800 border-green-600 shadow-lg border-2 p-6 w-auto align-center m-5 rounded-md"
-              >
-                <h1 className="font-extrabold text-4xl text-center capitalize mb-8">
-                  {event.title}
-                </h1>
-                <div className="flex justify-between mb-6">
-                  <p className="m-3 p-2 bg-indigo-700 rounded-lg font-extrabold hover:bg-indigo-300 text-white hover:text-black">
-                    <Link href={`/events/${event._id}`}>Details & RSVP</Link>
-                  </p>
-                  <p className="mb-2">
-                    <span className="font-semibold flex justify-end mb-2 text-center">
-                      {formatDate(event.date)}
-                    </span>
-                    <div className="text-gray-400 text-center">
-                      {event.location.address}, {event.location.city},{" "}
-                      {event.location.state}, {event.location.country}
-                    </div>
-                  </p>
-                  <p>
-                  <div>
-                    {event.attendees.length}{" "}
-                    {event.attendees.length === 1 ? "person" : "people"} going
-                  </div>
-                  <div className="m-3 p-2 bg-indigo-700 rounded-lg font-extrabold hover:bg-indigo-300 text-white hover:text-black">
-                    <Link href={`/rozorpay/${event._id}`}>Join this event</Link>
-                  </div>
-                  </p>
-                
-                </div>
-                {event.isPaid ? (
-                  <p className="mb-2 m-3">
-                    <span className="text-yellow-400 text-2xl	font-bold bg-gray-950 rounded-lg p-2">
-                      {event.price}
-                    </span>
-                  </p>
-                ) : (
-                  <p className="mb-2 m-3">
-                    <span className="text-green-400 font-bold text-2xl bg-gray-950 rounded-lg p-2">
-                      Free
-                    </span>
-                  </p>
-                )}
-                <p className="mb-2 mt-6">
-                  <span className="font-semibold">Categories:</span>{" "}
-                  {event.categories.map((category) => (
-                    <span
-                      key={category}
-                      className="mr-2 p-1 bg-indigo-500 rounded-md"
-                    >
-                      {category}
-                    </span>
-                  ))}
-                </p>
-                <p className="mb-2">
-                  <span className="font-semibold">Capacity:</span>{" "}
-                  <span className="text-yellow-400">{event.capacity}</span>{" "}
-                  Members
-                </p>
-                <p className="m-2">
-                  <span className="font-semibold italic text-justify">
-                    Description:
-                  </span>{" "}
-                  {event.description}
-                </p>
-
-                {/* Additional Information */}
-                <div className="mt-4">
-                  <p className="text-xl font-semibold text-yellow-500 mb-2">
-                    Hosted by {event.organizerDetails.name}
-                  </p>
-                  <p className="text-gray-300">
-                    Join us for an incredible experience! Connect with industry
-                    experts, learn new skills, and be part of a vibrant
-                    community. Don t miss out!
-                  </p>
-                </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-semibold text-center mb-8">Event List</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {eventData?.map((event) => (
+          <div
+            key={event._id}
+            className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1712846040326-a3d06c0b1667?q=80&w=3424&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt={event.title}
+              width={500}
+              height={300}
+              className="object-cover w-full h-48 transition-opacity duration-300 hover:opacity-70"
+            />
+            <div className="p-4">
+              <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
+              <p className="text-gray-600 mb-2">{event.description}</p>
+              <div className="flex justify-between items-center mt-4">
+                <span className="text-indigo-600 font-semibold">
+                  {event.isPaid ? `$${event.price}` : "Free"}
+                </span>
+                <Link
+                  href={`/events/${event._id}`}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                >
+                  View Details
+                </Link>
               </div>
-            ))}
+            </div>
           </div>
-        ) : (
-          <p className="text-white">Loading event data...</p>
-        )}
+        ))}
       </div>
     </div>
   );
