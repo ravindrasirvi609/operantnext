@@ -1,68 +1,83 @@
 "use client";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 
-export default function Jobs() {
-  return (
-    <section className="overflow-hidden bg-slate-300">
-      <div className="mx-auto max-w-5xl px-5 py-24">
-        <div className="mx-auto flex flex-wrap items-center lg:w-4/5">
-          <Image
-            className="h-64 w-full rounded object-cover lg:h-96 lg:w-1/2"
-            src="/opflogo.png"
-            alt="OPF Logo"
-            height={800}
-            width={800}
-          />
-
-          <div className="mt-6 w-full lg:mt-0 lg:w-1/2 lg:pl-10">
-            <h2 className="text-sm font-semibold tracking-widest text-gray-500">
-              Recently posted
-            </h2>
-            <h1 className="my-4 text-3xl font-semibold text-black">
-              Senior Product Designer (Remote)
-            </h1>
-            <div className="my-4 flex items-center">
-              <span className="flex items-center space-x-1">
-                {[...Array(5)].map((_, i) => (
-                  <svg
-                    key={i}
-                    className="w-5 h-5 text-yellow-400 fill-current"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 17.27l-5.74 3.28 1.1-6.42L2.38 9.22l6.44-.94L12 2l2.18 6.28 6.44.94-4.98 4.91 1.1 6.42z" />
-                  </svg>
-                ))}
-              </span>
-              <span className="ml-3 inline-block text-xs font-semibold">
-                4 Reviews
-              </span>
-            </div>
-
-            <p className="leading-relaxed">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur
-              rem amet repudiandae neque adipisci eum enim, natus illo inventore
-              totam?
-            </p>
-
-            <div className="my-4">
-              <span className="text-sm font-semibold">Job type:</span>
-              <span className="ml-2 text-sm text-gray-600">Full Time</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">Location:</span>
-              <span className="ml-2 text-sm text-gray-600">Remote</span>
-            </div>
-            <button
-              type="button"
-              className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-            >
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+interface Job {
+  _id: string;
+  title: string;
+  company: string;
+  location: string;
+  description: string;
+  type: string;
+  applyUrl: string;
+  companyLogo: string;
 }
+
+const JobListPage: React.FC = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get(`/api/jobs`);
+        const jobData = response.data;
+        setJobs(jobData);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  if (!jobs.length) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-semibold text-center mb-8">Job List</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {jobs.map((job) => (
+          <div
+            key={job._id}
+            className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105"
+          >
+            <Image
+              src={job.companyLogo}
+              alt={`${job.company} Logo`}
+              width={800}
+              height={500}
+              className="object-cover w-full h-64 transition-opacity duration-300 hover:opacity-80"
+            />
+            <div className="p-4">
+              <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
+              <p className="text-gray-600 mb-2">{job.company}</p>
+              <p className="text-gray-600 mb-2">{job.location}</p>
+              <p className="text-gray-600 mb-2">{job.type}</p>
+              <div className="flex justify-between items-center mt-4">
+                <Link href={`/jobs/${job._id}`}>
+                  <a className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300">
+                    View Details
+                  </a>
+                </Link>
+                <a
+                  href={job.applyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                >
+                  Apply Now
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default JobListPage;
