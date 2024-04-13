@@ -2,6 +2,7 @@ import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import jobModel from "@/models/jobModel";
 import Organizer from "@/models/organizerModel";
+import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
 // Initialize the database connection
@@ -11,7 +12,8 @@ export async function POST(req: NextRequest) {
   try {
     // Step 1: Ensure the user is authenticated
     const userId = await getDataFromToken(req);
-    const user = await Organizer.findById(userId);
+    const user = await User.findById(userId);
+    console.log("user", user);
 
     if (!user) {
       return new NextResponse("Authentication required", { status: 401 });

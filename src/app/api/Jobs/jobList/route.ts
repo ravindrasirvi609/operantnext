@@ -2,26 +2,25 @@ import { connect } from "@/dbConfig/dbConfig";
 import jobModel from "@/models/jobModel";
 import { NextRequest, NextResponse } from "next/server";
 
+// Initialize the database connection
 connect();
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const jobId = await req.json();
+    // Step 1: Retrieve all jobs from the database
+    const jobs = await jobModel.find();
 
-    const job = await jobModel.findById(jobId);
-
-    if (!job) {
-      return new NextResponse("Job not found", { status: 404 });
-    }
-
-    return new NextResponse(JSON.stringify(job), {
-      status: 200,
+    // Step 2: Return the jobs as a JSON response
+    return new NextResponse(JSON.stringify(jobs), {
+      status: 200, // 200 OK
       headers: {
         "Content-Type": "application/json",
       },
     });
   } catch (error: any) {
     console.error(error);
-    return new NextResponse("Error retrieving the job", { status: 500 });
+
+    // Handle errors
+    return new NextResponse("Error retrieving the jobs", { status: 500 });
   }
 }

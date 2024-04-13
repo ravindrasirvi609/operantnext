@@ -21,7 +21,7 @@ const JobListPage: React.FC = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`/api/jobs`);
+        const response = await axios.get(`/api/Jobs/jobList`);
         const jobData = response.data;
         setJobs(jobData);
       } catch (error) {
@@ -58,19 +58,20 @@ const JobListPage: React.FC = () => {
               <p className="text-gray-600 mb-2">{job.location}</p>
               <p className="text-gray-600 mb-2">{job.type}</p>
               <div className="flex justify-between items-center mt-4">
-                <Link href={`/jobs/${job._id}`}>
-                  <a className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300">
-                    View Details
-                  </a>
+                <Link
+                  href={`/jobs/${job._id}`}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                >
+                  View Details
                 </Link>
-                <a
+                <Link
                   href={job.applyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
                 >
                   Apply Now
-                </a>
+                </Link>
               </div>
             </div>
           </div>
