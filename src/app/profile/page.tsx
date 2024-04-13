@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import axios from "axios";
@@ -208,7 +207,7 @@ export default function ProfilePage() {
                       University/Institution
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                       {userData?.university}
+                      {userData?.university}
                     </dd>
                   </div>
                 </dl>
@@ -251,12 +250,21 @@ export default function ProfilePage() {
                 <dl>
                   <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
                     <dt className="text-sm font-medium text-gray-500">
-                      Event Name 1 
-
+                      Event Name 1
                     </dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    (Date) (Time) (Venue) (Organizer) (Description) (Certificate) (Feedback) (Rating) (Comments) (Status)  (Action)  (Edit) (Delete) (View) (Download) (Share) (Invite) (Apply) (Register) (Join) (Leave) (Cancel) (Accept) (Reject) (Decline) (Approve) (Disapprove) (Publish) (Unpublish) (Archive) (Unarchive) (Close) (Open) (Start) (End) (Pause) (Resume) (Suspend) (Unsuspend) (Terminate) (Restart) (Reset) (Refresh) (Update) (Save) (Submit) (Send) (Notify) (Remind) (Schedule) (Reschedule) (Cancel) (Delete) (Remove) (Add) (Create) (New) (Next) (Previous) (Back) (First) (Last) (Search) (Filter) (Sort) (Group) (Arrange)
-
+                      (Date) (Time) (Venue) (Organizer) (Description)
+                      (Certificate) (Feedback) (Rating) (Comments) (Status)
+                      (Action) (Edit) (Delete) (View) (Download) (Share)
+                      (Invite) (Apply) (Register) (Join) (Leave) (Cancel)
+                      (Accept) (Reject) (Decline) (Approve) (Disapprove)
+                      (Publish) (Unpublish) (Archive) (Unarchive) (Close) (Open)
+                      (Start) (End) (Pause) (Resume) (Suspend) (Unsuspend)
+                      (Terminate) (Restart) (Reset) (Refresh) (Update) (Save)
+                      (Submit) (Send) (Notify) (Remind) (Schedule) (Reschedule)
+                      (Cancel) (Delete) (Remove) (Add) (Create) (New) (Next)
+                      (Previous) (Back) (First) (Last) (Search) (Filter) (Sort)
+                      (Group) (Arrange)
                     </dd>
                   </div>
                 </dl>

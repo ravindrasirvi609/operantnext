@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,15 +14,33 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export function DropdownMenuDemo(props: any) {
+  const router = useRouter();
+
   console.log(" props.userData USERNAME", props.userData?.userData?.username);
+
+  const logout = async () => {
+    try {
+      await axios.get("/api/users/logout");
+      router.push("/login");
+      toast.success("Logout successful");
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{props.userData?.userData?.username}</Button>
+        <Button variant="outline" className="bg-pink-100">
+          {props.userData?.userData?.username}
+          <span className="ml-2">🔻</span>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -72,7 +91,7 @@ export function DropdownMenuDemo(props: any) {
         <DropdownMenuItem disabled>API</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          Log out
+          <Button onClick={logout}> Log out</Button>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
