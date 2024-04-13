@@ -1,6 +1,7 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import eventModel from "@/models/eventModel";
+import Organizer from "@/models/organizerModel";
 import Plans from "@/models/pricePlansModel";
 import UserForm from "@/models/userForm";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,6 +17,8 @@ export async function POST(req: NextRequest) {
     }
 
     const eventData = await req.json();
+    console.log("Event data:", eventData);
+
     const eventId = eventData.id;
     const event = await eventModel.findById(eventId);
 
@@ -35,9 +38,12 @@ export async function POST(req: NextRequest) {
       const ObjectId = require("mongoose").Types.ObjectId;
 
       const attendeeIds = event.attendees.map((id: string) => new ObjectId(id));
+      console.log("Attendee IDs:", attendeeIds);
 
       // Use find() to get an array of users
       const users = await UserForm.find({ _id: { $in: attendeeIds } });
+
+      const organiz = await Organizer.findById(event.organizer);
 
       if (!users || users.length === 0) {
         console.log(`Users not found for event ${event._id}`);
@@ -61,6 +67,10 @@ export async function POST(req: NextRequest) {
           currency: currency,
         },
         attendees: attendees,
+        organizerDetails: {
+          name: organiz.userName,
+          email: organiz.email,
+        },
       };
 
       return new NextResponse(JSON.stringify(responsePayload));
