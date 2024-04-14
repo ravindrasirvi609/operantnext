@@ -1,7 +1,17 @@
 "use client";
-import React from "react";
+import axios from "axios";
+import React, { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { isURL } from "validator";
+import Select from "react-select";
+
+interface Skill {
+  _id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 const JobForm = () => {
   const {
@@ -9,10 +19,41 @@ const JobForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [skills, setSkills] = useState<Skill[]>();
+  const [companies, setCompanies] = useState<any[]>();
+
+  useEffect(() => {
+    const fetchSkillList = async () => {
+      try {
+        const response = await axios.get(`/api/skills/skill-list`);
+        const skillsList = response.data;
+        setSkills(skillsList);
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    const fetchCompanyList = async () => {
+      try {
+        const response = await axios.get(`/api/companies/company-list`);
+        const companyList = response.data;
+        console.log("companyList", companyList);
+
+        setCompanies(companyList);
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    fetchSkillList();
+    fetchCompanyList();
+  }, [register]);
 
   const onSubmit = (data: any) => {
     console.log(data);
   };
+
+  function handleSkillChange(selectedSkills: any): void {
+    console.log("selectedSkills", selectedSkills);
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 bg-orange-300">
@@ -79,13 +120,15 @@ const JobForm = () => {
           >
             Company
           </label>
-          <input
-            {...register("company", { required: true })}
-            type="text"
-            id="company"
-            className={`mt-1 p-2 w-full rounded-md ${
-              errors.company ? "border-red-500" : "border-gray-300"
-            }`}
+          <Select
+            {...register("company")}
+            id="skills"
+            className="mt-1 w-full"
+            options={companies?.map((company) => ({
+              value: company._id,
+              label: company.userName,
+            }))}
+            onChange={handleSkillChange}
           />
           {errors.company && (
             <p className="text-red-500 text-sm">Company is required</p>
@@ -198,11 +241,16 @@ const JobForm = () => {
           >
             Skills
           </label>
-          <input
+          <Select
             {...register("skills")}
-            type="text"
             id="skills"
-            className="mt-1 p-2 w-full rounded-md"
+            className="mt-1 w-full"
+            isMulti
+            options={skills?.map((skill) => ({
+              value: skill._id,
+              label: skill.name,
+            }))}
+            onChange={handleSkillChange}
           />
         </div>
 
