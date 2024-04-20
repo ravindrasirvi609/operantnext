@@ -77,9 +77,7 @@ export default function HeaderNav(prop: any) {
           )}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Router>
-            <DropdownMenuDemo userData={prop} />
-          </Router>
+          <DropdownMenuDemo userData={prop} />
           {/* <button
             className="text-sm font-semibold leading-6 text-gray-900"
             onClick={logout}

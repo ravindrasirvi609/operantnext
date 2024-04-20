@@ -1,7 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 import RazorpayTransaction from "@/models/transactionModel";
-import jwt from "jsonwebtoken";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 connect();
