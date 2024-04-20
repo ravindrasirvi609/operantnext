@@ -4,10 +4,8 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import router from "next/router";
 
 interface UserFormData {
-  [key: string]: string;
   firstName: string;
   lastName: string;
   personalEmail: string;
@@ -21,6 +19,7 @@ interface UserFormData {
   country: string;
   highestQualification: string;
   university: string;
+  profilePicture: File | null;
 }
 
 const AadhaarForm = () => {
@@ -39,20 +38,22 @@ const AadhaarForm = () => {
       country: "",
       highestQualification: "",
       university: "",
+      profilePicture: null,
     }),
     []
   );
 
   const [userForm, setFormData] = useState<UserFormData>(initialFormData);
+  const [dragging, setDragging] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
   } = useForm({ defaultValues: initialFormData });
-  console.log(watch("firstName"));
-  console.log(errors?.firstName);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,11 +78,86 @@ const AadhaarForm = () => {
     fetchData();
   }, [initialFormData]);
 
+  interface UserFormData {
+    firstName: string;
+    lastName: string;
+    personalEmail: string;
+    mobileNo: string;
+    aadharNo: string;
+    dob: string;
+    streetAddress: string;
+    town: string;
+    district: string;
+    state: string;
+    country: string;
+    highestQualification: string;
+    university: string;
+    profilePicture: File | null;
+    [key: string]: string | File | null; // Add index signature
+  }
+
   useEffect(() => {
     Object.keys(userForm).forEach((key) => {
-      setValue(key, userForm[key]);
+      return setValue(key, userForm[key as keyof UserFormData]); // Use keyof to access the correct type
     });
   }, [userForm, setValue]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFormData({
+        ...userForm,
+        profilePicture: files[0],
+      });
+    }
+  };
+  const handleDragOver = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setDragging(false);
+  };
+
+  const handleDrop = (e: {
+    preventDefault: () => void;
+    dataTransfer: { files: any };
+  }) => {
+    e.preventDefault();
+    setDragging(false);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      setFile(files[0]);
+    }
+  };
+
+  const Submit = async (data: UserFormData) => {
+    try {
+      const formData = new FormData();
+      Object.keys(data).forEach((key) => {
+        if (key !== "profilePicture") {
+          formData.append(key, (data as any)[key].toString());
+        }
+      });
+
+      if (userForm.profilePicture) {
+        formData.append("profilePicture", userForm.profilePicture);
+      }
+
+      await axios.post("/api/users/form", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      Swal.fire("Success", "Form Successfully Submitted!", "success");
+      // TODO: Implement the router.push statement
+    } catch (error) {
+      Swal.fire("Error", "Something went wrong", "error");
+    }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -89,17 +165,6 @@ const AadhaarForm = () => {
       [name]: value,
     }));
   };
-
-  const Submit = async (data: any) => {
-    try {
-      await axios.post("/api/users/form", data);
-      Swal.fire("Success", "Form Successfully Submitted!", "success");
-      router.push("/profile");
-    } catch (error) {
-      Swal.fire("Error", "Something went wrong", "error");
-    }
-  };
-
   return (
     <div className="bg-lime-100">
       <div className="max-w-7xl mx-auto py-16 sm:px-6 lg:px-32">
@@ -226,6 +291,89 @@ const AadhaarForm = () => {
                 name="mobileNo"
                 className="appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               />
+            </div>
+          </div>
+
+          <div className="flex justify-center flex-wrap -mx-3 mb-6">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                htmlFor="personalEmail"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              >
+                Email:
+              </label>
+              <input
+                type="text"
+                id="personalEmail"
+                value={userForm.personalEmail}
+                {...register("personalEmail", {
+                  required: true,
+                  pattern: /^\S+@\S+$/i || "Invalid Email",
+                })}
+                onChange={handleChange}
+                name="personalEmail"
+                className={`appearance-none block w-full bg-sky-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${
+                  errors.personalEmail ? "border-red-500" : ""
+                }`}
+              />
+
+              <p className="text-xs text-gray-600 mt-1">
+                * Active Email is required for Early Notification
+              </p>
+            </div>
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <div
+                className={`bg-blue-200 p-6 rounded-lg shadow-md w-full max-w-md ${
+                  dragging
+                    ? "border-dashed border-2 border-blue-500"
+                    : "border-dashed border-2 border-gray-400"
+                }`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                <div className="mb-4">
+                  <label
+                    htmlFor="file"
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                  >
+                    Profile Picture:
+                  </label>
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                  <div className="relative p-4 rounded-lg cursor-pointer">
+                    <div className="text-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="mx-auto h-12 w-12 text-gray-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+                          clipRule="evenodd"
+                        />
+                        <path
+                          fillRule="evenodd"
+                          d="M10 2a8 8 0 100 16 8 8 0 000-16zM2 10a8 8 0 1116 0 8 8 0 01-16 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <p className="text-gray-600 mt-2">
+                        {file
+                          ? (file as File).name
+                          : "Drag and drop your file here"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -398,145 +546,6 @@ const AadhaarForm = () => {
               />
             </div>
           </div>
-
-          {/* <div className="mb-4">
-            <label htmlFor="secSclName" className="block mb-2 text-lg">
-              10th School Name:
-            </label>
-            <input
-              type="text"
-              id="secSclName"
-              name="secSclName"
-              value={userForm.secSclName}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="secMarks" className="block mb-2 text-lg">
-              10th Percentage:
-            </label>
-            <input
-              type="number"
-              id="secMarks"
-              name="secMarks"
-              value={userForm.secMarks}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="srSecSclName" className="block mb-2 text-lg">
-              12th School Name:
-            </label>
-            <input
-              type="text"
-              id="srSecSclName"
-              name="srSecSclName"
-              value={userForm.srSecSclName}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="srSecMarks" className="block mb-2 text-lg">
-              12th Percentage:
-            </label>
-            <input
-              type="number"
-              id="srSecMarks"
-              name="srSecMarks"
-              value={userForm.srSecMarks}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="ugColleageName" className="block mb-2 text-lg">
-              College Name (UG):
-            </label>
-            <input
-              type="text"
-              id="ugColleageName"
-              name="ugColleageName"
-              value={userForm.ugColleageName}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="ugCourseName" className="block mb-2 text-lg">
-              Course Name (UG):
-            </label>
-            <input
-              type="text"
-              id="ugCourseName"
-              name="ugCourseName"
-              value={userForm.ugCourseName}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="ugMarks" className="block mb-2 text-lg">
-              CGPA (UG):
-            </label>
-            <input
-              type="number"
-              id="ugMarks"
-              name="ugMarks"
-              value={userForm.ugMarks}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="pgColleageName" className="block mb-2 text-lg">
-              College Name (PG):
-            </label>
-            <input
-              type="text"
-              id="pgColleageName"
-              name="pgColleageName"
-              value={userForm.pgColleageName}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="pgCourseName" className="block mb-2 text-lg">
-              Course Name (PG):
-            </label>
-            <input
-              type="text"
-              id="pgCourseName"
-              name="pgCourseName"
-              value={userForm.pgCourseName}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="pgMarks" className="block mb-2 text-lg">
-              CGPA (PG):
-            </label>
-            <input
-              type="number"
-              id="pgMarks"
-              name="pgMarks"
-              value={userForm.pgMarks}
-              onChange={handleChange}
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            />
-          </div> */}
 
           <div className="text-center">
             <button

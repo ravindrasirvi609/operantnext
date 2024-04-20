@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userFormSchema = new mongoose.Schema({
-  profileImage: { type: String }, // You can store the image URL or file path
+  profileImage: { type: String },
   firstName: { type: String },
   lastName: { type: String },
   userTagLine: { type: String },
@@ -24,7 +24,7 @@ const userFormSchema = new mongoose.Schema({
   pgColleageName: { type: String },
   pgCourseName: { type: String },
   pgMarks: { type: Number },
-  highestQualification : { type: String },
+  highestQualification: { type: String },
   university: { type: String },
   workExperience: { type: Number },
   eventsAttended: [{ type: mongoose.Schema.Types.ObjectId, ref: "eventModel" }],
