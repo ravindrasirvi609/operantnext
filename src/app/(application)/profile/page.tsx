@@ -5,7 +5,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
-import HeaderNav from "../header";
+import HeaderNav from "../../header";
 
 interface UserData {
   _id: string;

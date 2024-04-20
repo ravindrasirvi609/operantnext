@@ -22,7 +22,12 @@ import toast from "react-hot-toast";
 export function DropdownMenuDemo(props: any) {
   const router = useRouter();
 
-  console.log(" props.userData USERNAME", props.userData?.userData?.username);
+  console.log("prop", props.userData?.username);
+
+  console.log(
+    " props.userData USERNAME userData.username",
+    props.userData?.username
+  );
 
   const logout = async () => {
     try {
@@ -38,7 +43,7 @@ export function DropdownMenuDemo(props: any) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="bg-pink-100">
-          {props.userData?.userData?.username}
+          {props.userData?.username}
           <span className="ml-2">🔻</span>
         </Button>
       </DropdownMenuTrigger>

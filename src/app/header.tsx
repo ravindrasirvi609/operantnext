@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { DropdownMenuDemo } from "@/components/dropdown";
-import { BrowserRouter as Router } from "react-router-dom";
+import Swal from "sweetalert2";
+import { UserData } from "./page";
 
 const navigation = [
   { name: "Profile", href: "/profile" },
@@ -15,12 +16,12 @@ const navigation = [
   { name: "Jobs", href: "/jobs" },
   { name: "Company", href: "https://opf.org.in/" },
 ];
+const initialUserData: UserData | null = null;
 
-export default function HeaderNav(prop: any) {
-  console.log(prop.userData);
-
+export default function HeaderNav() {
   const router = useRouter();
   const [role, setRole] = useState<string | null>();
+  const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isOrganization = role === "organization";
 
@@ -33,6 +34,22 @@ export default function HeaderNav(prop: any) {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/users/me");
+        const userData: UserData = response.data.data;
+        const role = localStorage.getItem("role");
+        // Set the user data and role to the state
+        setUserData(userData);
+        setRole(role);
+      } catch (error: any) {
+        Swal.fire(error.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -77,7 +94,7 @@ export default function HeaderNav(prop: any) {
           )}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <DropdownMenuDemo userData={prop} />
+          <DropdownMenuDemo userData={userData} />
           {/* <button
             className="text-sm font-semibold leading-6 text-gray-900"
             onClick={logout}
