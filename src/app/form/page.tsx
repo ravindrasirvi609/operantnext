@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import Image from "next/image";
 
 interface UserFormData {
   firstName: string;
@@ -308,7 +309,7 @@ const AadhaarForm = () => {
                 value={userForm.personalEmail}
                 {...register("personalEmail", {
                   required: true,
-                  pattern: /^\S+@\S+$/i || "Invalid Email",
+                  pattern: /^\S+@\S+$/i,
                 })}
                 onChange={handleChange}
                 name="personalEmail"
@@ -316,7 +317,9 @@ const AadhaarForm = () => {
                   errors.personalEmail ? "border-red-500" : ""
                 }`}
               />
-
+              {errors.personalEmail && (
+                <p className="text-xs text-red-500 mt-1">Invalid Email</p>
+              )}
               <p className="text-xs text-gray-600 mt-1">
                 * Active Email is required for Early Notification
               </p>
@@ -348,28 +351,37 @@ const AadhaarForm = () => {
                   />
                   <div className="relative p-4 rounded-lg cursor-pointer">
                     <div className="text-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="mx-auto h-12 w-12 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 12a2 2 0 100-4 2 2 0 000 4z"
-                          clipRule="evenodd"
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mx-auto h-12 w-12 text-gray-400"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+                            clipRule="evenodd"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            d="M10 2a8 8 0 100 16 8 8 0 000-16zM2 10a8 8 0 1116 0 8 8 0 01-16 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <p className="text-gray-600 mt-2">
+                          {file
+                            ? (file as File).name
+                            : "Drag and drop your file here"}
+                        </p>
+                        <Image
+                          src={(userForm.profileImage as string) || ""}
+                          alt="upload"
+                          width={100}
+                          height={100}
+                          className="mt-2"
                         />
-                        <path
-                          fillRule="evenodd"
-                          d="M10 2a8 8 0 100 16 8 8 0 000-16zM2 10a8 8 0 1116 0 8 8 0 01-16 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <p className="text-gray-600 mt-2">
-                        {file
-                          ? (file as File).name
-                          : "Drag and drop your file here"}
-                      </p>
+                      </>
                     </div>
                   </div>
                 </div>
