@@ -8,11 +8,8 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
-      {/* Add your header component here */}
       <HeaderNav />
-      <main>{children}</main>
-
-      {/* Add your footer component here */}
+      <main className="mt-8">{children}</main>
     </div>
   );
 };

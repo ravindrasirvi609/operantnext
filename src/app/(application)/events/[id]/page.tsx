@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Head from "next/head";
 
 interface Event {
   location: {
@@ -62,59 +63,73 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-orange-300">
-      <h1 className="text-3xl font-bold text-center mb-8">{event?.title}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
+    <div className="container mx-auto p-4 bg-lime-200">
+      <Head>
+        <title>{event.title} - Event Details</title>
+      </Head>
+
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-1/2 p-4 transform transition-transform hover:scale-105">
           <Image
             src="https://images.unsplash.com/photo-1712846040326-a3d06c0b1667?q=80&w=3424&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt={event?.title}
-            width={800}
-            height={500}
-            className="object-cover w-full h-64 transition-opacity duration-300 hover:opacity-80"
+            alt={event.title}
+            width={500}
+            height={300}
+            className="rounded-md shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out"
           />
-          <div className="p-4">
-            <h2 className="text-xl font-semibold mb-2">{event?.title}</h2>
-            <p className="text-gray-600 mb-2">{event?.description}</p>
-            <div className="flex justify-between items-center mt-4">
-              <span className="text-indigo-600 font-semibold">
-                {event?.isPaid ? `$${event?.price}` : "Free"}
-              </span>
-              <Link
-                href={event?.registrationUrl}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
-              >
-                Register Now
-              </Link>
-            </div>
+        </div>
+        <div className="md:w-1/2 p-4">
+          <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
+          <p className="text-gray-600 mb-2">{formatDate(event.date)}</p>
+          <p className="text-gray-600 mb-4">
+            {event.location.address}, {event.location.city},{" "}
+            {event.location.state}, {event.location.country}
+          </p>
+          <p className="text-lg mb-4">{event.description}</p>
+          <div className="flex items-center space-x-4">
+            {event.isPaid ? (
+              <p className="text-green-500 text-xl font-semibold">
+                Price: ${event.price}
+              </p>
+            ) : (
+              <p className="text-green-500 text-xl font-semibold">Free Event</p>
+            )}
+            <a
+              href={event.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
+            >
+              Register Now
+            </a>
           </div>
         </div>
-        <div className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
-          <div className="p-4">
-            <h3 className="text-lg font-semibold mb-2">Event Details</h3>
-            <p className="text-gray-600 mb-2">
-              <strong>Date:</strong> {formatDate(event?.date)}
-            </p>
-            <p className="text-gray-600 mb-2">
-              <strong>Location:</strong> {event?.location.address},{" "}
-              {event?.location.city}, {event?.location.state},{" "}
-              {event?.location.country}
-            </p>
-            <p className="text-gray-600 mb-2">
-              <strong>Organizer:</strong> {event?.organizerDetails?.name} (
-              {event?.organizerDetails?.email})
-            </p>
-            <p className="text-gray-600 mb-2">
-              <strong>Capacity:</strong> {event?.capacity} attendees
-            </p>
-            <p className="text-gray-600 mb-2">
-              <strong>Categories:</strong> {event?.categories.join(", ")}
-            </p>
-            <p className="text-gray-600 mb-2">
-              <strong>Attendees:</strong> {event?.attendees.length}
-            </p>
-          </div>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-3xl font-bold mb-4">Organizer Details</h2>
+        <div className="flex flex-col md:flex-row md:space-x-8">
+          <p className="text-lg mb-2">Name: {event.organizerDetails.name}</p>
+          <p className="text-lg mb-2">Email: {event.organizerDetails.email}</p>
         </div>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-3xl font-bold mb-4">Event Categories</h2>
+        <ul className="list-disc list-inside space-y-2">
+          {event.categories.map((category, index) => (
+            <li key={index} className="text-gray-600 text-lg">
+              {category}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-3xl font-bold mb-4">Event Capacity</h2>
+        <p className="text-lg">
+          {event.attendees.length} / {event.capacity}
+        </p>
       </div>
     </div>
   );
