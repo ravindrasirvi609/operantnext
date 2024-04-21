@@ -4,11 +4,18 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+interface Location {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+}
+
 interface Job {
   _id: string;
   title: string;
   company: string;
-  location: string;
+  location: Location;
   description: string;
   type: string;
   applyUrl: string;
@@ -33,11 +40,20 @@ const JobListPage: React.FC = () => {
   }, []);
 
   if (!jobs.length) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-blue-600">Loading...</h1>
+          <div className="mt-4">
+            <div className="inline-block animate-spin ease-linear rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className=" mx-auto px-4 py-8 bg-lime-100">
       <h1 className="text-3xl font-semibold text-center mb-8">Job List</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobs.map((job) => (
@@ -46,7 +62,7 @@ const JobListPage: React.FC = () => {
             className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105"
           >
             <Image
-              src={job.companyLogo}
+              src="https://images.unsplash.com/photo-1713204641930-9be477a56a8d?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt={`${job.company} Logo`}
               width={800}
               height={500}
@@ -55,7 +71,7 @@ const JobListPage: React.FC = () => {
             <div className="p-4">
               <h2 className="text-xl font-semibold mb-2">{job.title}</h2>
               <p className="text-gray-600 mb-2">{job.company}</p>
-              <p className="text-gray-600 mb-2">{job.location}</p>
+              <p className="text-gray-600 mb-2">{`${job.location.address}, ${job.location.city}, ${job.location.state}, ${job.location.country}`}</p>
               <p className="text-gray-600 mb-2">{job.type}</p>
               <div className="flex justify-between items-center mt-4">
                 <Link
@@ -64,14 +80,16 @@ const JobListPage: React.FC = () => {
                 >
                   View Details
                 </Link>
-                <Link
-                  href={job.applyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
-                >
-                  Apply Now
-                </Link>
+                {job.applyUrl && (
+                  <Link
+                    href={job.applyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-300"
+                  >
+                    Apply Now
+                  </Link>
+                )}
               </div>
             </div>
           </div>

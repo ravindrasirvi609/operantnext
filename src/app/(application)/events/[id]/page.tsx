@@ -63,7 +63,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
   }
 
   return (
-    <div className="container mx-auto p-4 bg-lime-200">
+    <div className="mx-auto p-4 mt-20 bg-lime-100">
       <Head>
         <title>{event.title} - Event Details</title>
       </Head>

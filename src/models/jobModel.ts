@@ -89,6 +89,6 @@ jobSchema.pre("save", function (next) {
   next();
 });
 
-const JobModel = mongoose.model("Job", jobSchema);
+const JobModel = mongoose.models.eventModel || mongoose.model("Job", jobSchema);
 
 export default JobModel;

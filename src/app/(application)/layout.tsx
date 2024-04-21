@@ -1,5 +1,6 @@
 import React from "react";
 import HeaderNav from "../header";
+import { cn } from "@/lib/utils";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -8,8 +9,12 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
-      <HeaderNav />
-      <main className="mt-8">{children}</main>
+      <div>
+        <HeaderNav />
+      </div>
+      <main className={cn("min-h-screen bg-background font-sans antialiased")}>
+        {children}
+      </main>
     </div>
   );
 };

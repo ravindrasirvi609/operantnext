@@ -52,7 +52,7 @@ export default function HeaderNav() {
   }, []);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
+    <header className="absolute inset-x-0 top-0 z-50 bg-lime-200">
       <nav
         className="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
