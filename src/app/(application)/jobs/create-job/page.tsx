@@ -18,6 +18,7 @@ const JobForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
   const [skills, setSkills] = useState<Skill[]>();
   const [companies, setCompanies] = useState<any[]>();
@@ -45,14 +46,55 @@ const JobForm = () => {
     };
     fetchSkillList();
     fetchCompanyList();
+    register("skills");
+    register("company");
   }, [register]);
 
   const onSubmit = (data: any) => {
     console.log(data);
+    const jobData = {
+      title: data.title,
+      description: data.description,
+      location: {
+        type: data.location.type,
+        address: data.location.address,
+      },
+      type: data.type,
+      applyUrl: data.applyUrl,
+      companyLogo: data.companyLogo,
+      benefits: data.benefits,
+      salaryRange: {
+        min: data.salaryRange.min,
+        max: data.salaryRange.max,
+      },
+      experienceLevel: data.experienceLevel,
+      remoteOptions: {
+        flexibleHours: data.remoteOptions.flexibleHours,
+        timezone: data.remoteOptions.timezone,
+      },
+      department: data.department,
+      skills: data.skills.map((skill: any) => skill.value),
+      company: data.company.value,
+    };
+    console.log("jobData", jobData);
+    const response = axios
+      .post("/api/Jobs/createJob", jobData)
+      .then((response) => {
+        console.log("response", response);
+      })
+      .catch((error) => {
+        console.error("Error creating job:", error);
+      });
   };
 
   function handleSkillChange(selectedSkills: any): void {
     console.log("selectedSkills", selectedSkills);
+
+    setValue("skills", selectedSkills);
+  }
+
+  function handleCompanyChange(selectedCompany: any): void {
+    setValue("company", selectedCompany);
   }
 
   return (
@@ -128,7 +170,7 @@ const JobForm = () => {
               value: company._id,
               label: company.userName,
             }))}
-            onChange={handleSkillChange}
+            onChange={handleCompanyChange}
           />
           {errors.company && (
             <p className="text-red-500 text-sm">Company is required</p>
