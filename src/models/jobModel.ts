@@ -84,11 +84,6 @@ const jobSchema = new mongoose.Schema({
   department: String,
 });
 
-jobSchema.pre("save", function (next) {
-  this.updatedAt = new Date();
-  next();
-});
-
-const JobModel = mongoose.models.eventModel || mongoose.model("Job", jobSchema);
+const JobModel = mongoose.models.Job || mongoose.model("Job", jobSchema);
 
 export default JobModel;
