@@ -1,38 +1,61 @@
 import { connect } from "@/dbConfig/dbConfig";
 import jobModel from "@/models/jobModel";
+import Organizer from "@/models/organizerModel";
+import SkillModel from "@/models/skillModel";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-// Connect to MongoDB
 connect();
 
 export async function POST(req: NextRequest) {
   try {
-    // Parse JSON body from the request
     const { id } = await req.json();
 
-    // Validate the id format
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return new NextResponse("Invalid Job ID format", { status: 400 });
     }
 
-    // Find the job by ID
-    const job = await jobModel.findById(id);
+    const job = await jobModel.findById(id); // Populate company data
+    console.log("job", job);
 
-    // Check if job exists
+    // Check if job exists and company data is populated
+    const company = await Organizer.findById(job?.company);
     if (!job) {
-      return new NextResponse("Job not found", { status: 404 });
+      return new NextResponse("Job not found or company data missing", {
+        status: 404,
+      });
     }
 
-    // Return the job as a JSON response
-    return new NextResponse(JSON.stringify(job), {
+    const skills = await SkillModel.find({ _id: { $in: job?.skills } });
+    console.log("skills", skills);
+
+    if (!skills) {
+      return new NextResponse("Error retrieving skills", { status: 500 });
+    }
+
+    const companyName = company.userName || "Company Name unavailable";
+    const skillNames = skills.map(
+      (skill) => skill.name || "Skill name unavailable"
+    );
+
+    job.company = companyName;
+    job.skills = skillNames;
+
+    console.log("job", job.company, job.skills);
+
+    const newJob = {
+      ...job,
+      company: companyName,
+      skills: skillNames,
+    };
+
+    return new NextResponse(JSON.stringify(newJob), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
       },
     });
   } catch (error: any) {
-    // Log and return error response
     console.error(error);
     return new NextResponse("Error retrieving the job", { status: 500 });
   }
