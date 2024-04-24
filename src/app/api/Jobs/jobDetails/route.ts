@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
 
     // Check if job exists and company data is populated
     const company = await Organizer.findById(job?.company);
+    const companyName = company.get("userName") || "Company Name unavailable";
+
     if (!job) {
       return new NextResponse("Job not found or company data missing", {
         status: 404,
@@ -27,13 +29,11 @@ export async function POST(req: NextRequest) {
     }
 
     const skills = await SkillModel.find({ _id: { $in: job?.skills } });
-    console.log("skills", skills);
 
     if (!skills) {
       return new NextResponse("Error retrieving skills", { status: 500 });
     }
 
-    const companyName = company.userName || "Company Name unavailable";
     const skillNames = skills.map(
       (skill) => skill.name || "Skill name unavailable"
     );
@@ -42,10 +42,12 @@ export async function POST(req: NextRequest) {
     job.skills = skillNames;
 
     const newJob = {
-      ...job,
+      ...job.toObject(),
       company: companyName,
       skills: skillNames,
     };
+
+    console.log("newJob", newJob);
 
     return new NextResponse(JSON.stringify(newJob), {
       status: 200,
