@@ -41,8 +41,6 @@ export async function POST(req: NextRequest) {
     job.company = companyName;
     job.skills = skillNames;
 
-    console.log("job", job.company, job.skills);
-
     const newJob = {
       ...job,
       company: companyName,
