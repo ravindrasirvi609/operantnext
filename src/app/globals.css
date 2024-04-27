@@ -75,3 +75,51 @@
         color: var(--foreground);
     }
   }
+
+
+
+    .my-custom-root-class {
+      /* styles for the overall component */
+      border: 1px solid #98f3b6;
+      padding: 5px;
+    }
+  
+    .my-custom-root-is-active {
+      border-color: #100ac9;
+    }
+  
+    .my-custom-tag {
+      /* styles for individual tags */
+      background-color: #d30e0e;
+      padding: 0.5rem;
+      margin: 0.2rem;
+      border-radius: 3px;
+    }
+  
+    .my-custom-option {
+      /* styles for individual options in the dropdown */
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+  
+    .my-custom-option-is-active {
+      /* styles for the active option in the dropdown */
+      background-color: #0cd293;
+    }
+
+    .my-custom-label {
+      font-weight: bold;
+    }
+
+    .my-custom-input {
+      /* styles for the input */
+      background-color: #ecfccb;
+      width: 100% !important;
+      padding: 0.5rem;
+    }
+
+    .my-custom-list-box {
+      /* styles for the list box */
+      background-color: #93c5fd;
+      border: 2px solid #d20c6f;
+    }

@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { ClassNames, ReactTags } from "react-tag-autocomplete";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -17,6 +18,34 @@ const schema = yup.object().shape({
   imageUrl: yup.string().url("Invalid URL"),
 });
 
+const suggestions = [
+  { label: "USA", value: "USA" },
+  { label: "Germany", value: "Germany" },
+  { label: "Austria", value: "Austria" },
+  { label: "Costa Rica", value: "Costa Rica" },
+  { label: "Sri Lanka", value: "Sri Lanka" },
+  { label: "Thailand", value: "Thailand" },
+  { label: "Australia", value: "Australia" },
+  { label: "Colombia", value: "Colombia" },
+  { label: "Czech Republic", value: "Czech Republic" },
+  { label: "Denmark", value: "Denmark" },
+  { label: "Dominican Republic", value: "Dominican Republic" },
+  { label: "Dominica", value: "Dominica" },
+  { label: "Ecuador", value: "Ecuador" },
+  { label: "Egypt", value: "Egypt" },
+  { label: "Spain", value: "Spain" },
+  { label: "Estonia", value: "Estonia" },
+  { label: "Finland", value: "Finland" },
+  { label: "France", value: "France" },
+  { label: "Greece", value: "Greece" },
+  { label: "Honduras", value: "Honduras" },
+  { label: "Hungary", value: "Hungary" },
+  { label: "Iceland", value: "Iceland" },
+  { label: "India", value: "India" },
+  { label: "Indonesia", value: "Indonesia" },
+  { label: "Ireland", value: "Ireland" },
+];
+
 const ArticleForm = () => {
   type FormData = {
     excerpt?: string;
@@ -29,6 +58,24 @@ const ArticleForm = () => {
     category: string;
   };
 
+  const classNames: ClassNames = {
+    root: "my-custom-root-class",
+    rootIsActive: "my-custom-root-is-active",
+    option: "my-custom-option",
+    optionIsActive: "my-custom-option-is-active",
+    rootIsDisabled: "",
+    rootIsInvalid: "",
+    label: "my-custom-label",
+    tagList: "",
+    tagListItem: "",
+    tag: "",
+    tagName: "",
+    comboBox: "",
+    input: "my-custom-input",
+    listBox: "my-custom-list-box",
+    highlight: "",
+  };
+
   const {
     register,
     handleSubmit,
@@ -36,6 +83,22 @@ const ArticleForm = () => {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+  const [selected, setSelected] = useState<any[]>([]);
+
+  const onAdd = useCallback(
+    (newTag: any) => {
+      setSelected([...selected, newTag]);
+    },
+    [selected]
+  );
+  console.log("onAdd", selected);
+
+  const onDelete = useCallback(
+    (tagIndex: number) => {
+      setSelected(selected.filter((_, i) => i !== tagIndex));
+    },
+    [selected]
+  );
 
   const onSubmit = (data: FormData) => {
     console.log(data);
@@ -125,20 +188,19 @@ const ArticleForm = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="tags"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Tags
-          </label>
-          <input
-            type="text"
-            id="tags"
-            className="mt-1 p-2 w-full border bg-lime-100 border-blue-500 rounded-md"
-            {...register("tags")}
+          <ReactTags
+            labelText="Select Category"
+            selected={selected}
+            suggestions={suggestions}
+            onAdd={onAdd}
+            onDelete={onDelete}
+            noOptionsText="No matching category found"
+            classNames={classNames}
           />
           {errors.tags && (
-            <p className="text-red-500 text-sm mt-1">{errors.tags.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors?.category?.message}
+            </p>
           )}
         </div>
 
