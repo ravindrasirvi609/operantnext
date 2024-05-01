@@ -21,31 +21,31 @@ const schema = yup.object().shape({
 });
 
 const suggestions = [
-  { label: "USA", value: "USA" },
-  { label: "Germany", value: "Germany" },
-  { label: "Austria", value: "Austria" },
-  { label: "Costa Rica", value: "Costa Rica" },
-  { label: "Sri Lanka", value: "Sri Lanka" },
-  { label: "Thailand", value: "Thailand" },
-  { label: "Australia", value: "Australia" },
-  { label: "Colombia", value: "Colombia" },
-  { label: "Czech Republic", value: "Czech Republic" },
-  { label: "Denmark", value: "Denmark" },
-  { label: "Dominican Republic", value: "Dominican Republic" },
-  { label: "Dominica", value: "Dominica" },
-  { label: "Ecuador", value: "Ecuador" },
-  { label: "Egypt", value: "Egypt" },
-  { label: "Spain", value: "Spain" },
-  { label: "Estonia", value: "Estonia" },
-  { label: "Finland", value: "Finland" },
-  { label: "France", value: "France" },
-  { label: "Greece", value: "Greece" },
-  { label: "Honduras", value: "Honduras" },
-  { label: "Hungary", value: "Hungary" },
-  { label: "Iceland", value: "Iceland" },
-  { label: "India", value: "India" },
-  { label: "Indonesia", value: "Indonesia" },
-  { label: "Ireland", value: "Ireland" },
+  { label: "Antibiotics", value: "Antibiotics" },
+  { label: "Analgesics", value: "Analgesics" },
+  { label: "Antidepressants", value: "Antidepressants" },
+  { label: "Antihistamines", value: "Antihistamines" },
+  { label: "Antivirals", value: "Antivirals" },
+  { label: "Beta blockers", value: "Beta blockers" },
+  { label: "Diuretics", value: "Diuretics" },
+  { label: "Hormonal contraceptives", value: "Hormonal contraceptives" },
+  { label: "Insulin", value: "Insulin" },
+  { label: "Narcotic analgesics", value: "Narcotic analgesics" },
+  { label: "Statin drugs", value: "Statin drugs" },
+  { label: "Sedatives", value: "Sedatives" },
+  { label: "Tranquilizers", value: "Tranquilizers" },
+  { label: "Vaccines", value: "Vaccines" },
+  { label: "Antacids", value: "Antacids" },
+  { label: "Anticoagulants", value: "Anticoagulants" },
+  { label: "Antifungals", value: "Antifungals" },
+  { label: "Antiemetics", value: "Antiemetics" },
+  { label: "Antispasmodics", value: "Antispasmodics" },
+  { label: "Corticosteroids", value: "Corticosteroids" },
+  { label: "Bronchodilators", value: "Bronchodilators" },
+  { label: "Immunosuppressants", value: "Immunosuppressants" },
+  { label: "Laxatives", value: "Laxatives" },
+  { label: "Muscle relaxants", value: "Muscle relaxants" },
+  { label: "Proton pump inhibitors", value: "Proton pump inhibitors" },
 ];
 
 const ArticleForm = () => {
@@ -129,29 +129,27 @@ const ArticleForm = () => {
     [selected]
   );
 
-  const onSubmit = (data: FormData) => {
-    console.log("__________---------", data);
-    const formData = {
-      ...data,
-      tags: selected.map((tag) => tag.label),
-      imageUrl: file,
-    };
-    console.log("formData", formData);
+  const onSubmit = async (data: FormData) => {
+    try {
+      const formData = {
+        ...data,
+        tags: selected.map((tag) => tag.label),
+        imageUrl: file,
+      };
 
-    const form = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "imageUrl") {
-        form.append("profilePicture", value as File);
-      } else {
-        form.append(key, value as string);
-      }
-    });
-    console.log("form", form);
+      const form = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "imageUrl") {
+          form.append("profilePicture", value as File);
+        } else {
+          form.append(key, value as string);
+        }
+      });
 
-    const res = axios.post("/api/articles/createArticle", form);
-    console.log(res);
-
-    console.log(formData);
+      const res = await axios.post("/api/articles/createArticle", form);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
