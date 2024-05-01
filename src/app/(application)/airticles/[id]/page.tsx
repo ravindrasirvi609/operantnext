@@ -27,7 +27,7 @@ interface ArticleDetailsProps {
   };
 }
 
-const ArticleDetails: React.FC<ArticleDetailsProps> = ({ params }: any) => {
+const ArticleDetails: React.FC = ({ params }: any) => {
   const id = params?.id;
   const [article, setArticle] = useState<Article | null>(null);
 
