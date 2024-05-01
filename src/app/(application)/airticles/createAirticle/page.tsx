@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ClassNames, ReactTags } from "react-tag-autocomplete";
+import Image from "next/image";
+import axios from "axios";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -84,6 +86,34 @@ const ArticleForm = () => {
     resolver: yupResolver(schema),
   });
   const [selected, setSelected] = useState<any[]>([]);
+  const [dragging, setDragging] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFile(files[0]);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragging(false);
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      setFile(files[0]);
+    }
+  };
 
   const onAdd = useCallback(
     (newTag: any) => {
@@ -91,7 +121,6 @@ const ArticleForm = () => {
     },
     [selected]
   );
-  console.log("onAdd", selected);
 
   const onDelete = useCallback(
     (tagIndex: number) => {
@@ -101,8 +130,28 @@ const ArticleForm = () => {
   );
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
-    // Handle form submission logic here
+    console.log("__________---------", data);
+    const formData = {
+      ...data,
+      tags: selected.map((tag) => tag.label),
+      imageUrl: file,
+    };
+    console.log("formData", formData);
+
+    const form = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "imageUrl") {
+        form.append("profilePicture", value as File);
+      } else {
+        form.append(key, value as string);
+      }
+    });
+    console.log("form", form);
+
+    const res = axios.post("/api/articles/createArticle", form);
+    console.log(res);
+
+    console.log(formData);
   };
 
   return (
@@ -245,7 +294,7 @@ const ArticleForm = () => {
           )}
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             htmlFor="imageUrl"
             className="block text-sm font-medium text-gray-600"
@@ -263,6 +312,72 @@ const ArticleForm = () => {
               {errors.imageUrl.message}
             </p>
           )}
+        </div> */}
+
+        <div className="mb-4">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <div
+              className={`bg-blue-200 p-6 rounded-lg shadow-md w-full max-w-md ${
+                dragging
+                  ? "border-dashed border-2 border-blue-500"
+                  : "border-dashed border-2 border-gray-400"
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="mb-4">
+                <label
+                  htmlFor="file"
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                >
+                  Profile Picture:
+                </label>
+                <input
+                  type="file"
+                  name="file"
+                  id="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <div className="relative p-4 rounded-lg cursor-pointer">
+                  <div className="text-center">
+                    <>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="mx-auto h-12 w-12 text-gray-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+                          clipRule="evenodd"
+                        />
+                        <path
+                          fillRule="evenodd"
+                          d="M10 2a8 8 0 100 16 8 8 0 000-16zM2 10a8 8 0 1116 0 8 8 0 01-16 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <p className="text-gray-600 mt-2">
+                        {file
+                          ? (file as File).name
+                          : "Drag and drop your file here"}
+                      </p>
+                      <Image
+                        src={file ? URL.createObjectURL(file) : ""}
+                        alt="upload"
+                        width={100}
+                        height={100}
+                        className="mt-2"
+                      />
+                    </>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <button

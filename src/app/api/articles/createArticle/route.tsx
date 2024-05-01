@@ -1,35 +1,62 @@
+import { uploadToCloudinary } from "@/cloudinary/cloudinary";
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import Article from "@/models/articalModel";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
-// Initialize the database connection
 connect();
 
 export async function POST(req: NextRequest) {
   try {
-    // Step 1: Ensure the user is authenticated
+    const formData = await req.formData();
+    const file = formData.get("profilePicture") as File;
+    const fileBuffer = await file.arrayBuffer();
+    const mimeType = file.type;
+    const encoding = "base64";
+    const base64Data = Buffer.from(fileBuffer).toString("base64");
+    const fileUri = "data:" + mimeType + ";" + encoding + "," + base64Data;
+
+    const res = await uploadToCloudinary(fileUri, file.name);
+    console.log("Cloudinary response", res);
+
     const userId = await getDataFromToken(req);
     const user = await User.findById(userId);
+
+    let message = "failure";
+    let imgUrl = "";
 
     if (!user) {
       return new NextResponse("Authentication required", { status: 401 });
     }
-
-    // Step 2: Check if the user has the "author" role
-    if (user.role !== "author") {
-      return new NextResponse(
-        "Unauthorized. User must have the 'author' role.",
-        { status: 401 }
-      );
+    if (res.success && res.result) {
+      message = "success";
+      imgUrl = res.result.secure_url;
     }
+    const { title, slug, content, excerpt, tags, category, status } =
+      Object.fromEntries(formData.entries());
 
-    // Step 3: Retrieve article data from the request body
-    const articleData = await req.json();
+    // if (user.role !== "author") {
+    //   return new NextResponse(
+    //     "Unauthorized. User must have the 'author' role.",
+    //     { status: 401 }
+    //   );
+    // }
 
-    // Step 4: Create a new article document in the database
-    const article = await Article.create({ ...articleData, author: userId });
+    const articleData = new Article({
+      title,
+      slug,
+      content,
+      excerpt,
+      tags,
+      category,
+      status,
+      author: userId,
+      imageUrl: res.success ? res?.result?.secure_url : "",
+    });
+
+    // Step 4: Save the article to the database
+    const article = await articleData.save();
 
     // Step 5: Return the created article as a JSON response
     return new NextResponse(JSON.stringify(article), {
