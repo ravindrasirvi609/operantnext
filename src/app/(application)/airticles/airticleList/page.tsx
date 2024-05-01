@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 interface Article {
@@ -41,40 +42,42 @@ const ArticleList: React.FC = () => {
       <h1 className="text-3xl font-bold mb-6">Article List</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article) => (
-          <div
-            key={article._id}
-            className="border rounded-lg overflow-hidden shadow-md transition duration-300 transform hover:scale-105"
-          >
-            {article.imageUrl && (
-              <Image
-                src={article.imageUrl}
-                alt={article.title}
-                width={600}
-                height={400}
-                className="object-cover w-full h-48"
-              />
-            )}
-            <div className="p-4">
-              <h2 className="text-xl font-bold mb-2">{article.title}</h2>
-              <p className="text-gray-700 mb-2">{article.excerpt}</p>
-              <div className="flex justify-between text-gray-600 mb-2">
-                <p>Category: {article.category}</p>
-                <p>Tags: {article.tags.join(", ")}</p>
-              </div>
-              <div className="flex justify-between text-gray-600 mb-2">
-                <p>Status: {article.status}</p>
-                <p>Views: {article.views}</p>
-              </div>
-              <div className="flex justify-between text-gray-600">
-                <p>
-                  Created At: {new Date(article.createdAt).toLocaleString()}
-                </p>
-                <p>
-                  Updated At: {new Date(article.updatedAt).toLocaleString()}
-                </p>
+          <Link key={article._id} href={`/airticles/${article._id}`}>
+            <div
+              key={article._id}
+              className="border rounded-lg overflow-hidden shadow-md transition duration-300 transform hover:scale-105"
+            >
+              {article.imageUrl && (
+                <Image
+                  src={article.imageUrl}
+                  alt={article.title}
+                  width={600}
+                  height={400}
+                  className="object-cover w-full h-48"
+                />
+              )}
+              <div className="p-4">
+                <h2 className="text-xl font-bold mb-2">{article.title}</h2>
+                <p className="text-gray-700 mb-2">{article.excerpt}</p>
+                <div className="flex justify-between text-gray-600 mb-2">
+                  <p>Category: {article.category}</p>
+                  <p>Tags: {article.tags.join(", ")}</p>
+                </div>
+                <div className="flex justify-between text-gray-600 mb-2">
+                  <p>Status: {article.status}</p>
+                  <p>Views: {article.views}</p>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <p>
+                    Created At: {new Date(article.createdAt).toLocaleString()}
+                  </p>
+                  <p>
+                    Updated At: {new Date(article.updatedAt).toLocaleString()}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

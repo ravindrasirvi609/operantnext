@@ -7,12 +7,13 @@ connect();
 export async function POST(req: NextRequest) {
   try {
     const { id } = await req.json();
+    console.log("id", id);
 
     if (!id) {
       return NextResponse.json({ error: "Slug is required" });
     }
 
-    const article = await Article.findOne({ id });
+    const article = await Article.findOne({ _id: id });
 
     if (!article) {
       return NextResponse.json({ error: "Article not found" });
