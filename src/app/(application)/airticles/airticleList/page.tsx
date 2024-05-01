@@ -45,7 +45,7 @@ const ArticleList: React.FC = () => {
           <Link key={article._id} href={`/airticles/${article._id}`}>
             <div
               key={article._id}
-              className="border rounded-lg overflow-hidden shadow-md transition duration-300 transform hover:scale-105"
+              className="border rounded-lg bg-blue-300 overflow-hidden shadow-md transition duration-300 transform hover:scale-105"
             >
               {article.imageUrl && (
                 <Image

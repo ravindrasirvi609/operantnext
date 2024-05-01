@@ -55,7 +55,7 @@ const ArticleDetails: React.FC<ArticleDetailsProps> = ({ params }: any) => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-lime-100 rounded-lg shadow-md mt-40">
+    <div className="max-w-3xl mx-auto p-6 bg-blue-200 rounded-lg shadow-md mt-40">
       <h1 className="text-3xl text-center font-bold mb-4">{article.title}</h1>
       {article.imageUrl && (
         <Image
