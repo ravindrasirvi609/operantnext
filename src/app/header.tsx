@@ -15,6 +15,7 @@ const navigation = [
   { name: "Confrences", href: "/events" },
   { name: "Jobs", href: "/jobs" },
   { name: "Company", href: "https://opf.org.in/" },
+  { name: "Articles", href: "/airticles/airticleList" },
 ];
 const initialUserData: UserData | null = null;
 
