@@ -51,7 +51,7 @@ export default function CompanyProfile() {
   };
 
   const editProfileRouting = () => {
-    router.push("/form");
+    router.push("/companyProfile");
   };
 
   useEffect(() => {

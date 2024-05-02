@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { on } from "events";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 interface ICompany {
   companyName: string;
@@ -84,6 +85,27 @@ const EditCompanyForm = () => {
 
   useEffect(() => {
     setCompanyData(initialCompanyData);
+  }, [initialCompanyData]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/users/companyDetails");
+        const receivedFormData = response.data;
+        if (receivedFormData && receivedFormData.data) {
+          const parsedDate = new Date(receivedFormData.data.dob);
+
+          setCompanyData({
+            ...initialCompanyData,
+            ...receivedFormData.data,
+          });
+        }
+      } catch (error: any) {
+        Swal.fire("Error", error.message, "error");
+      }
+    };
+
+    fetchData();
   }, [initialCompanyData]);
 
   const handleChange = (
