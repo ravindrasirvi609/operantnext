@@ -22,6 +22,7 @@ const collegeSchema = new mongoose.Schema({
   collegeType: { type: String },
   affiliatedTo: { type: String },
   websiteUrl: { type: String },
+  profileImage: { type: String },
 });
 
 const College =

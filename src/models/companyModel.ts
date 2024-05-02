@@ -16,6 +16,7 @@ const companySchema = new mongoose.Schema({
   industryType: { type: String },
   numberOfEmployees: { type: Number },
   websiteUrl: { type: String },
+  profileImage: { type: String },
 });
 
 const Company =
