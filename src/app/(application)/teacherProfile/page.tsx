@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, use } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 interface Teacher {
   firstName: string;
@@ -71,6 +73,27 @@ const EditTeacherForm = () => {
     setTeacherData(initialTeacherData);
   }, [initialTeacherData]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/users/teacherDetails");
+        const receivedFormData = response.data;
+        if (receivedFormData && receivedFormData.data) {
+          const parsedDate = new Date(receivedFormData.data.dob);
+
+          setTeacherData({
+            ...initialTeacherData,
+            ...receivedFormData.data,
+          });
+        }
+      } catch (error: any) {
+        Swal.fire("Error", error.message, "error");
+      }
+    };
+
+    fetchData();
+  }, [initialTeacherData]);
+
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -85,7 +108,12 @@ const EditTeacherForm = () => {
   };
 
   async function onSubmit(data: Teacher) {
-    console.log(data);
+    try {
+      const response = await axios.put("/api/users/teacherDetails", data);
+      Swal.fire("Success", response.data.message, "success");
+    } catch (error: any) {
+      Swal.fire("Error", error.message, "error");
+    }
   }
 
   return (

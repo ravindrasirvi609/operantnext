@@ -46,7 +46,7 @@ export default function CollegeProfile() {
 
   const getCollegeDetails = async () => {
     try {
-      const res = await axios.get("/api/college/details");
+      const res = await axios.get("/api/users/collegeDetails");
       setData(res.data.data.firstName);
       setUserData(res.data.data);
     } catch (error) {
@@ -55,7 +55,7 @@ export default function CollegeProfile() {
   };
 
   const editProfileRouting = () => {
-    router.push("/form");
+    router.push("/collegeProfile");
   };
 
   useEffect(() => {

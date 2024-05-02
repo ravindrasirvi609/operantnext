@@ -47,7 +47,7 @@ export default function TeacherProfile() {
   };
 
   const editProfileRoutinting = () => {
-    router.push("/form");
+    router.push("/teacherProfile");
   };
 
   useEffect(() => {
