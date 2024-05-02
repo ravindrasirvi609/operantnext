@@ -1,7 +1,7 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import eventModel from "@/models/eventModel";
-import Organizer from "@/models/organizerModel";
+import Organizer from "@/models/collegeModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();

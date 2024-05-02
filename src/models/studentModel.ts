@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userFormSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   profileImage: { type: String },
   firstName: { type: String },
   lastName: { type: String },
@@ -30,7 +30,7 @@ const userFormSchema = new mongoose.Schema({
   eventsAttended: [{ type: mongoose.Schema.Types.ObjectId, ref: "eventModel" }],
 });
 
-const UserForm =
-  mongoose.models.usersform || mongoose.model("usersform", userFormSchema);
+const Student =
+  mongoose.models.studentData || mongoose.model("studentData", studentSchema);
 
-export default UserForm;
+export default Student;

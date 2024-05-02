@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Authentication required", { status: 401 });
     }
 
-    if (user.role !== "organization") {
+    if (user.role !== "COMPANY" && user.role !== "COLLEGE") {
       return new NextResponse(
         "Unauthorized. User must have the 'organization' role.",
         { status: 401 }

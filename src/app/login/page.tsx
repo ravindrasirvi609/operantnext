@@ -91,8 +91,10 @@ export default function LoginPage() {
                     <option value="DEFAULT" disabled>
                       Choose a role
                     </option>
-                    <option value="user">Student</option>
-                    <option value="organization">Organization</option>
+                    <option value="STUDENT">Student</option>
+                    <option value="TEACHER">Teacher</option>
+                    <option value="COLLEGE">College</option>
+                    <option value="COMPANY">Company</option>
                   </select>
                   {errors.role && (
                     <p className="text-red-500 text-xs mt-1">

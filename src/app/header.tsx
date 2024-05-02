@@ -5,18 +5,43 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { DropdownMenuDemo } from "@/components/dropdown";
 import Swal from "sweetalert2";
 import { UserData } from "./page";
 
-const navigation = [
-  { name: "Profile", href: "/profile" },
-  { name: "Confrences", href: "/events" },
+const studentNavigation = [
+  { name: "Conferences", href: "/events" },
   { name: "Jobs", href: "/jobs" },
-  { name: "Company", href: "https://opf.org.in/" },
-  { name: "Articles", href: "/airticles/airticleList" },
+  { name: "Articles", href: "/articles/articleList" },
+  { name: "Courses", href: "/courses" },
+  { name: "Resources", href: "/resources" },
+  // { name: "Assignments", href: "/Assignments" },
 ];
+
+const collegeNavigation = [
+  { name: "Post-Event", href: "/profile" },
+  { name: "Conferences", href: "/events" },
+  { name: "Collaborations", href: "/collaborations" },
+  { name: "Resources", href: "/resources" },
+  { name: "Forums", href: "/forums" },
+];
+
+const teacherNavigation = [
+  { name: "Review-Articles", href: "/profile" },
+  { name: "Conferences", href: "/events" },
+  { name: "Classes", href: "/classes" },
+  { name: "Resources", href: "/resources" },
+  { name: "Forums", href: "/forums" },
+];
+
+const companyNavigation = [
+  { name: "Job Postings", href: "/profile" },
+  { name: "Events", href: "/events" },
+  { name: "Recruitment", href: "/jobPostings" },
+  { name: "Resources", href: "/resources" },
+  { name: "Forums", href: "/forums" },
+];
+
 const initialUserData: UserData | null = null;
 
 export default function HeaderNav() {
@@ -24,17 +49,6 @@ export default function HeaderNav() {
   const [role, setRole] = useState<string | null>();
   const [userData, setUserData] = useState<UserData | null>(initialUserData);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isOrganization = role === "organization";
-
-  const logout = async () => {
-    try {
-      await axios.get("/api/users/logout");
-      router.push("/login");
-      toast.success("Logout successful");
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +65,25 @@ export default function HeaderNav() {
     };
     fetchData();
   }, []);
+
+  let navigation: any[];
+  switch (role) {
+    case "STUDENT":
+      navigation = studentNavigation;
+      break;
+    case "COLLEGE":
+      navigation = collegeNavigation;
+      break;
+    case "TEACHER":
+      navigation = teacherNavigation;
+      break;
+    case "COMPANY":
+      navigation = companyNavigation;
+      break;
+    default:
+      navigation = [];
+      break;
+  }
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 bg-lime-200">
@@ -81,18 +114,15 @@ export default function HeaderNav() {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) =>
-            // Use conditional rendering to hide the 'Events' link if the role is 'organization'
-            !isOrganization || item.name !== "Events" ? (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-sm font-semibold leading-6 text-gray-900"
-              >
-                {item.name}
-              </a>
-            ) : null
-          )}
+          {navigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              {item.name}
+            </a>
+          ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <DropdownMenuDemo userData={userData} />
@@ -113,11 +143,11 @@ export default function HeaderNav() {
         <div className="fixed inset-0 z-50" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
+            <a href="/" className="-m-1.5 p-1.5">
+              <span className="sr-only">Operant Pharmacy Federation</span>
               <Image
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                src="/opflogo.png"
                 alt=""
                 width={800}
                 height={500}

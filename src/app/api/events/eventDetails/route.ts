@@ -1,9 +1,9 @@
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import eventModel from "@/models/eventModel";
-import Organizer from "@/models/organizerModel";
+import Organizer from "@/models/collegeModel";
 import Plans from "@/models/pricePlansModel";
-import UserForm from "@/models/userForm";
+import UserForm from "@/models/studentModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();

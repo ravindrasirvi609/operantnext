@@ -21,6 +21,7 @@ interface UserData {
   highestQualification: string;
   university: string;
   workExperience: number;
+  profileImage: string;
 }
 
 export default function ProfilePage() {
@@ -73,13 +74,23 @@ export default function ProfilePage() {
             <div className="bg-white shadow-2xl p-3 overflow-hidden sm:rounded-lg">
               <div className="w-1/2 mx-auto mb-4">
                 <div className="bg-sky-200 rounded-full w-36 h-36 items-center ">
-                  <Image
-                    className="rounded-full"
-                    src="/user.png"
-                    alt=""
-                    width={144}
-                    height={144}
-                  />
+                  {userData?.profileImage ? (
+                    <Image
+                      className="rounded-full"
+                      src={userData?.profileImage}
+                      alt=""
+                      width={144}
+                      height={144}
+                    />
+                  ) : (
+                    <Image
+                      className="rounded-full"
+                      src="/user.png"
+                      alt=""
+                      width={144}
+                      height={144}
+                    />
+                  )}
                 </div>
               </div>
               <div className="text-center font-bold text-sky-900 mt-16">

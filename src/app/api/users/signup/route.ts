@@ -1,11 +1,12 @@
-import UserForm from "@/models/userForm";
-import Organizer from "@/models/organizerModel";
 import User from "@/models/userModel";
-
 import { sendEmail } from "@/helpers/mailer";
 import bcryptjs from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
+import Student from "@/models/studentModel";
+import College from "@/models/collegeModel";
+import Company from "@/models/companyModel";
+import Teacher from "@/models/teacherModel";
 
 const SALT_ROUNDS = 10;
 
@@ -43,10 +44,14 @@ export async function POST(request: NextRequest) {
 
     const savedUser = await createUser(username, email, hashedPassword, role);
 
-    if (role === "user") {
-      await createUserForm(savedUser._id, savedUser.email);
-    } else if (role === "organization") {
-      await createOrganizer(savedUser._id, savedUser.emailcs);
+    if (role === "STUDENT") {
+      await createStudentForm(savedUser._id, savedUser.email);
+    } else if (role === "TEACHER") {
+      await createTeacherForm(savedUser._id, savedUser.email);
+    } else if (role === "COMPANY") {
+      await createCompanyForm(savedUser._id, savedUser.email);
+    } else if (role === "COLLEGE") {
+      await createCollegeForm(savedUser._id, savedUser.email);
     }
 
     await sendVerificationEmail(savedUser.email, savedUser._id);
@@ -77,28 +82,40 @@ async function createUser(
   return await newUser.save();
 }
 
-async function createUserForm(
-  userId: string,
-  personalEmail: string
-) {
-  const userForm = new UserForm({
+async function createStudentForm(userId: string, personalEmail: string) {
+  const studentForm = new Student({
     _id: userId,
     personalEmail,
   });
 
-  return await userForm.save();
+  return await studentForm.save();
 }
 
-async function createOrganizer(
-  userId: string,
-  email: string,
-) {
-  const organizer = new Organizer({
+async function createCollegeForm(userId: string, email: string) {
+  const ColleageForm = new College({
     _id: userId,
     email,
   });
 
-  return await organizer.save();
+  return await ColleageForm.save();
+}
+
+async function createCompanyForm(companyId: string, email: string) {
+  const companyForm = new Company({
+    _id: companyId,
+    email,
+  });
+
+  return await companyForm.save();
+}
+
+async function createTeacherForm(teacherId: string, personalEmail: string) {
+  const teacherForm = new Teacher({
+    _id: teacherId,
+    personalEmail,
+  });
+
+  return await teacherForm.save();
 }
 
 async function sendVerificationEmail(email: string, userId: string) {

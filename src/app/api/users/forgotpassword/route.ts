@@ -10,24 +10,23 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { email } = reqBody;
 
-    // Validate request data
     if (!email) {
-      return NextResponse.json({ error: "Please provide a valid email" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Please provide a valid email" },
+        { status: 400 }
+      );
     }
 
     const user = await findUserByEmail(email);
-    console.log("user", user);
-    
 
     if (!user) {
-      return NextResponse.json({ error: "User with the provided email not found" }, { status: 400 });
+      return NextResponse.json(
+        { error: "User with the provided email not found" },
+        { status: 400 }
+      );
     }
 
     await sendPasswordResetEmail(user);
-
-    // It's not necessary to save the user after sending the email; remove this line
-    // await user.save();
-
     return NextResponse.json({
       message: "Password reset email sent successfully",
       sendEmail: true,

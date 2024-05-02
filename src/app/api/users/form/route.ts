@@ -1,7 +1,7 @@
 import { uploadToCloudinary } from "@/cloudinary/cloudinary";
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-import UserForm from "@/models/userForm";
+import Student from "@/models/studentModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
@@ -17,8 +17,6 @@ export async function POST(req: NextRequest) {
     const fileUri = "data:" + mimeType + ";" + encoding + "," + base64Data;
 
     const res = await uploadToCloudinary(fileUri, file.name);
-    console.log("Cloudinary response", res);
-
     const userId = await getDataFromToken(req);
 
     let message = "failure";
@@ -30,7 +28,7 @@ export async function POST(req: NextRequest) {
       message = "success";
     }
 
-    let userForm = await UserForm.findOne({ _id: userId });
+    let userForm = await Student.findOne({ _id: userId });
 
     if (userForm) {
       userForm.firstName = formData.get("firstName") as string;
@@ -50,7 +48,7 @@ export async function POST(req: NextRequest) {
       userForm.university = formData.get("university") as string;
       userForm.profileImage = imgUrl;
     } else {
-      userForm = new UserForm({
+      userForm = new Student({
         _id: userId,
         firstName: formData.get("firstName"),
         lastName: formData.get("lastName"),
@@ -68,12 +66,7 @@ export async function POST(req: NextRequest) {
         profileImage: imgUrl,
       });
     }
-
-    console.log("User form data", userForm);
-
     const response = await userForm.save();
-    console.log("User form saved successfully", response);
-
     return new NextResponse("User form saved successfully", response);
   } catch (error) {
     console.error("Error in POST handler:", error);
@@ -81,16 +74,10 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET API to fetch user form data
 export async function GET(req: NextRequest) {
   try {
-    // Step 1: Obtain the logged-in user's ID from the token
     const userId = await getDataFromToken(req);
-
-    // Step 2: Fetch the user form data from the database based on the user's ID
-    const userForm = await UserForm.findOne({ _id: userId });
-
-    // Step 3: Return the response
+    const userForm = await Student.findOne({ _id: userId });
     const resp = NextResponse.json({
       message: "data received successfully",
       success: true,

@@ -1,6 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
 import jobModel from "@/models/jobModel";
-import Organizer from "@/models/organizerModel";
+import Organizer from "@/models/collegeModel";
 import SkillModel from "@/models/skillModel";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";

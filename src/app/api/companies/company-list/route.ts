@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import Organizer from "@/models/organizerModel";
+import Organizer from "@/models/collegeModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
