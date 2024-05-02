@@ -59,7 +59,7 @@ const AadhaarForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/users/form");
+        const response = await axios.get("/api/users/studentDetails");
         const receivedFormData = response.data;
         if (receivedFormData && receivedFormData.data) {
           const parsedDate = new Date(receivedFormData.data.dob);
@@ -147,7 +147,7 @@ const AadhaarForm = () => {
         formData.append("profilePicture", userForm.profilePicture);
       }
 
-      await axios.post("/api/users/form", formData, {
+      await axios.post("/api/users/studentDetails", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
