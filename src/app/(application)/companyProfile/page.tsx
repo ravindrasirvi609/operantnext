@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { on } from "events";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 interface ICompany {
   companyName: string;
@@ -22,15 +26,28 @@ interface ICompany {
   profileImage?: string;
 }
 
-interface EditCompanyFormProps {
-  initialCompanyData?: ICompany;
-  onSubmit: (data: ICompany) => void;
-}
+const EditCompanyForm = () => {
+  const initialCompanyData = useMemo(() => {
+    return {
+      companyName: "",
+      location: {
+        streetAddress: "",
+        city: "",
+        state: "",
+        country: "",
+        postalCode: "",
+      },
+      mobileNo: "",
+      email: "",
+      authorisedPersonName: "",
+      registrationDate: new Date(),
+      industryType: "",
+      numberOfEmployees: 0,
+      websiteUrl: "",
+      profileImage: "",
+    };
+  }, []);
 
-const EditCompanyForm: React.FC<EditCompanyFormProps> = ({
-  initialCompanyData = {} as ICompany,
-  onSubmit,
-}) => {
   const [companyData, setCompanyData] = useState<ICompany>(initialCompanyData);
 
   const validationSchema = Yup.object().shape({
@@ -81,6 +98,16 @@ const EditCompanyForm: React.FC<EditCompanyFormProps> = ({
   const handleFormSubmit = (data: any) => {
     onSubmit(data);
   };
+
+  async function onSubmit(data: any) {
+    try {
+      const res = await axios.post("/api/users/editCompany", data);
+      toast.success("Company details updated successfully");
+      // router.push("/companyProfile");
+    } catch (error) {
+      toast.error("Failed to update company details");
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -32,10 +32,32 @@ interface EditCollegeFormProps {
   onSubmit: (data: College) => void;
 }
 
-const EditCollegeForm: React.FC<EditCollegeFormProps> = ({
-  initialCollegeData = {} as College,
-  onSubmit,
-}) => {
+const EditCollegeForm = () => {
+  const initialCollegeData = useMemo(() => {
+    return {
+      collegeName: "",
+      university: "",
+      location: {
+        streetAddress: "",
+        town: "",
+        district: "",
+        state: "",
+        country: "",
+      },
+      coursesOffered: [],
+      studentsEnrolled: [],
+      mobileNo: undefined,
+      email: "",
+      authorisedPersonName: "",
+      registrationDate: new Date(),
+      establishedYear: undefined,
+      collegeType: "",
+      affiliatedTo: "",
+      websiteUrl: "",
+      profileImage: "",
+    };
+  }, []);
+
   const [collegeData, setCollegeData] = useState<College>(initialCollegeData);
 
   const validationSchema = Yup.object().shape({
@@ -57,13 +79,14 @@ const EditCollegeForm: React.FC<EditCollegeFormProps> = ({
       "Established year must be a positive number"
     ),
     collegeType: Yup.string(),
-    university: Yup.string(),
     affiliatedTo: Yup.string(),
     websiteUrl: Yup.string().url("Invalid URL format"),
     profileImage: Yup.string().url("Invalid URL format"),
     mobileNo: Yup.string()
       .matches(/^\d{10}$/, "Invalid mobile number format")
       .notRequired(),
+
+    university: Yup.string().notRequired(),
   });
 
   const {
@@ -91,6 +114,15 @@ const EditCollegeForm: React.FC<EditCollegeFormProps> = ({
   const handleFormSubmit = (data: any) => {
     onSubmit(data);
   };
+
+  async function onSubmit(data: College) {
+    try {
+      // API call to update college data
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>

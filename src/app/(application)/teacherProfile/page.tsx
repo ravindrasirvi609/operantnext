@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -19,15 +19,24 @@ interface Teacher {
   profileImage?: string;
 }
 
-interface EditTeacherFormProps {
-  initialTeacherData?: Teacher;
-  onSubmit: (data: Teacher) => void;
-}
+const EditTeacherForm = () => {
+  const initialTeacherData = useMemo(() => {
+    return {
+      firstName: "",
+      lastName: "",
+      email: "",
+      college: "",
+      registrationDate: new Date(),
+      subjectSpecialization: "",
+      mobileNo: undefined,
+      dob: undefined,
+      highestQualification: undefined,
+      university: undefined,
+      workExperience: undefined,
+      profileImage: undefined,
+    };
+  }, []);
 
-const EditTeacherForm: React.FC<EditTeacherFormProps> = ({
-  initialTeacherData = {} as Teacher,
-  onSubmit,
-}) => {
   const [teacherData, setTeacherData] = useState<Teacher>(initialTeacherData);
 
   const validationSchema = Yup.object().shape({
@@ -74,6 +83,10 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({
   const handleFormSubmit = (data: any) => {
     onSubmit(data);
   };
+
+  async function onSubmit(data: Teacher) {
+    console.log(data);
+  }
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
