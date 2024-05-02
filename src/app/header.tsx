@@ -56,7 +56,6 @@ export default function HeaderNav() {
         const response = await axios.get("/api/users/me");
         const userData: UserData = response.data.data;
         const role = localStorage.getItem("role");
-        // Set the user data and role to the state
         setUserData(userData);
         setRole(role);
       } catch (error: any) {

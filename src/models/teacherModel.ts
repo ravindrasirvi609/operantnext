@@ -2,8 +2,8 @@ import { profile } from "console";
 import mongoose from "mongoose";
 
 const teacherSchema = new mongoose.Schema({
-  firstName: { type: String, required: true, maxlength: 50 },
-  lastName: { type: String, required: true, maxlength: 50 },
+  firstName: { type: String, maxlength: 50 },
+  lastName: { type: String, maxlength: 50 },
   profileImage: { type: String },
   email: { type: String, unique: true, validate: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
   mobileNo: { type: String },

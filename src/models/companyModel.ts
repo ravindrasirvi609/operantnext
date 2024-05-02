@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const companySchema = new mongoose.Schema({
-  companyName: { type: String, required: true, maxlength: 100 },
+  companyName: { type: String, maxlength: 100 },
   location: {
     streetAddress: { type: String },
     city: { type: String },
