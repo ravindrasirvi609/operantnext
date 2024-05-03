@@ -6,23 +6,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 
-interface UserFormData {
-  firstName: string;
-  lastName: string;
-  personalEmail: string;
-  mobileNo: string;
-  aadharNo: string;
-  dob: string;
-  streetAddress: string;
-  town: string;
-  district: string;
-  state: string;
-  country: string;
-  highestQualification: string;
-  university: string;
-  profilePicture: File | null;
-}
-
 const AadhaarForm = () => {
   const initialFormData: UserFormData = useMemo(
     () => ({
