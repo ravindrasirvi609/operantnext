@@ -1,7 +1,6 @@
 "use client";
 import axios from "axios";
-import React, { use, useEffect, useState } from "react";
-import { Router } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 interface Plan {
   name: string;
