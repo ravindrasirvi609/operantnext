@@ -1,3 +1,4 @@
+import { uploadToCloudinary } from "@/cloudinary/cloudinary";
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import eventModel from "@/models/eventModel";
@@ -22,8 +23,45 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const eventData = await req.json();
-    const event = await eventModel.create({ ...eventData, organizer: userId });
+    const formData = await req.formData();
+    const file = formData.get("profilePicture") as File;
+    const fileBuffer = await file.arrayBuffer();
+    const mimeType = file.type;
+    const encoding = "base64";
+    const base64Data = Buffer.from(fileBuffer).toString("base64");
+    const fileUri = "data:" + mimeType + ";" + encoding + "," + base64Data;
+
+    const res = await uploadToCloudinary(fileUri, file.name);
+
+    let message = "failure";
+    let imgUrl = "";
+
+    console.log("POST request", userId, formData);
+    if (res.success && res.result) {
+      imgUrl = res.result.secure_url;
+      message = "success";
+    }
+
+    let eventForm = new eventModel({
+      title: formData.get("title"),
+      description: formData.get("description"),
+      date: formData.get("date"),
+      isPaid: formData.get("isPaid"),
+      categories: formData.get("categories"),
+      planDetails: formData.get("planDetails"),
+      image: formData.get("imgUrl"),
+      organizer: userId,
+    });
+
+    const event = await eventForm.save();
+
+    // const eventData = await req.json();
+    // console.log("eventData", eventData);
+
+    // const event = await eventModel.create({
+    //   ...eventData.data,
+    //   organizer: userId,
+    // });
     return new NextResponse(JSON.stringify(event), {
       status: 201,
       headers: {
@@ -32,20 +70,8 @@ export async function POST(req: NextRequest) {
     });
   } catch (error: any) {
     console.error(error);
-
-    if (error.name === "ValidationError") {
-      return new NextResponse(JSON.stringify({ error: error.message }), {
-        status: 400,
-      });
-    } else if (error.name === "MongoError" && error.code === 11000) {
-      return new NextResponse(
-        JSON.stringify({ error: "Duplicate key error" }),
-        {
-          status: 409,
-        }
-      );
-    } else {
-      return new NextResponse("Error creating the event", { status: 500 });
-    }
+    return new NextResponse("An error occurred while adding the event", {
+      status: 500,
+    });
   }
 }

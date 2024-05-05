@@ -3,38 +3,36 @@ import mongoose from "mongoose";
 const eventSchema = new mongoose.Schema({
   title: { type: String, required: true },
   date: { type: Date, required: true },
-  description: { type: String, required: true, unique: true },
-  isPaid: { type: Boolean, required: true },
+  description: { type: String, required: true },
+  isPaid: { type: Boolean, default: false },
   price: { type: Number },
-  registrationUrl: { type: String, required: true },
+  registrationUrl: { type: String },
   location: {
     address: { type: String },
     city: { type: String },
     state: { type: String },
     country: { type: String },
   },
-  image: { type: String }, // You can store the URL or path to the event image
-  isJoined: { type: Boolean, default: false }, // This is for the current user
+  image: { type: String },
+  isJoined: { type: Boolean, default: false },
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Organizer", // Reference to an Organizer model
+    ref: "Organizer",
   },
-  categories: [{ type: String }], // An array of event categories or tags
-  capacity: { type: Number }, // If you want to limit the number of attendees
+  categories: [{ type: String }],
+  capacity: { type: Number },
   attendees: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Reference to a User model for tracking attendees
+      ref: "User",
     },
   ],
-  planDetails: 
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Plans", // Reference to a Plan model for tracking plans
-    },
+  planDetails: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Plans", // Reference to a Plan model for tracking plans
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-
 });
 
 const eventModel =

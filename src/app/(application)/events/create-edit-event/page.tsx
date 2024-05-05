@@ -20,6 +20,8 @@ interface EventFormData {
   };
   categories: string[];
   capacity?: number;
+  planDetails: string;
+  image?: File;
 }
 
 const schema = z.object({
@@ -37,6 +39,8 @@ const schema = z.object({
   }),
   categories: z.array(z.string()),
   capacity: z.number().optional(),
+  planDetails: z.string().nonempty("Plan is required"),
+  image: z.any().optional(),
 });
 
 const EventForm: React.FC = () => {
@@ -99,17 +103,30 @@ const EventForm: React.FC = () => {
   }, []);
 
   const onSubmit = (data: EventFormData) => {
-    fetchData(data);
-  };
+    const formData = new FormData();
 
-  async function fetchData(data: EventFormData) {
+    Object.entries(data).forEach(([key, value]) => {
+      if (key === "image" && value instanceof FileList) {
+        for (let i = 0; i < value.length; i++) {
+          formData.append("image", value[i]);
+        }
+      } else {
+        formData.append(key, value as string);
+      }
+    });
+
     try {
-      const response = await axios.post("/api/events/addEvent", { data });
+      const response = axios.post("/api/events/addEvent", formData);
       console.log("response", response);
     } catch (error: any) {
       Swal.fire(error.message);
     }
-  }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    console.log("file", file);
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -344,14 +361,15 @@ const EventForm: React.FC = () => {
 
           <div className="relative">
             <label
-              htmlFor="plan"
+              htmlFor="planDetails"
               className="block mb-2 text-sm font-medium text-gray-700"
             >
               Choose a Plan:
             </label>
             <select
-              id="plan"
+              id="planDetails"
               className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              {...register("planDetails", { required: true })}
             >
               {Array.isArray(plansData) &&
                 plansData.map((plan: any) => (
@@ -360,6 +378,19 @@ const EventForm: React.FC = () => {
                   </option>
                 ))}
             </select>
+          </div>
+
+          <div>
+            <div>
+              <label htmlFor="image">Upload Image</label>
+              <input
+                id="image"
+                type="file"
+                {...register("image")}
+                className="block"
+                onChange={handleFileChange}
+              />
+            </div>
           </div>
 
           <div>
