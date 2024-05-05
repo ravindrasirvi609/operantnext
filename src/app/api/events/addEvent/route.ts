@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-    const file = formData.get("profilePicture") as File;
+    const file = formData.get("image") as File;
     const fileBuffer = await file.arrayBuffer();
     const mimeType = file.type;
     const encoding = "base64";
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
     const fileUri = "data:" + mimeType + ";" + encoding + "," + base64Data;
 
     const res = await uploadToCloudinary(fileUri, file.name);
+    console.log("res", res);
 
     let message = "failure";
     let imgUrl = "";
@@ -39,18 +40,36 @@ export async function POST(req: NextRequest) {
     console.log("POST request", userId, formData);
     if (res.success && res.result) {
       imgUrl = res.result.secure_url;
+      console.log("imgUrl", imgUrl);
+
       message = "success";
     }
 
+    let address = formData.get("location[address]");
+    let city = formData.get("location[city]");
+    let state = formData.get("location[state]");
+    let country = formData.get("location[country]");
+
+    let location = {
+      address,
+      city,
+      state,
+      country,
+    };
     let eventForm = new eventModel({
       title: formData.get("title"),
       description: formData.get("description"),
-      date: formData.get("date"),
+      startDate: formData.get("startDate"),
+      endDate: formData.get("endDate"),
       isPaid: formData.get("isPaid"),
       categories: formData.get("categories"),
       planDetails: formData.get("planDetails"),
-      image: formData.get("imgUrl"),
+      capacity: formData.get("capacity"),
+      price: formData.get("price"),
+      registrationUrl: formData.get("registrationUrl"),
+      image: imgUrl,
       organizer: userId,
+      location,
     });
 
     const event = await eventForm.save();

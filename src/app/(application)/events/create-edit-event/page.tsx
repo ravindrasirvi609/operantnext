@@ -8,7 +8,8 @@ import { z } from "zod";
 interface EventFormData {
   title: string;
   description: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   isPaid: boolean;
   price?: number;
   registrationUrl?: string;
@@ -27,7 +28,8 @@ interface EventFormData {
 const schema = z.object({
   title: z.string().nonempty("Title is required"),
   description: z.string().nonempty("Description is required"),
-  date: z.string().nonempty("Date is required"),
+  startDate: z.string().nonempty("Date is required"),
+  endDate: z.string().nonempty("Date is required"),
   isPaid: z.boolean(),
   price: z.number().optional(),
   registrationUrl: z.string().url("Invalid registration URL").optional(),
@@ -106,11 +108,18 @@ const EventForm: React.FC = () => {
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
-      if (key === "image" && value instanceof FileList) {
+      if (key === "location") {
+        // If it's the location object, append each field of the location
+        Object.entries(value).forEach(([locationKey, locationValue]) => {
+          formData.append(`location[${locationKey}]`, locationValue as string);
+        });
+      } else if (key === "image" && value instanceof FileList) {
+        // If it's the image field, append each file in the FileList
         for (let i = 0; i < value.length; i++) {
           formData.append("image", value[i]);
         }
       } else {
+        // Append other fields directly
         formData.append(key, value as string);
       }
     });
@@ -180,19 +189,37 @@ const EventForm: React.FC = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div className="p-1">
               <label htmlFor="date" className="sr-only">
-                Date
+                start Date
               </label>
               <input
                 id="date"
-                {...register("date")}
-                type="date"
+                {...register("startDate")}
+                type="startDate"
                 required
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Date"
               />
-              {errors.date && (
+              {errors.startDate && (
                 <p className="mt-1 text-red-500 text-xs">
-                  {errors.date.message}
+                  {errors.startDate.message}
+                </p>
+              )}
+            </div>
+            <div className="p-1">
+              <label htmlFor="endDate" className="sr-only">
+                end Date
+              </label>
+              <input
+                id="endDate"
+                {...register("endDate")}
+                type="endDate"
+                required
+                className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="endDate"
+              />
+              {errors.endDate && (
+                <p className="mt-1 text-red-500 text-xs">
+                  {errors.endDate.message}
                 </p>
               )}
             </div>
