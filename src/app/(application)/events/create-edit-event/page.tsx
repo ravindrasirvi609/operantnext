@@ -30,9 +30,12 @@ const EventForm: React.FC = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm<EventFormData>();
 
   const [plansData, setPlansData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     async function fetchPlans() {
@@ -71,8 +74,12 @@ const EventForm: React.FC = () => {
     try {
       const response = axios.post("/api/events/addEvent", formData);
       console.log("response", response);
+      setSubmitted(true);
+      reset();
     } catch (error: any) {
       Swal.fire(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,6 +127,7 @@ const EventForm: React.FC = () => {
                 id="description"
                 {...register("description")}
                 rows={3}
+                required
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Description"
               />
@@ -319,6 +327,7 @@ const EventForm: React.FC = () => {
                 id="capacity"
                 {...register("capacity")}
                 type="number"
+                required
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Capacity"
               />
@@ -368,11 +377,17 @@ const EventForm: React.FC = () => {
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading} // Disable the submit button when loading
             >
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>
+        {submitted && (
+          <p className="text-green-500 text-center mt-4">
+            Successfully submitted!
+          </p>
+        )}
       </div>
     </div>
   );
