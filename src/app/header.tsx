@@ -19,7 +19,7 @@ const studentNavigation = [
 ];
 
 const collegeNavigation = [
-  { name: "Post-Event", href: "/profile" },
+  { name: "Post-Event", href: "/events/create-edit-event" },
   { name: "Conferences", href: "/events" },
   { name: "Collaborations", href: "/collaborations" },
   { name: "Resources", href: "/resources" },

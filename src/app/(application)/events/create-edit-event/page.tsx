@@ -1,6 +1,8 @@
 "use client";
+import axios from "axios";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 import { z } from "zod";
 
 interface EventFormData {
@@ -87,8 +89,18 @@ const EventForm: React.FC = () => {
   });
 
   const onSubmit = (data: EventFormData) => {
-    console.log(data);
+    fetchData(data);
   };
+
+  async function fetchData(data: EventFormData) {
+    try {
+      const response = await axios.post("/api/events/addEvent", { data });
+    } catch (error: any) {
+      Swal.fire(error.message);
+    } finally {
+      Swal.fire("Event created successfully");
+    }
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
