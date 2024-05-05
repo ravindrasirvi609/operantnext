@@ -14,7 +14,6 @@ const planSchema = new mongoose.Schema({
     required: true,
   },
 
-
   isActive: {
     type: Boolean,
     default: true,
@@ -23,8 +22,6 @@ const planSchema = new mongoose.Schema({
     type: String, // e.g., 'USD', 'INR', etc.
     required: true,
   },
-
-  // Add more fields as needed
 });
 
 const Plans = mongoose.models.Plans || mongoose.model("Plans", planSchema);
