@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import React from "react";
+import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -20,21 +20,25 @@ const schema = z.object({
   currency: z.string().nonempty("Currency is required"),
 });
 
-const PlanForm: React.FC<{ defaultValues?: FormData }> = ({
-  defaultValues = {
-    name: "",
-    description: "",
-    price: 0,
-    isActive: false,
-    currency: "",
-  },
-}) => {
+const PlanForm = () => {
+  const defaultValues = useMemo(
+    () => ({
+      name: "",
+      description: "",
+      price: 0,
+      isActive: false,
+      currency: "",
+    }),
+    []
+  );
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormData>({
-    defaultValues,
+    defaultValues: defaultValues,
   });
 
   const onSubmit = (data: FormData) => {
