@@ -1,9 +1,8 @@
 "use client";
 import axios from "axios";
-import React, { use, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { z } from "zod";
 
 interface EventFormData {
   title: string;
@@ -11,7 +10,7 @@ interface EventFormData {
   startDate: string;
   endDate: string;
   isPaid: boolean;
-  price?: number;
+  price?: string;
   registrationUrl?: string;
   location: {
     address: string;
@@ -20,72 +19,18 @@ interface EventFormData {
     country: string;
   };
   categories: string[];
-  capacity?: number;
+  capacity?: string;
   planDetails: string;
   image?: File;
 }
-
-const schema = z.object({
-  title: z.string().nonempty("Title is required"),
-  description: z.string().nonempty("Description is required"),
-  startDate: z.string().nonempty("Date is required"),
-  endDate: z.string().nonempty("Date is required"),
-  isPaid: z.boolean(),
-  price: z.number().optional(),
-  registrationUrl: z.string().url("Invalid registration URL").optional(),
-  location: z.object({
-    address: z.string().nonempty("Address is required"),
-    city: z.string().nonempty("City is required"),
-    state: z.string().optional().nullable(),
-    country: z.string().nonempty("Country is required"),
-  }),
-  categories: z.array(z.string()),
-  capacity: z.number().optional(),
-  planDetails: z.string().nonempty("Plan is required"),
-  image: z.any().optional(),
-});
 
 const EventForm: React.FC = () => {
   const {
     register,
     handleSubmit,
     watch,
-    control,
     formState: { errors },
-  } = useForm<EventFormData>({
-    resolver: async (data) => {
-      console.log("data", data);
-
-      try {
-        schema.parse(data);
-        console.log(
-          "data",
-          data,
-          schema.parse(data),
-          schema.parse(data).location
-        );
-
-        return { values: data, errors: {} };
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          console.log("err", error);
-
-          return {
-            values: {},
-            errors: error.errors.reduce(
-              (acc, err) => ({
-                ...acc,
-
-                [err.path[0]]: err.message,
-              }),
-              {}
-            ),
-          };
-        }
-        return { values: {}, errors: {} };
-      }
-    },
-  });
+  } = useForm<EventFormData>();
 
   const [plansData, setPlansData] = useState([]);
 
@@ -105,21 +50,20 @@ const EventForm: React.FC = () => {
   }, []);
 
   const onSubmit = (data: EventFormData) => {
+    console.log("data", data.price, data.capacity);
+
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
       if (key === "location") {
-        // If it's the location object, append each field of the location
         Object.entries(value).forEach(([locationKey, locationValue]) => {
           formData.append(`location[${locationKey}]`, locationValue as string);
         });
       } else if (key === "image" && value instanceof FileList) {
-        // If it's the image field, append each file in the FileList
         for (let i = 0; i < value.length; i++) {
           formData.append("image", value[i]);
         }
       } else {
-        // Append other fields directly
         formData.append(key, value as string);
       }
     });
@@ -194,7 +138,7 @@ const EventForm: React.FC = () => {
               <input
                 id="date"
                 {...register("startDate")}
-                type="startDate"
+                type="date"
                 required
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Date"
@@ -212,7 +156,7 @@ const EventForm: React.FC = () => {
               <input
                 id="endDate"
                 {...register("endDate")}
-                type="endDate"
+                type="date"
                 required
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="endDate"
@@ -245,7 +189,7 @@ const EventForm: React.FC = () => {
                   </label>
                   <input
                     id="price"
-                    {...(register("price"), { valueAsNumber: true })}
+                    {...register("price")}
                     type="number"
                     className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     placeholder="Price"
@@ -373,7 +317,7 @@ const EventForm: React.FC = () => {
               </label>
               <input
                 id="capacity"
-                {...(register("capacity"), { valueAsNumber: true })}
+                {...register("capacity")}
                 type="number"
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Capacity"
@@ -425,21 +369,6 @@ const EventForm: React.FC = () => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                <svg
-                  className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 5.293a1 1 0 011.414 0L15 13.586V17a1 1 0 01-1 1H4a1 1 0 01-1-1v-1.586l6.293-6.293a1 1 0 011.414 0l3.586 3.586a1 1 0 001.414-1.414l-3.586-3.586a3 3 0 00-4.243 0L5.293 5.293zM7 3a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1H8a1 1 0 01-1-1V3z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </span>
               Submit
             </button>
           </div>
