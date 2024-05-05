@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { z } from "zod";
@@ -21,13 +21,6 @@ interface EventFormData {
   categories: string[];
   capacity?: number;
 }
-
-const categoriesOptions = [
-  "Category 1",
-  "Category 2",
-  "Category 3",
-  // Add more categories as needed
-];
 
 const schema = z.object({
   title: z.string().nonempty("Title is required"),
@@ -88,6 +81,23 @@ const EventForm: React.FC = () => {
     },
   });
 
+  const [plansData, setPlansData] = useState([]);
+
+  useEffect(() => {
+    async function fetchPlans() {
+      try {
+        const response = await axios.get("/api/plans/planList");
+        console.log("response", response.data);
+
+        setPlansData(response.data);
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    }
+
+    fetchPlans();
+  }, []);
+
   const onSubmit = (data: EventFormData) => {
     fetchData(data);
   };
@@ -95,6 +105,7 @@ const EventForm: React.FC = () => {
   async function fetchData(data: EventFormData) {
     try {
       const response = await axios.post("/api/events/addEvent", { data });
+      console.log("response", response);
     } catch (error: any) {
       Swal.fire(error.message);
     }
@@ -113,7 +124,7 @@ const EventForm: React.FC = () => {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
+            <div className="p-1">
               <label htmlFor="title" className="sr-only">
                 Title
               </label>
@@ -131,7 +142,7 @@ const EventForm: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className="p-1">
               <label htmlFor="description" className="sr-only">
                 Description
               </label>
@@ -150,7 +161,7 @@ const EventForm: React.FC = () => {
             </div>
           </div>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
+            <div className="p-1">
               <label htmlFor="date" className="sr-only">
                 Date
               </label>
@@ -184,7 +195,7 @@ const EventForm: React.FC = () => {
             </div>
             {watch("isPaid") && (
               <>
-                <div>
+                <div className="p-1">
                   <label htmlFor="price" className="sr-only">
                     Price
                   </label>
@@ -201,7 +212,7 @@ const EventForm: React.FC = () => {
                     </p>
                   )}
                 </div>
-                <div>
+                <div className="p-1">
                   <label htmlFor="registrationUrl" className="sr-only">
                     Registration URL
                   </label>
@@ -222,7 +233,7 @@ const EventForm: React.FC = () => {
             )}
           </div>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
+            <div className="p-1">
               <label htmlFor="address" className="sr-only">
                 Address
               </label>
@@ -240,7 +251,7 @@ const EventForm: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className="p-1">
               <label htmlFor="city" className="sr-only">
                 City
               </label>
@@ -258,7 +269,7 @@ const EventForm: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className="p-1">
               <label htmlFor="state" className="sr-only">
                 State
               </label>
@@ -275,7 +286,7 @@ const EventForm: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className="p-1">
               <label htmlFor="country" className="sr-only">
                 Country
               </label>
@@ -295,7 +306,7 @@ const EventForm: React.FC = () => {
             </div>
           </div>
           <div className="rounded-md shadow-sm -space-y-px">
-            <div>
+            <div className="p-1">
               <label htmlFor="categories" className="sr-only">
                 Categories
               </label>
@@ -312,7 +323,7 @@ const EventForm: React.FC = () => {
                 </p>
               )}
             </div>
-            <div>
+            <div className="p-1">
               <label htmlFor="capacity" className="sr-only">
                 Capacity
               </label>
@@ -330,13 +341,33 @@ const EventForm: React.FC = () => {
               )}
             </div>
           </div>
+
+          <div className="relative">
+            <label
+              htmlFor="plan"
+              className="block mb-2 text-sm font-medium text-gray-700"
+            >
+              Choose a Plan:
+            </label>
+            <select
+              id="plan"
+              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              {Array.isArray(plansData) &&
+                plansData.map((plan: any) => (
+                  <option key={plan._id} value={plan._id}>
+                    {plan.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+
           <div>
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                {/* Heroicon name: solid/pencil-alt */}
                 <svg
                   className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
                   xmlns="http://www.w3.org/2000/svg"

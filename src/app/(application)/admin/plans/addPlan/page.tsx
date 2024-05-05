@@ -57,7 +57,6 @@ const PlanForm = () => {
   const submitForm = async (data: FormData) => {
     try {
       console.log("data", data);
-
       // Validate form data
       schema.parse(data);
 
