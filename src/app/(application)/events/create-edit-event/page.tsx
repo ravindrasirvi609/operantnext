@@ -97,8 +97,6 @@ const EventForm: React.FC = () => {
       const response = await axios.post("/api/events/addEvent", { data });
     } catch (error: any) {
       Swal.fire(error.message);
-    } finally {
-      Swal.fire("Event created successfully");
     }
   }
 
@@ -192,7 +190,7 @@ const EventForm: React.FC = () => {
                   </label>
                   <input
                     id="price"
-                    {...register("price")}
+                    {...(register("price"), { valueAsNumber: true })}
                     type="number"
                     className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     placeholder="Price"
@@ -301,24 +299,13 @@ const EventForm: React.FC = () => {
               <label htmlFor="categories" className="sr-only">
                 Categories
               </label>
-              <Controller
-                name="categories"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    id="categories"
-                    multiple
-                    className="form-multiselect block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  >
-                    {categoriesOptions.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              />
+              <select {...register("categories", { required: true })} multiple>
+                {" "}
+                <option value="">Select...</option>
+                <option value="A">Option A</option>
+                <option value="B">Option B</option>
+                <option value="C">Option C</option>
+              </select>
               {errors.categories && (
                 <p className="mt-1 text-red-500 text-xs">
                   {errors.categories.message}
@@ -331,7 +318,7 @@ const EventForm: React.FC = () => {
               </label>
               <input
                 id="capacity"
-                {...register("capacity")}
+                {...(register("capacity"), { valueAsNumber: true })}
                 type="number"
                 className="appearance-none  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Capacity"
