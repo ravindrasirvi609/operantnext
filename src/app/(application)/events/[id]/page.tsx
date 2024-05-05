@@ -14,7 +14,8 @@ interface Event {
   };
   _id: string;
   title: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   description: string;
   isPaid: boolean;
   price: number;
@@ -81,7 +82,10 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
         </div>
         <div className="md:w-1/2 p-4">
           <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
-          <p className="text-gray-600 mb-2">{formatDate(event.date)}</p>
+          <p className="text-gray-600 mb-2">
+            {formatDate(event.startDate)} - {formatDate(event.endDate)}
+          </p>
+
           <p className="text-gray-600 mb-4">
             {event.location.address}, {event.location.city},{" "}
             {event.location.state}, {event.location.country}
