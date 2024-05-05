@@ -26,6 +26,7 @@ interface Event {
   categories: string[];
   capacity: number;
   attendees: string[];
+  image: string;
   __v: number;
   organizerDetails: {
     name: string;
@@ -69,7 +70,7 @@ export default function EventList() {
             className="bg-white rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
           >
             <Image
-              src="https://images.unsplash.com/photo-1712846040326-a3d06c0b1667?q=80&w=3424&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src={event.image}
               alt={event.title}
               width={500}
               height={300}
@@ -80,7 +81,7 @@ export default function EventList() {
               <p className="text-gray-600 mb-2">{event.description}</p>
               <div className="flex justify-between items-center mt-4">
                 <span className="text-indigo-600 font-semibold">
-                  {event.isPaid ? `$${event.price}` : "Free"}
+                  {event.isPaid ? `${event.price}` : "Free"}
                 </span>
                 <Link
                   href={`/events/${event._id}`}

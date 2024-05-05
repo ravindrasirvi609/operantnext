@@ -13,7 +13,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <HeaderNav />
       </div>
       <main
-        className={cn("min-h-screen bg-background font-sans antialiased pt-24")}
+        className={cn("min-h-screen bg-background font-sans antialiased pt-20")}
       >
         {children}
       </main>

@@ -24,6 +24,7 @@ interface Event {
   capacity: number;
   attendees: string[];
   __v: number;
+  image: string;
   organizerDetails: {
     name: string;
     email: string;
@@ -63,7 +64,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
   }
 
   return (
-    <div className="mx-auto p-4 mt-20 bg-lime-100">
+    <div className="mx-auto p-4 bg-lime-100">
       <Head>
         <title>{event.title} - Event Details</title>
       </Head>
@@ -71,7 +72,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/2 p-4 transform transition-transform hover:scale-105">
           <Image
-            src="https://images.unsplash.com/photo-1712846040326-a3d06c0b1667?q=80&w=3424&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src={event.image}
             alt={event.title}
             width={500}
             height={300}
@@ -101,6 +102,14 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
               className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
             >
               Register Now
+            </a>
+            <a
+              href={`/rozorpay/${event._id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
+            >
+              Join Event
             </a>
           </div>
         </div>

@@ -45,11 +45,6 @@ export async function POST(req: NextRequest) {
 
       const organiz = await Organizer.findById(event.organizer);
 
-      if (!users || users.length === 0) {
-        console.log(`Users not found for event ${event._id}`);
-        return new NextResponse("Users not found", { status: 404 });
-      }
-
       const price = plan.price; // Use the correct field from your schema
       const currency = plan.currency; // Use the correct field from your schema
 

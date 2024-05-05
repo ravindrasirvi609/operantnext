@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Image from "next/image";
 
 interface planDetails {
   eventId?: string;
@@ -15,6 +16,7 @@ export default function EventPayment({ params }: any) {
 
   const [paymentInitialized, setPaymentInitialized] = useState(false);
   const [planDetails, setPlanDetails] = useState<planDetails>();
+  const [event, setEvent] = useState<any>({});
 
   useEffect(() => {
     getEventDetails(pramsId);
@@ -23,6 +25,7 @@ export default function EventPayment({ params }: any) {
 
   const getEventDetails = async (id: string) => {
     const response = await axios.post("/api/events/eventDetails", id);
+    setEvent(response.data);
     const planDetails = {
       price: response.data.plan.price,
       currency: response.data.plan.currency,
@@ -144,6 +147,21 @@ export default function EventPayment({ params }: any) {
     <div className="font-Inter h-screen overflow-auto bg-gradient-to-r from-blue-400 to-blue-500">
       <div className="relative z-10 flex flex-col md:flex-row mt-10 items-center max-w-6xl justify-evenly mx-auto">
         <div className="md:w-1/3 mb-20 md:mb-0 mx-10">
+          <Image
+            src={event.image}
+            alt="Event"
+            className="rounded-lg shadow-lg"
+            width={400}
+            height={400}
+          />
+        </div>
+        <div className="md:w-2/3 mx-10">
+          <h1 className="text-4xl font-bold text-white mb-4">
+            Event Name: {event.title}
+          </h1>
+          <p className="text-white mb-2">
+            Event Description: {event.description}
+          </p>
           <div className="bg-gradient-to-r from-[#3e4044] to-[#1D2328] p-[1px] rounded-md mb-4">
             {paymentInitialized && (
               <button
