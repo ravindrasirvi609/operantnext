@@ -17,645 +17,241 @@ async function generateInvoiceHtml(orderId: string): Promise<string> {
       throw new Error(`No transaction data found for order ID ${orderId}`);
     }
 
-    const invoiceHtml = `
-<html>
-  <head>
-    <style>
-    .bill-to {
-      font-weight: 600;
-    }
-    .bill-to,
-    .bill-to1 {
-      position: relative;
-      letter-spacing: 0.02em;
-      line-height: 140%;
-    }
-    .contact {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
+    const invoiceHtml = `<!doctype html>
+<html class="no-js" lang="zxx">
 
-      // ...
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>OPF Event Billing</title>
+    <meta name="author" content="themeholy">
+    <meta name="description" content="Invar - Invoice HTML Template">
+    <meta name="keywords" content="Invar - Invoice HTML Template" />
+    <meta name="robots" content="INDEX,FOLLOW">
 
-      // Define a function to generate the invoice PDF
-      async function generateInvoicePdf(orderId: string): Promise<Uint8Array> {
-        try {
-          // Fetch data from RazorpayTransaction based on the provided order ID
-          const transactionData = await RazorpayTransaction.findOne({
-            orderId,
-          }).exec();
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-      
+    <!-- Favicons - Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/img/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/img/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/img/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/img/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/img/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
+    <link rel="manifest" href="assets/img/favicons/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/img/favicons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
 
-          // Create a new PDF document
-          const pdfDoc = await PDFDocument.create();
+    <!--==============================
+	  Google Fonts
+	============================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-          // Set the document metadata
-          pdfDoc.setTitle("Invoice");
-          pdfDoc.setAuthor("Your Company");
 
-          // Add a new page with A4 size
-          const page = pdfDoc.addPage([595.276, 841.890]);
+    <!--==============================
+	    All CSS File
+	============================== -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
 
-          // Load the font
-          const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+</head>
 
-          // Set the font size and color
-          page.setFont(font);
-          page.setFontSize(12);
-          page.setTextColor(rgb(0, 0, 0));
+<body>
 
-          // Draw the invoice content on the page
-          page.drawText("Invoice Content", {
-            x: 50,
-            y: 700,
-          });
 
-          // Generate the PDF as a Uint8Array
-          const pdfBytes = await pdfDoc.save();
+    <!--[if lte IE 9]>
+    	<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
 
-          return pdfBytes;
-        } catch (error) {
-          console.error("Error generating invoice PDF:", error);
-          throw error;
-        }
-      }
-    }
-    .bill-to6 {
-      position: relative;
-      font-size: var(--font-size-3xs-6);
-      letter-spacing: 0.02em;
-      line-height: 120%;
-    }
-    .payment {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      gap: var(--gap-11xs);
-    }
-    .ashishsharma-biolink-1-icon {
-      position: relative;
-      width: 72px;
-      height: 72px;
-      object-fit: cover;
-    }
-    .footer {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      border-top: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 612px;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: var(--padding-base) var(--padding-5xl);
-      gap: var(--gap-5xl);
-    }
-    .title {
-      position: relative;
-      letter-spacing: -0.05em;
-      line-height: 119%;
-      font-weight: 600;
-    }
-    .from {
-      margin: 0;
-    }
-    .subject {
-      position: relative;
-      font-size: var(--font-size-4xs);
-      letter-spacing: 0.02em;
-      line-height: 140%;
-    }
-    .sender {
-      align-self: stretch;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: var(--padding-5xl);
-      gap: var(--gap-9xs);
-    }
-    .invoice-number-title,
-    .issue-date-title {
-      position: relative;
-      letter-spacing: -0.03em;
-      line-height: 120%;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      width: 41.8px;
-    }
-    .issue-date-title {
-      width: 46.6px;
-    }
-    .invoice-number-title-parent {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-      gap: var(--gap-8xs);
-    }
-    .invoice-number {
-      position: relative;
-      line-height: 120%;
-    }
-    .invoice-number-parent {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: flex-start;
-      gap: var(--gap-8xs);
-      text-align: right;
-    }
-    .header,
-    .invoice-details {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-    }
-    .invoice-details {
-      align-self: stretch;
-      border-left: 0.5px solid var(--color-darkgray);
-      justify-content: flex-start;
-      padding: var(--padding-5xl);
-      gap: var(--gap-17xl);
-      font-size: var(--font-size-3xs-6);
-    }
-    .header {
-      border-bottom: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 612px;
-      justify-content: space-between;
-    }
-    .bill-to8,
-    .total-due-title,
-    .total-due-title1 {
-      position: relative;
-      letter-spacing: 0.02em;
-      line-height: 140%;
-      display: flex;
-      align-items: center;
-      width: 338px;
-    }
-    .total-due-title,
-    .total-due-title1 {
-      line-height: 120%;
-      font-weight: 600;
-      width: 200.3px;
-    }
-    .total-due-title1 {
-      font-size: 27.55px;
-      letter-spacing: -0.05em;
-      line-height: 119%;
-    }
-    .total-due {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: flex-start;
-      gap: var(--gap-base);
-      text-align: right;
-      font-size: var(--font-size-2xs-6);
-    }
-    .client {
-      width: 611.6px;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: var(--padding-5xl) var(--padding-5xl) var(--padding-xs);
-      box-sizing: border-box;
-      font-size: var(--font-size-4xs);
-    }
-    .charges {
-      position: relative;
-      letter-spacing: 0.12em;
-      line-height: 120%;
-      text-transform: uppercase;
-    }
-    .deliverables,
-    .quantity {
-      border: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      flex-direction: column;
-      padding: var(--padding-xs) var(--padding-base);
-    }
-    .deliverables {
-      width: 338.5px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-    }
-    .quantity {
-      width: 113.5px;
-    }
-    .charges1,
-    .index1,
-    .quantity {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-    }
-    .charges1 {
-      border: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 113.5px;
-      flex-direction: column;
-      padding: var(--padding-xs) var(--padding-base);
-      text-align: right;
-    }
-    .index1 {
-      flex-direction: row;
-      padding: 0 var(--padding-5xl);
-      font-size: 7.95px;
-    }
-    .description,
-    .title1 {
-      position: relative;
-      line-height: 120%;
-    }
-    .title1 {
-      font-weight: 500;
-    }
-    .description {
-      font-size: 7.95px;
-      letter-spacing: 0.02em;
-      display: none;
-      opacity: 0.8;
-    }
-    .deliverables1,
-    .title-description {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .title-description {
-      justify-content: flex-start;
-      gap: var(--gap-5xs);
-    }
-    .deliverables1 {
-      align-self: stretch;
-      border: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 338.5px;
-      justify-content: center;
-      padding: var(--padding-base);
-    }
-    .quantity3 {
-      position: relative;
-      letter-spacing: 0.12em;
-      line-height: 120%;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-    .quantity2 {
-      align-self: stretch;
-      border: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 113.5px;
-      flex-direction: column;
-      justify-content: center;
-      padding: var(--padding-base);
-    }
-    .charges2,
-    .item,
-    .quantity2 {
-      display: flex;
-      align-items: flex-start;
-    }
-    .charges2 {
-      align-self: stretch;
-      border: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 113.5px;
-      flex-direction: column;
-      justify-content: center;
-      padding: var(--padding-base);
-      text-align: right;
-    }
-    .item {
-      flex-direction: row;
-      justify-content: flex-start;
-      padding: 0 var(--padding-5xl);
-    }
-    .description2 {
-      align-self: stretch;
-      position: relative;
-      font-size: var(--font-size-4xs-5);
-      letter-spacing: 0.02em;
-      line-height: 12.5px;
-      opacity: 0.8;
-    }
-    .charges4,
-    .quantity6,
-    .title-description2 {
-      align-self: stretch;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-    }
-    .title-description2 {
-      gap: var(--gap-5xs);
-    }
-    .charges4,
-    .quantity6 {
-      border: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      width: 113.5px;
-      padding: var(--padding-base);
-    }
-    .charges4 {
-      text-align: right;
-    }
-    .spacer {
-      align-self: stretch;
-      width: 338px;
-    }
-    .amount,
-    .title5 {
-      position: relative;
-      line-height: 120%;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      width: 90.7px;
-      flex-shrink: 0;
-    }
-    .amount {
-      color: var(--color-gray);
-      text-align: right;
-      width: 102.9px;
-    }
-    .total-row {
-      display: flex;
-      flex-direction: row;
-      align-items: baseline;
-      justify-content: flex-start;
-      gap: 1.91px;
-    }
-    .total-child {
-      align-self: stretch;
-      position: relative;
-      border-top: 0.5px solid var(--color-darkgray);
-      box-sizing: border-box;
-      height: 0.5px;
-    }
-    .amount2,
-    .title7 {
-      position: relative;
-      line-height: 120%;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      width: 90.7px;
-      flex-shrink: 0;
-    }
-    .amount2 {
-      color: var(--color-gray);
-      text-align: right;
-      width: 102.9px;
-    }
-    .total7 {
-      display: flex;
-      flex-direction: row;
-      align-items: baseline;
-      justify-content: flex-start;
-      gap: 1.91px;
-      font-size: var(--font-size-2xs-6);
-    }
-    .total6 {
-      background-color: var(--color-white);
-      border: 0.5px solid var(--color-darkgray);
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 15.24130630493164px;
-      gap: var(--gap-3xs);
-    }
-    .auto-layout,
-    .items-list,
-    .total5,
-    .total6 {
-      display: flex;
-      justify-content: flex-start;
-    }
-    .total5 {
-      flex-direction: row;
-      align-items: center;
-      padding: 0 var(--padding-5xl);
-      font-size: 9.53px;
-      color: var(--color-black);
-    }
-    .auto-layout,
-    .items-list {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .items-list {
-      padding: var(--padding-xs) 0 var(--padding-5xl);
-      font-size: var(--font-size-2xs-6);
-    }
-    .auto-layout {
-      position: absolute;
-      top: 0;
-      left: 0;
-      font-size: 24.96px;
-    }
-    .property-1default,
-    .property-1variant2 {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: var(--color-white);
-      width: 612px;
-      height: 792px;
-      overflow: hidden;
-    }
-    .property-1variant2 {
-      top: 832px;
-    }
-    .invoice {
-      position: relative;
-      border-radius: 5px;
-      border: 1px dashed #9747ff;
-      box-sizing: border-box;
-      width: 100%;
-      height: 1644px;
-      overflow: hidden;
-      text-align: left;
-      font-size: var(--font-size-4xs);
-      color: var(--color-gray);
-      font-family: var(--font-manrope);
-    }
-    
-    </style>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
-    />
-  </head>
-  <body>
-    <div class="invoice">
-      <div class="property-1default">
-        <div class="footer">
-          <div class="contact">
-            <div class="bill-to">Contact:</div>
-            <div class="bill-to1">Phone: +91 8107199052</div>
-            <div class="bill-to1">Email: sirviravirandra609@gmail.com</div>
-          </div>
-          <div class="payment">
-            <div class="bill-to">Payment:</div>
-            <div class="bill-to1">Payable to Ravindra Choudhary</div>
-            <div class="bill-to1">Account number, Bank</div>
-            <div class="bill-to6">*Please make payment before due date</div>
-          </div>
+
+    <!--********************************
+   		Code Start From Here 
+	******************************** -->
+
+    <div class="invoice-container-wrap">
+        <div class="invoice-container">
+            <main>
+                <!--==============================
+Invoice Area
+==============================-->
+                <div class="themeholy-invoice invoice_style9">
+                    <div class="download-inner" id="download_section">
+                        <!--==============================
+	Header Area
+==============================-->
+                        <header class="themeholy-header header-layout7">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-auto">
+                                    <div class="header-logo">
+                                        <a href="index.html"><img src="public/opflogo.png" alt="Operant Pharmacy Federation"></a>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <h1 class="big-title">Invoice</h1>
+                                    <span><b>Invoice No: </b> ${transactionData.paymentId} </span>
+                                    <span><b>Date: </b> ${transactionData.createdAt}</span>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="row justify-content-between my-4">
+                            <div class="col-auto">
+                                <div class="invoice-left">
+                                    <b>Must Read:</b>
+                                    <address>
+                                        Intrinsicly expedite enterprise-wide leadership skills <br>
+                                        through bleeding-edge deliverables. Rapidiously <br>
+                                        revolutionize corporate manufactured products.
+                                    </address>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="invoice-right">
+                                    <b>Operant Pharmacy Federation:</b>
+                                    <address>
+                                        17, Mayank Nagar, <br>
+                                        Pali, Rajasthan, India <br>
+                                        +91 8107199052 <br>
+                                        info@opf.org.in
+                                    </address>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="invoice-table table-style3">
+                            <tbody>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <td>HFG326548</td>
+                                    <th>Balance Due:</th>
+                                    <td>$2350.00</td>
+                                </tr>
+                                <tr>
+                                    <th>Student Name:</th>
+                                    <td>Amit Mithon Becham</td>
+                                    <th>Due Date:</th>
+                                    <td>27/07/2022</td>
+                                </tr>
+                                <tr>
+                                    <th>Due Date:</th>
+                                    <td>Summer</td>
+                                    <th>Statement For:</th>
+                                    <td>2022 Spring</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="invoice-table table-stripe3">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Semester Fee</td>
+                                    <td>27/07/2022</td>
+                                    <td>$100.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Exam Fee</td>
+                                    <td>27/07/2022</td>
+                                    <td>$150.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Transport Fee</td>
+                                    <td>27/07/2022</td>
+                                    <td>$30.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Hostel Fee</td>
+                                    <td>27/07/2022</td>
+                                    <td>$50.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Book Fee</td>
+                                    <td>27/07/2022</td>
+                                    <td>$15.00</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2"><b>Total Amount:</b></td>
+                                    <td>$430.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="row justify-content-between">
+                            <div class="col-auto">
+                                <b>Payment Info:</b>
+                                <p class="mb-0">Credit Card No: 2456********** <br>
+                                    A/C Name: Anthony Mithon</p>
+                            </div>
+                            <div class="col-auto">
+                                <table class="total-table2">
+                                    <tr>
+                                        <th>Paid:</th>
+                                        <td>$345.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Balance Due:</th>
+                                        <td>$00.00</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <p class="company-address style2">
+                            <b>Invar Inc:</b> <br>
+                            12th Floor, Plot No.5, IFIC Bank, Gausin Rod, Suite 250-20, Franchisco USA 2022.
+                        </p>
+                        <p class="invoice-note mt-3">
+                            <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.64581 13.7917H10.3541V12.5417H3.64581V13.7917ZM3.64581 10.25H10.3541V9.00002H3.64581V10.25ZM1.58331 17.3334C1.24998 17.3334 0.958313 17.2084 0.708313 16.9584C0.458313 16.7084 0.333313 16.4167 0.333313 16.0834V1.91669C0.333313 1.58335 0.458313 1.29169 0.708313 1.04169C0.958313 0.791687 1.24998 0.666687 1.58331 0.666687H9.10415L13.6666 5.22919V16.0834C13.6666 16.4167 13.5416 16.7084 13.2916 16.9584C13.0416 17.2084 12.75 17.3334 12.4166 17.3334H1.58331ZM8.47915 5.79169V1.91669H1.58331V16.0834H12.4166V5.79169H8.47915ZM1.58331 1.91669V5.79169V1.91669V16.0834V1.91669Z" fill="#2D7CFE" />
+                            </svg>
+
+                            <b>NOTE: </b>This is computer generated receipt and does not require physical signature.
+                        </p>
+                        <div class="body-shape9"></div>
+                        <div class="body-shape1"></div>
+                    </div>
+                    
+                </div>
+            </main>
         </div>
-        <div class="auto-layout">
-          <div class="header">
-            <div class="sender">
-              <div class="title">Invoice</div>
-              <div class="subject">
-                <p class="from">
-                  <b>From:</b>
-                </p>
-                <p class="from">Operant Pharmacy Federation</p>
-                <p class="from">Pali Rajsthan</p>
-              </div>
-            </div>
-            <div class="invoice-details">
-              <div class="invoice-number-title-parent">
-                <div class="invoice-number-title">Invoice #</div>
-                <div class="issue-date-title">Issue Date</div>
-                <div class="invoice-number-title">Due Date</div>
-              </div>
-              <div class="invoice-number-parent">
-                <div class="invoice-number">DES00100</div>
-                <div class="invoice-number">${new Date().toLocaleDateString()}</div>
-                <div class="invoice-number">${new Date().toLocaleDateString()}</div>
-              </div>
-            </div>
-          </div>
-          <div class="client">
-            <div class="contact">
-              <div class="bill-to">Bill To:</div>
-              <div class="bill-to8">Client Name</div>
-              <div class="bill-to8">Client Address</div>
-              <div class="bill-to8">
-                Phone: [enter phone number], Email: [enter email address]
-              </div>
-            </div>
-            <div class="total-due">
-              <div class="total-due-title">Total Due:</div>
-              <div class="total-due-title1">₹0</div>
-            </div>
-          </div>
-          <div class="items-list">
-            <div class="index1">
-              <div class="deliverables">
-                <b class="charges">deliverables</b>
-              </div>
-              <div class="quantity">
-                <b class="charges">Quantity</b>
-              </div>
-              <div class="charges1">
-                <b class="charges">charges</b>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description">
-                  <div class="title1">Hero section stock image</div>
-                  <div class="description">
-                    Third round of feedback requested by the client
-                  </div>
-                </div>
-              </div>
-              <div class="quantity2">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges2">
-                <div class="quantity3">₹30,000</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description">
-                  <div class="title1">Hero section stock image</div>
-                  <div class="description">
-                    Third round of feedback requested by the client
-                  </div>
-                </div>
-              </div>
-              <div class="quantity2">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges2">
-                <div class="quantity3">₹30,000</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description2">
-                  <div class="title1">Responsive web pages designs</div>
-                  <div class="description2">
-                    Add more specific details in bullet points or numbers list
-                  </div>
-                </div>
-              </div>
-              <div class="quantity6">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges4">
-                <div class="quantity3">₹1,50,000</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="deliverables1">
-                <div class="title-description">
-                  <div class="title1">Font: Helvetica</div>
-                  <div class="description">
-                    Third round of feedback requested by the client
-                  </div>
-                </div>
-              </div>
-              <div class="quantity2">
-                <div class="quantity3">01</div>
-              </div>
-              <div class="charges2">
-                <div class="quantity3">₹60,000</div>
-              </div>
-            </div>
-            <div class="total5">
-              <div class="spacer"></div>
-              <div class="total6">
-                <div class="total-row">
-                  <div class="title5">Subtotal</div>
-                  <div class="amount">₹0.00</div>
-                </div>
-                <div class="total-row">
-                  <div class="title5">Discount (0%)</div>
-                  <div class="amount">₹0.00</div>
-                </div>
-                <div class="total-child"></div>
-                <div class="total7">
-                  <div class="title7">Total</div>
-                  <div class="amount2">₹21,000.00</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </body>
-</html>
+    <!-- Invoice Conainter End -->
 
-    `;
+    <!--==============================
+    All Js File
+============================== -->
+    <!-- Jquery -->
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- PDF Generator -->
+    <script src="assets/js/jspdf.min.js"></script>
+    <script src="assets/js/html2canvas.min.js"></script>
+    <!-- Main Js File -->
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>`;
     return invoiceHtml;
   } catch (error) {
     console.error("Error generating invoice HTML:", error);
