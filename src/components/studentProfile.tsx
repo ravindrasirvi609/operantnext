@@ -49,7 +49,7 @@ export default function StudentProfile() {
   };
 
   const editProfileRoutinting = () => {
-    router.push("/form");
+    router.push("/studentProfile");
   };
 
   useEffect(() => {
