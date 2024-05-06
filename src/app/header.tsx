@@ -12,7 +12,7 @@ import { UserData } from "./page";
 const studentNavigation = [
   { name: "Conferences", href: "/events" },
   { name: "Jobs", href: "/jobs" },
-  { name: "Articles", href: "/articles/articleList" },
+  { name: "Articles", href: "/article/articleList" },
   { name: "Courses", href: "/courses" },
   { name: "Resources", href: "/resources" },
   // { name: "Assignments", href: "/Assignments" },
