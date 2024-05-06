@@ -81,7 +81,7 @@ export default function EventList() {
               <p className="text-gray-600 mb-2">{event.description}</p>
               <div className="flex justify-between items-center mt-4">
                 <span className="text-indigo-600 font-semibold">
-                  {event.isPaid ? `${event.price}` : "Free"}
+                  {event.isPaid ? `₹${event.price}` : "Free"}
                 </span>
                 <Link
                   href={`/events/${event._id}`}

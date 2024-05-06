@@ -3,6 +3,8 @@ import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import eventModel from "@/models/eventModel";
 import User from "@/models/userModel";
+import plans from "@/models/pricePlansModel";
+
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
@@ -24,6 +26,32 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
+
+    let evenPrice = formData.get("price");
+    const planId = formData.get("planDetails");
+    const planDetails = await plans.findById(planId);
+    console.log("planDetails", planDetails);
+
+    if (!planDetails) {
+      return new NextResponse(
+        JSON.stringify({ error: "Invalid plan details" }),
+        { status: 400 }
+      );
+    }
+
+    const planPrice = planDetails.price;
+    console.log("planPrice", planPrice);
+    console.log("evenPrice", evenPrice);
+
+    if (planPrice != evenPrice) {
+      return new NextResponse(
+        JSON.stringify({ error: "Plan price and event price do not match" }),
+        {
+          status: 401,
+        }
+      );
+    }
+
     const file = formData.get("image") as File;
     const fileBuffer = await file.arrayBuffer();
     const mimeType = file.type;

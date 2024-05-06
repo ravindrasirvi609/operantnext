@@ -24,6 +24,7 @@ interface Event {
   categories: string[];
   capacity: number;
   attendees: string[];
+  isJoined: boolean;
   __v: number;
   image: string;
   organizerDetails: {
@@ -36,6 +37,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
   const id = params.id;
 
   const [event, setEvent] = useState<Event | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -71,13 +73,21 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
       </Head>
 
       <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/2 p-4 transform transition-transform hover:scale-105">
+        <div
+          className={`md:w-1/2 p-4 transform transition-transform ${
+            isHovered ? "scale-105" : ""
+          }`}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <Image
             src={event.image}
             alt={event.title}
             width={500}
             height={300}
-            className="rounded-md shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out"
+            className={`rounded-md shadow-lg ${
+              isHovered ? "hover:shadow-xl" : ""
+            } transition-shadow duration-300 ease-in-out`}
           />
         </div>
         <div className="md:w-1/2 p-4">
@@ -94,27 +104,25 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
           <div className="flex items-center space-x-4">
             {event.isPaid ? (
               <p className="text-green-500 text-xl font-semibold">
-                Price: ${event.price}
+                Price: ₹{event.price}
               </p>
             ) : (
               <p className="text-green-500 text-xl font-semibold">Free Event</p>
             )}
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
-            >
-              Register Now
-            </a>
-            <a
-              href={`/rozorpay/${event._id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
-            >
-              Join Event
-            </a>
+            {event.isJoined ? (
+              <p className="text-blue-500 font-bold py-2 px-6 rounded-full">
+                Already joined
+              </p>
+            ) : (
+              <a
+                href={`/rozorpay/${event._id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
+              >
+                Join Event
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -141,7 +149,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
       <div className="mt-12">
         <h2 className="text-3xl font-bold mb-4">Event Capacity</h2>
         <p className="text-lg">
-          {event.attendees.length} / {event.capacity}
+          {event.attendees.length + 1} / {event.capacity}
         </p>
       </div>
     </div>

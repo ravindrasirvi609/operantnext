@@ -52,7 +52,7 @@ const EventForm: React.FC = () => {
     fetchPlans();
   }, []);
 
-  const onSubmit = (data: EventFormData) => {
+  const onSubmit = async (data: EventFormData) => {
     console.log("data", data.price, data.capacity);
 
     const formData = new FormData();
@@ -72,10 +72,17 @@ const EventForm: React.FC = () => {
     });
 
     try {
-      const response = axios.post("/api/events/addEvent", formData);
+      const response = await axios.post("/api/events/addEvent", formData);
       console.log("response", response);
-      setSubmitted(true);
-      reset();
+
+      if (response.status === 201) {
+        Swal.fire("Event created successfully");
+        setSubmitted(true);
+        reset();
+      }
+      if (response.status === 401) {
+        Swal.fire("Event price and Plan price do not match");
+      }
     } catch (error: any) {
       Swal.fire(error.message);
     } finally {

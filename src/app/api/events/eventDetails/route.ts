@@ -40,19 +40,20 @@ export async function POST(req: NextRequest) {
       const attendeeIds = event.attendees.map((id: string) => new ObjectId(id));
       console.log("Attendee IDs:", attendeeIds);
 
-      // Use find() to get an array of users
       const users = await UserForm.find({ _id: { $in: attendeeIds } });
+      console.log("Users:", users);
 
       const organiz = await Organizer.findById(event.organizer);
 
-      const price = plan.price; // Use the correct field from your schema
-      const currency = plan.currency; // Use the correct field from your schema
+      const price = plan.price;
+      const currency = plan.currency;
 
       const attendees = users.map((user) => ({
         personalEmail: user.personalEmail,
         firstName: user.firstName,
         lastName: user.lastName,
         _id: user._id,
+        isJoined: users.some((u) => u._id.toString() === user._id.toString()),
       }));
 
       const responsePayload = {
@@ -62,6 +63,9 @@ export async function POST(req: NextRequest) {
           currency: currency,
         },
         attendees: attendees,
+        isJoined: attendees.some(
+          (attendee) => attendee._id.toString() === userId
+        ),
         organizerDetails: {
           name: organiz.userName,
           email: organiz.email,
