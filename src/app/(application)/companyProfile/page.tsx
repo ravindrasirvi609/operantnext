@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { on } from "events";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
@@ -132,49 +131,262 @@ const EditCompanyForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <h2>Edit Company</h2>
-      <div className="form-group">
-        <label htmlFor="companyName">Company Name:</label>
-        <input
-          {...register("companyName")}
-          type="text"
-          id="companyName"
-          placeholder="Enter company name"
-          value={companyData.companyName || ""}
-          onChange={handleChange}
-        />
-        {errors.companyName && (
-          <p className="error-message">{errors.companyName.message}</p>
-        )}
-      </div>
+    <div className="bg-purple-900 text-white min-h-screen p-8">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6">Edit Company</h2>
 
-      <div className="form-group">
-        <label htmlFor="location.streetAddress">
-          Street Address (Optional):
-        </label>
-        <input
-          {...register("location.streetAddress")}
-          type="text"
-          id="location.streetAddress"
-          placeholder="Enter street address"
-          value={companyData.location.streetAddress || ""}
-          onChange={handleChange}
-        />
-        {errors.location?.streetAddress && (
-          <p className="error-message">
-            {errors.location.streetAddress.message}
-          </p>
-        )}
-      </div>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+          <div className="form-group">
+            <label htmlFor="companyName">Company Name:</label>
+            <input
+              {...register("companyName")}
+              type="text"
+              id="companyName"
+              placeholder="Enter company name"
+              value={companyData.companyName || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.companyName && (
+              <p className="error-message">{errors.companyName.message}</p>
+            )}
+          </div>
 
-      {/* Add other fields based on the ICompany interface */}
-      {/* Remember to adjust validation and error messages accordingly */}
+          <div className="form-group">
+            <label htmlFor="location.streetAddress">
+              Street Address (Optional):
+            </label>
+            <input
+              {...register("location.streetAddress")}
+              type="text"
+              id="location.streetAddress"
+              placeholder="Enter street address"
+              value={companyData.location.streetAddress || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.location?.streetAddress && (
+              <p className="error-message">
+                {errors.location.streetAddress.message}
+              </p>
+            )}
+          </div>
 
-      <div className="form-group">
-        <button type="submit">Submit</button>
+          <div className="form-group">
+            <label htmlFor="location.city">City:</label>
+            <input
+              {...register("location.city")}
+              type="text"
+              id="location.city"
+              placeholder="Enter city"
+              value={companyData.location.city || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.location?.city && (
+              <p className="error-message">{errors.location.city.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="location.state">State:</label>
+            <input
+              {...register("location.state")}
+              type="text"
+              id="location.state"
+              placeholder="Enter state"
+              value={companyData.location.state || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.location?.state && (
+              <p className="error-message">{errors.location.state.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="location.country">Country:</label>
+            <input
+              {...register("location.country")}
+              type="text"
+              id="location.country"
+              placeholder="Enter country"
+              value={companyData.location.country || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.location?.country && (
+              <p className="error-message">{errors.location.country.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="location.postalCode">Postal Code:</label>
+            <input
+              {...register("location.postalCode")}
+              type="text"
+              id="location.postalCode"
+              placeholder="Enter postal code"
+              value={companyData.location.postalCode || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.location?.postalCode && (
+              <p className="error-message">
+                {errors.location.postalCode.message}
+              </p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="mobileNo">Mobile No:</label>
+            <input
+              {...register("mobileNo")}
+              type="text"
+              id="mobileNo"
+              placeholder="Enter mobile number"
+              value={companyData.mobileNo || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.mobileNo && (
+              <p className="error-message">{errors.mobileNo.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              {...register("email")}
+              type="text"
+              id="email"
+              placeholder="Enter email"
+              value={companyData.email || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.email && (
+              <p className="error-message">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="authorisedPersonName">
+              Authorised Person Name:
+            </label>
+            <input
+              {...register("authorisedPersonName")}
+              type="text"
+              id="authorisedPersonName"
+              placeholder="Enter authorised person name"
+              value={companyData.authorisedPersonName || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.authorisedPersonName && (
+              <p className="error-message">
+                {errors.authorisedPersonName.message}
+              </p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="registrationDate">Registration Date:</label>
+            <input
+              {...register("registrationDate")}
+              type="date"
+              id="registrationDate"
+              value={
+                companyData.registrationDate
+                  ? companyData.registrationDate.toString()
+                  : ""
+              }
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.registrationDate && (
+              <p className="error-message">{errors.registrationDate.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="industryType">Industry Type:</label>
+            <input
+              {...register("industryType")}
+              type="text"
+              id="industryType"
+              placeholder="Enter industry type"
+              value={companyData.industryType || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.industryType && (
+              <p className="error-message">{errors.industryType.message}</p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="numberOfEmployees">Number of Employees:</label>
+            <input
+              {...register("numberOfEmployees")}
+              type="number"
+              id="numberOfEmployees"
+              value={companyData.numberOfEmployees || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.numberOfEmployees && (
+              <p className="error-message">
+                {errors.numberOfEmployees.message}
+              </p>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="websiteUrl">Website URL:</label>
+            <input
+              {...register("websiteUrl")}
+              type="text"
+              id="websiteUrl"
+              placeholder="Enter website URL"
+              value={companyData.websiteUrl || ""}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-purple-800 text-white"
+            />
+            {errors.websiteUrl && (
+              <p className="error-message">{errors.websiteUrl.message}</p>
+            )}
+          </div>
+          <div className="flex justify-center items-center p-10 border-2 border-dashed border-green-500 rounded-lg relative">
+            <input
+              type="file"
+              className="absolute w-full h-full opacity-0 cursor-pointer"
+              {...register("profileImage")}
+              id="profileImage"
+              placeholder="Enter profile image URL"
+              value={companyData.profileImage || ""}
+              onChange={handleChange}
+            />
+            <div className="text-center">
+              <p className="text-lg">Drag & drop to upload</p>
+              <p className="text-sm text-zinc-600">or browse</p>
+            </div>
+          </div>
+          {errors.profileImage && (
+            <p className="error-message">{errors.profileImage.message}</p>
+          )}
+
+          <div className="form-group">
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 
