@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import { use } from "react";
 
 const companySchema = new mongoose.Schema({
   companyName: { type: String, maxlength: 100 },
+  username: { type: String, maxlength: 50 },
   location: {
     streetAddress: { type: String },
     city: { type: String },

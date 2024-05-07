@@ -35,7 +35,7 @@ const teacherNavigation = [
 ];
 
 const companyNavigation = [
-  { name: "Job Postings", href: "/profile" },
+  { name: "Job Postings", href: "/jobs/create-job" },
   { name: "Events", href: "/events" },
   { name: "Recruitment", href: "/jobPostings" },
   { name: "Resources", href: "/resources" },
