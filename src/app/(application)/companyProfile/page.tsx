@@ -110,19 +110,68 @@ const EditCompanyForm = () => {
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setCompanyData({
-      ...companyData,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    if (name.includes("location.")) {
+      const locationField = name.split(".")[1];
+      setCompanyData({
+        ...companyData,
+        location: {
+          ...companyData.location,
+          [locationField]: value,
+        },
+      });
+    } else {
+      setCompanyData({
+        ...companyData,
+        [name]: value,
+      });
+    }
+  };
+
+  const handleChangeFile = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    fieldName: string
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      setCompanyData({
+        ...companyData,
+        [fieldName]: event.target.files[0],
+      });
+    }
   };
 
   const handleFormSubmit = (data: any) => {
+    console.log("data", data);
+
     onSubmit(data);
   };
 
   async function onSubmit(data: any) {
     try {
-      const res = await axios.post("/api/users/editCompany", data);
+      const formData = new FormData();
+
+      // Append non-file fields
+      Object.keys(data).forEach((key) => {
+        if (typeof data[key] === "object" && data[key] !== null) {
+          // Handling nested objects like location
+          Object.keys(data[key]).forEach((nestedKey) => {
+            formData.append(`${key}.${nestedKey}`, data[key][nestedKey]);
+          });
+        } else {
+          formData.append(key, data[key]);
+        }
+      });
+
+      // Append file if exists
+      if (data.profileImage && data.profileImage[0]) {
+        formData.append("profileImage", data.profileImage[0]);
+      }
+
+      const res = await axios.post("/api/users/companyDetails", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Important to set the correct content type
+        },
+      });
       toast.success("Company details updated successfully");
       // router.push("/companyProfile");
     } catch (error) {
@@ -161,7 +210,7 @@ const EditCompanyForm = () => {
               type="text"
               id="location.streetAddress"
               placeholder="Enter street address"
-              value={companyData.location.streetAddress || ""}
+              value={companyData.location.streetAddress}
               onChange={handleChange}
               className="w-full p-2 rounded bg-purple-800 text-white"
             />
@@ -365,7 +414,7 @@ const EditCompanyForm = () => {
               id="profileImage"
               placeholder="Enter profile image URL"
               value={companyData.profileImage || ""}
-              onChange={handleChange}
+              onChange={(e) => handleChangeFile(e, "profileImage")}
             />
             <div className="text-center">
               <p className="text-lg">Drag & drop to upload</p>
