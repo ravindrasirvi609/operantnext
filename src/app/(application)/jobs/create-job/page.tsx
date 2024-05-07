@@ -69,7 +69,8 @@ const JobForm = () => {
       },
       experienceLevel: data.experienceLevel,
       remoteOptions: {
-        flexibleHours: data.remoteOptions.flexibleHours,
+        flexibleHours:
+          data.remoteOptions.flexibleHours.length === 1 ? true : false,
         timezone: data.remoteOptions.timezone,
       },
       department: data.department,
@@ -168,7 +169,7 @@ const JobForm = () => {
             className="mt-1 w-full"
             options={companies?.map((company) => ({
               value: company._id,
-              label: company.userName,
+              label: company.companyName,
             }))}
             onChange={handleCompanyChange}
           />

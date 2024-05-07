@@ -24,6 +24,8 @@ export async function POST(req: NextRequest) {
     }
 
     const jobData = await req.json();
+    console.log("jobData", jobData);
+
     const job = await jobModel.create({ ...jobData, organization: userId });
 
     return new NextResponse(JSON.stringify(job), {
