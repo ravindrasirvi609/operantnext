@@ -23,7 +23,7 @@ interface ICompany {
   industryType?: string;
   numberOfEmployees?: number;
   websiteUrl?: string;
-  profileImage?: string;
+  profileImage?: string | File;
 }
 
 const EditCompanyForm = () => {
@@ -69,7 +69,7 @@ const EditCompanyForm = () => {
       "Number of employees must be a positive number"
     ),
     websiteUrl: Yup.string().url("Invalid URL format"),
-    profileImage: Yup.string().url("Invalid URL format"),
+    profileImage: Yup.mixed(),
     mobileNo: Yup.string().matches(/^\d{10}$/, "Invalid mobile number format"),
   });
 
@@ -128,21 +128,19 @@ const EditCompanyForm = () => {
     }
   };
 
-  const handleChangeFile = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    fieldName: string
-  ) => {
-    if (event.target.files && event.target.files[0]) {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+
+    if (files && files.length > 0) {
       setCompanyData({
         ...companyData,
-        [fieldName]: event.target.files[0],
+        profileImage: files[0],
       });
     }
   };
 
   const handleFormSubmit = (data: any) => {
     console.log("data", data);
-
     onSubmit(data);
   };
 
@@ -413,17 +411,13 @@ const EditCompanyForm = () => {
               {...register("profileImage")}
               id="profileImage"
               placeholder="Enter profile image URL"
-              value={companyData.profileImage || ""}
-              onChange={(e) => handleChangeFile(e, "profileImage")}
+              onChange={handleFileChange}
             />
             <div className="text-center">
               <p className="text-lg">Drag & drop to upload</p>
               <p className="text-sm text-zinc-600">or browse</p>
             </div>
           </div>
-          {errors.profileImage && (
-            <p className="error-message">{errors.profileImage.message}</p>
-          )}
 
           <div className="form-group">
             <button
