@@ -153,7 +153,7 @@ const ArticleForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-lime-100 mt-20 flex justify-center items-center">
+    <div className="min-h-screen bg-lime-100 flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-8 rounded-lg shadow-md w-full md:w-3/4 lg:w-1/2"
