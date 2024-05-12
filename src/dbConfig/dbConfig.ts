@@ -21,7 +21,8 @@ export async function connect() {
         process.exit();
       });
     } else {
-      console.log("MongoDB is already connected");
+      // Improved: Return a resolved promise for already connected case
+      return Promise.resolve();
     }
   } catch (error) {
     console.log("Something goes wrong!");
