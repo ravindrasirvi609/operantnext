@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import User from "@/models/userModel";
 import bcryptjs from "bcryptjs";
+import { Resend } from "resend";
 
 export const sendEmail = async ({ email, emailType, userId }: any) => {
   try {
@@ -13,6 +14,8 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 
     // create a hashed token
     const hashedToken = await bcryptjs.hash(userId.toString(), 10);
+    const resend = new Resend(process.env.RESEND_API_KEY!);
+
     console.log("hashedToken", hashedToken, emailType, email, userId);
 
     if (emailType === "VERIFY") {
@@ -20,21 +23,13 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         verifyToken: hashedToken,
         verifyTokenExpiry: Date.now() + 3600000,
       });
-      
 
-      var transport = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-          user: "sirviravindra609@gmail.com", // Replace with your Gmail email address
-          pass: "ozuq slvq vtwv tujr", // Replace with your Gmail password or app password
-        },
-      });
-
-      const mailOptions = {
-        from: "sirviravindra609@gmail.com",
+      const mailresponse = await resend.emails.send({
+        from: "dev@ravindrachoudhary.in",
         to: email,
-        subject: "OPF : Verify your email",
-        html: `<!DOCTYPE html>
+        subject: `OPF : Verify your email`,
+        html: `
+   <!DOCTYPE html>
         <html>
         <head>
         
@@ -295,10 +290,10 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
           <!-- end body -->
         
         </body>
-        </html>`,
-      };
+        </html>
+  `,
+      });
 
-      const mailresponse = await transport.sendMail(mailOptions);
       return mailresponse;
     } else if (emailType === "RESET") {
       await User.findByIdAndUpdate(userId, {
@@ -306,19 +301,12 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         forgotPasswordTokenExpiry: Date.now() + 3600000,
       });
 
-      var transport = nodemailer.createTransport({
-        service: "Gmail",
-        auth: {
-          user: "sirviravindra609@gmail.com", // Replace with your Gmail email address
-          pass: "ozuq slvq vtwv tujr", // Replace with your Gmail password or app password
-        },
-      });
-
-      const mailOptions = {
-        from: "sirviravindra609@gmail.com",
+      const mailOptions = await resend.emails.send({
+        from: "dev@ravindrachoudhary.in",
         to: email,
-        subject: "OPF : Reset your password",
-        html: `<!DOCTYPE html>
+        subject: `OPF : Reset your password`,
+        html: `
+   <!DOCTYPE html>
         <html>
         <head>
             <title>Password Reset</title>
@@ -371,11 +359,10 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
             </div>
         </body>
         </html>
-        `,
-      };
+  `,
+      });
 
-      const mailresponse = await transport.sendMail(mailOptions);
-      return mailresponse;
+      return mailOptions;
     }
   } catch (error: any) {
     throw new Error(error.message);

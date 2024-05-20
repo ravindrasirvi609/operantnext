@@ -25,5 +25,7 @@ export const config = {
     "/studentProfile",
     "/rozorpay",
     "/events",
+    "/eventDetails",
+    "/eventRegister",
   ],
 };

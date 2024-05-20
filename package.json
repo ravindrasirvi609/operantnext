@@ -45,6 +45,7 @@
     "react-router-dom": "^6.22.3",
     "react-select": "^5.8.0",
     "react-tag-autocomplete": "^7.2.0",
+    "resend": "^3.2.0",
     "shortid": "^2.2.16",
     "sweetalert2": "^11.6.13",
     "tailwind-merge": "^2.2.2",
