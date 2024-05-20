@@ -2,11 +2,7 @@ import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
@@ -40,7 +36,7 @@ const LogoutDialog = ({
     <div className="flex items-center justify-center mt-3">
       <AlertDialog>
         <AlertDialogTrigger>
-          <button className="bg-sky-200 text-black px-4 py-2 rounded-full">
+          <button className="bg-red-500 text-black hover:bg-red-700 hover:font-black px-6 py-2 rounded-md">
             Logout
           </button>
         </AlertDialogTrigger>
@@ -52,13 +48,13 @@ const LogoutDialog = ({
           </div>
           <div className="px-6 py-4 flex justify-center space-x-4">
             <AlertDialogAction
-              className="px-4 py-2 bg-red-500 text-white rounded-full"
+              className="px-8 py-2 bg-red-500 text-white rounded-md"
               onClick={logout}
             >
               Yes
             </AlertDialogAction>
             <AlertDialogAction
-              className="px-4 py-2 bg-gray-300 text-black rounded-full"
+              className="px-8 py-2 bg-gray-300 text-black rounded-md"
               onClick={() => setIsOpen(false)} // Close the dialog without logging out
             >
               No

@@ -6,9 +6,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -18,9 +16,20 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import LogoutDialog from "./logoutButton"; // Ensure this path is correct
+import { useState } from "react";
 
 export function DropdownMenuDemo(props: any) {
   const router = useRouter();
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+
+  const closeLogoutDialog = () => {
+    setIsLogoutDialogOpen(false);
+  };
+
+  const openLogoutDialog = () => {
+    setIsLogoutDialogOpen(true);
+  };
 
   const logout = async () => {
     try {
@@ -33,68 +42,62 @@ export function DropdownMenuDemo(props: any) {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="bg-blue-300">
-          {props.userData?.username}
-          <span className="ml-2">🔻</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <Link href="/profile">
-            {" "}
-            <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="studentProfile/billing">
-            <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Keyboard shortcuts
-            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
+    <div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" className="bg-blue-300">
+            {props.userData?.username}
+            <span className="ml-2">🔻</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <Link href="/profile">
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+            </Link>
+            <Link href="studentProfile/billing">
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>Team</DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <DropdownMenuItem>Email</DropdownMenuItem>
                 <DropdownMenuItem>Message</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>More...</DropdownMenuItem>
               </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
-            New Team
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Button onClick={logout}> Log out</Button>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            </DropdownMenuSub>
+            <DropdownMenuItem>New Team</DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>GitHub</DropdownMenuItem>
+          <DropdownMenuItem>Support</DropdownMenuItem>
+          <DropdownMenuItem disabled>API</DropdownMenuItem>
+          <DropdownMenuSeparator />
+
+          <LogoutDialog
+            isOpen={isLogoutDialogOpen}
+            title="Are you sure you want to logout?"
+            onConfirm={logout}
+            onCancel={closeLogoutDialog}
+            confirmButtonText="Yes"
+            cancelButtonText="No"
+            onLogout={logout}
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Render the LogoutDialog outside of the DropdownMenu */}
+    </div>
   );
 }
+
+export default DropdownMenuDemo;
