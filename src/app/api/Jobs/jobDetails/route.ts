@@ -1,9 +1,9 @@
 import { connect } from "@/dbConfig/dbConfig";
 import jobModel from "@/models/jobModel";
-import Organizer from "@/models/collegeModel";
 import SkillModel from "@/models/skillModel";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import Company from "@/models/companyModel";
 
 connect();
 
@@ -15,11 +15,14 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Invalid Job ID format", { status: 400 });
     }
 
-    const job = await jobModel.findById(id); // Populate company data
-    console.log("job", job);
+    const job = await jobModel.findById(id);
 
-    // Check if job exists and company data is populated
-    const company = await Organizer.findById(job?.company);
+    const company = await Company.findById(job?.company);
+    if (!company) {
+      return new NextResponse("No company found with this ID", {
+        status: 400,
+      });
+    }
     const companyName = company.get("userName") || "Company Name unavailable";
 
     if (!job) {
@@ -46,8 +49,6 @@ export async function POST(req: NextRequest) {
       company: companyName,
       skills: skillNames,
     };
-
-    console.log("newJob", newJob);
 
     return new NextResponse(JSON.stringify(newJob), {
       status: 200,
