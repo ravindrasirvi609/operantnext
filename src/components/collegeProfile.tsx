@@ -1,10 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
-
+import ConfirmationDialog from "@/components/confirmation-dialog";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ICollege {
   collegeName: string;
@@ -111,12 +119,31 @@ export default function CollegeProfile() {
               </button>
             </div>
             <div className="flex items-center justify-center mt-3">
-              <button
-                className="bg-sky-200 text-black px-4 py-2 rounded-full"
-                onClick={logout}
-              >
-                Logout
-              </button>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <button className="bg-sky-200 text-black px-4 py-2 rounded-full">
+                    Logout
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white rounded-lg shadow-lg">
+                  <div className="px-6 py-4 text-center">
+                    <AlertDialogTitle className="text-2xl font-semibold text-gray-900">
+                      Are you sure you want to logout?
+                    </AlertDialogTitle>
+                  </div>
+                  <div className="px-6 py-4 flex justify-center space-x-4">
+                    <AlertDialogAction
+                      className="px-4 py-2 bg-red-500 text-white rounded-full"
+                      onClick={logout}
+                    >
+                      Yes
+                    </AlertDialogAction>
+                    <AlertDialogAction className="px-4 py-2 bg-gray-300 text-black rounded-full">
+                      No
+                    </AlertDialogAction>
+                  </div>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>
