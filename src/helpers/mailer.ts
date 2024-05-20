@@ -26,7 +26,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 
       const mailresponse = await resend.emails.send({
         from: "dev@ravindrachoudhary.in",
-        to: email,
+        to: `${email}`,
         subject: `OPF : Verify your email`,
         html: `
    <!DOCTYPE html>
@@ -293,7 +293,6 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
         </html>
   `,
       });
-
       return mailresponse;
     } else if (emailType === "RESET") {
       await User.findByIdAndUpdate(userId, {
