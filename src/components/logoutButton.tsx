@@ -1,28 +1,45 @@
 import { useState } from "react";
 import {
   AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
   AlertDialogAction,
-} from "@radix-ui/react-alert-dialog";
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-interface LogoutDialogProps {
-  onLogout: () => void; // Function to handle logout
+interface ConfirmationDialogProps {
+  isOpen?: boolean;
+  title: string;
+  onConfirm: () => void | Promise<void>;
+  onCancel: () => void;
+  confirmButtonText: string;
+  cancelButtonText: string;
+  onLogout?: () => void;
 }
 
-const LogoutDialog: React.FC<LogoutDialogProps> = ({ onLogout }) => {
+const LogoutDialog = ({
+  title,
+  onConfirm,
+  onCancel,
+  confirmButtonText,
+  cancelButtonText,
+  onLogout,
+}: ConfirmationDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const logout = () => {
-    onLogout(); // Call the provided logout function
-    setIsOpen(false); // Close the dialog
+    onLogout && onLogout();
+    setIsOpen(false);
   };
 
   return (
     <div className="flex items-center justify-center mt-3">
-      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-        <AlertDialogTrigger asChild>
+      <AlertDialog>
+        <AlertDialogTrigger>
           <button className="bg-sky-200 text-black px-4 py-2 rounded-full">
             Logout
           </button>
