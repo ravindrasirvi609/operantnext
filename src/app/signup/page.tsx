@@ -24,6 +24,7 @@ export default function SignupPage() {
   const [isTouched, setIsTouched] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [errors, setErrors] = useState<ValidationErrors>({
     email: "",
@@ -31,8 +32,13 @@ export default function SignupPage() {
     confirmPassword: "",
     username: "",
   });
+
   const toggleOptionsVisibility = () => {
     setIsOptionsVisible(!isOptionsVisible);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   const onSignup = async () => {
@@ -114,7 +120,9 @@ export default function SignupPage() {
 
     if (!user.password) {
       validationErrors.password = "Password is required.";
-    } else if (user.password.length < 8) {
+    } else if (
+      !/^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/.test(user.password)
+    ) {
       validationErrors.password =
         "Password must have at least 8 characters, one capital letter, one special symbol, and one number.";
     }
@@ -249,12 +257,19 @@ export default function SignupPage() {
                     >
                       Password
                     </label>
+                    <button
+                      type="button"
+                      onClick={toggleShowPassword}
+                      className="text-indigo-600 hover:text-indigo-500 text-sm"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
                   </div>
                   <div className="mt-2">
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={user.password}
                       onChange={handleInputChange}
                       autoComplete="new-password"
@@ -279,7 +294,7 @@ export default function SignupPage() {
                     <input
                       id="confirmPassword"
                       name="confirmPassword"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={user.confirmPassword}
                       onChange={handleInputChange}
                       autoComplete="new-password"
