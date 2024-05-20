@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Image from "next/image";
+import EyeIcon from "@heroicons/react/24/outline/EyeIcon";
+import { EyeOffIcon } from "lucide-react";
 
 type ValidationErrors = {
   [key: string]: string;
@@ -164,175 +166,184 @@ export default function SignupPage() {
 
   return (
     <>
-      <div className="relative min-h-screen bg-gradient-to-r from-blue-200 to-cyan-200">
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-          <div className="flex flex-col justify-center px-4 py-8 lg:px-8 w-full max-w-md mx-auto">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-36">
-              <Image
-                className="mx-auto h-15.5rem w-auto"
-                src="/opflogo.png"
-                alt="OPF Logo"
-                height={1000}
-                width={1000}
-              />
-            </div>
-
+      <div className="relative min-h-screen bg-gradient-to-r from-blue-200 to-cyan-200 flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-md p-6 w-full max-w-md mx-auto">
+          <div className="flex flex-col items-center">
+            <Image
+              className="h-24 w-24"
+              src="/opflogo.png"
+              alt="OPF Logo"
+              height={96}
+              width={96}
+            />
             <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-600">
               {loading ? "Processing" : "Register Your Account"}
             </h2>
-
-            <div className="mt-6">
-              <div className="space-y-6">
-                <div className="relative text-left">
-                  <select
-                    value={user.role}
-                    onChange={(e) => setUser({ ...user, role: e.target.value })}
-                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <option value="" disabled>
-                      Select a role
-                    </option>
-                    <option value="STUDENT">Student</option>
-                    <option value="TEACHER">Teacher</option>
-                    <option value="COLLEGE">College</option>
-                    <option value="COMPANY">Company</option>
-                  </select>
-                  {user.role === "" && (
-                    <p className="text-red-500 text-xs mt-1">
-                      Role is required
-                    </p>
+          </div>
+          <div className="mt-6">
+            <div className="space-y-6">
+              <div className="relative text-left">
+                <select
+                  value={user.role}
+                  onChange={(e) => setUser({ ...user, role: e.target.value })}
+                  className="block w-full bg-lime-100 px-4 py-2 text-sm text-gray-700  border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="" disabled>
+                    Select a role
+                  </option>
+                  <option value="STUDENT">Student</option>
+                  <option value="TEACHER">Teacher</option>
+                  <option value="COLLEGE">College</option>
+                  <option value="COMPANY">Company</option>
+                </select>
+                {isTouched && user.role === "" && (
+                  <p className="text-red-500 text-xs mt-1">Role is required</p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium leading-6 text-indigo-600"
+                >
+                  Username
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="username"
+                    value={user.username}
+                    onChange={handleInputChange}
+                    name="username"
+                    type="text"
+                    autoComplete="username"
+                    required
+                    className="p-2 block w-full bg-lime-100 rounded-md border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  {isTouched && errors.username && isSubmitted && (
+                    <p className="text-red-500">{errors.username}</p>
                   )}
                 </div>
-                <div>
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 text-indigo-600"
+                >
+                  Email Address
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="email"
+                    value={user.email}
+                    onChange={handleInputChange}
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className="p-2 block w-full bg-lime-100 rounded-md border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  {isTouched && errors.email && isSubmitted && (
+                    <p className="text-red-500">{errors.email}</p>
+                  )}
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
                   <label
-                    htmlFor="username"
+                    htmlFor="password"
                     className="block text-sm font-medium leading-6 text-indigo-600"
                   >
-                    Username
+                    Password
                   </label>
-                  <div className="mt-2">
-                    <input
-                      id="username"
-                      value={user.username}
-                      onChange={handleInputChange}
-                      name="username"
-                      type="text"
-                      autoComplete="username"
-                      required
-                      className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                    {isTouched && errors.username && isSubmitted && (
-                      <p className="text-red-500">{errors.username}</p>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium leading-6 text-indigo-600"
-                  >
-                    Email Address
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="email"
-                      value={user.email}
-                      onChange={handleInputChange}
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      required
-                      className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                    {isTouched && errors.email && isSubmitted && (
-                      <p className="text-red-500">{errors.email}</p>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="password"
-                      className="block text-sm font-medium leading-6 text-indigo-600"
-                    >
-                      Password
-                    </label>
-                    <button
-                      type="button"
-                      onClick={toggleShowPassword}
-                      className="text-indigo-600 hover:text-indigo-500 text-sm"
-                    >
-                      {showPassword ? "Hide" : "Show"}
-                    </button>
-                  </div>
-                  <div className="mt-2">
-                    <input
-                      id="password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      value={user.password}
-                      onChange={handleInputChange}
-                      autoComplete="new-password"
-                      required
-                      className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                    {isTouched && errors.password && isSubmitted && (
-                      <p className="text-red-500">{errors.password}</p>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="confirmPassword"
-                      className="block text-sm font-medium leading-6 text-indigo-600"
-                    >
-                      Confirm Password
-                    </label>
-                  </div>
-                  <div className="mt-2">
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type={showPassword ? "text" : "password"}
-                      value={user.confirmPassword}
-                      onChange={handleInputChange}
-                      autoComplete="new-password"
-                      required
-                      className="p-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    />
-                    {isTouched && errors.confirmPassword && isSubmitted && (
-                      <p className="text-red-500">{errors.confirmPassword}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
                   <button
-                    onClick={handleSubmit}
-                    type="submit"
-                    className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
-                      buttonDisabled
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-indigo-500"
-                    } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
-                    disabled={buttonDisabled}
+                    type="button"
+                    onClick={toggleShowPassword}
+                    className="text-indigo-600 hover:text-indigo-500 text-sm"
                   >
-                    {loading ? "Processing" : "Register"}
+                    {showPassword ? (
+                      <EyeOffIcon className="h-5 w-5" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5" />
+                    )}
                   </button>
+                </div>
+                <div className="mt-2 relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={user.password}
+                    onChange={handleInputChange}
+                    autoComplete="new-password"
+                    required
+                    className="p-2 block w-full bg-lime-100 rounded-md border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  {isTouched && errors.password && isSubmitted && (
+                    <p className="text-red-500">{errors.password}</p>
+                  )}
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-medium leading-6 text-indigo-600"
+                  >
+                    Confirm Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={toggleShowPassword}
+                    className="text-indigo-600 hover:text-indigo-500 text-sm"
+                  >
+                    {showPassword ? (
+                      <EyeOffIcon className="h-5 w-5" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+                <div className="mt-2">
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showPassword ? "text" : "password"}
+                    value={user.confirmPassword}
+                    onChange={handleInputChange}
+                    autoComplete="new-password"
+                    required
+                    className="p-2 block w-full bg-lime-100 rounded-md border border-gray-300 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                  {isTouched && errors.confirmPassword && isSubmitted && (
+                    <p className="text-red-500">{errors.confirmPassword}</p>
+                  )}
                 </div>
               </div>
 
-              <p className="mt-6 text-center text-sm text-gray-500">
-                Already a member?{" "}
-                <Link
-                  href="/login"
-                  className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              <div>
+                <button
+                  onClick={handleSubmit}
+                  type="submit"
+                  className={`flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                    buttonDisabled
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-indigo-500"
+                  } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+                  disabled={buttonDisabled}
                 >
-                  Login
-                </Link>
-              </p>
+                  {loading ? "Processing" : "Register"}
+                </button>
+              </div>
             </div>
+
+            <p className="mt-6 text-center text-sm text-gray-500">
+              Already a member?{" "}
+              <Link
+                href="/login"
+                className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              >
+                Login
+              </Link>
+            </p>
           </div>
         </div>
       </div>
