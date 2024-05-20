@@ -5,6 +5,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import LogoutDialog from "./logoutButton";
 
 interface ICompany {
   companyName: string;
@@ -29,6 +30,11 @@ export default function CompanyProfile() {
   const router = useRouter();
   const [companyData, setCompanyData] = useState<ICompany | null>(null);
   const [data, setData] = useState("nothing");
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+
+  const closeLogoutDialog = () => {
+    setIsLogoutDialogOpen(false);
+  };
 
   const logout = async () => {
     try {
@@ -104,12 +110,15 @@ export default function CompanyProfile() {
               </button>
             </div>
             <div className="flex items-center justify-center mt-3">
-              <button
-                className="bg-sky-200 text-black px-4 py-2 rounded-full"
-                onClick={logout}
-              >
-                Logout
-              </button>
+              <LogoutDialog
+                isOpen={isLogoutDialogOpen}
+                title="Are you sure you want to logout?"
+                onConfirm={logout}
+                onCancel={closeLogoutDialog}
+                confirmButtonText="Yes"
+                cancelButtonText="No"
+                onLogout={logout}
+              />
             </div>
           </div>
         </div>

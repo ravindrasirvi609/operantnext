@@ -53,10 +53,6 @@ export default function CollegeProfile() {
     }
   };
 
-  const openLogoutDialog = () => {
-    setIsLogoutDialogOpen(true);
-  };
-
   const closeLogoutDialog = () => {
     setIsLogoutDialogOpen(false);
   };
