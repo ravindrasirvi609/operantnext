@@ -3,8 +3,8 @@ import React from "react";
 
 const CourseDetails = () => {
   return (
-    <div className="flex min-h-screen bg-blue-200 dark:bg-zinc-900">
-      <div className="w-1/4 bg-white dark:bg-zinc-800 p-4">
+    <div className="flex flex-col md:flex-row min-h-screen bg-blue-200 dark:bg-zinc-900">
+      <div className="w-full md:w-1/4 bg-white dark:bg-zinc-800 p-4">
         <div className="flex items-center mb-6">
           <div className="w-12 h-12 bg-zinc-300 rounded-full"></div>
           <div className="ml-4">
@@ -90,8 +90,8 @@ const CourseDetails = () => {
         </div>
       </div>
 
-      <div className="w-3/4 p-6">
-        <header className="flex justify-between items-center mb-6">
+      <div className="w-full md:w-3/4 p-6">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <div>
             <p className="text-zinc-700 dark:text-zinc-300">
               Hello, <span className="font-bold">Kary Williams</span>
@@ -100,14 +100,23 @@ const CourseDetails = () => {
               All courses &gt; User experience design fundamentals
             </p>
           </div>
-          <nav className="flex space-x-4">
-            <a href="#" className="text-zinc-700 dark:text-zinc-300">
+          <nav className="flex flex-wrap sm:space-x-4 mt-4 sm:mt-0">
+            <a
+              href="#"
+              className="text-zinc-700 dark:text-zinc-300 mr-4 sm:mr-0"
+            >
               For business
             </a>
-            <a href="#" className="text-zinc-700 dark:text-zinc-300">
+            <a
+              href="#"
+              className="text-zinc-700 dark:text-zinc-300 mr-4 sm:mr-0"
+            >
               Teach on Design Academy
             </a>
-            <a href="#" className="text-zinc-700 dark:text-zinc-300">
+            <a
+              href="#"
+              className="text-zinc-700 dark:text-zinc-300 mr-4 sm:mr-0"
+            >
               Subscription
             </a>
             <a href="#" className="text-zinc-700 dark:text-zinc-300">
@@ -115,8 +124,8 @@ const CourseDetails = () => {
             </a>
           </nav>
         </header>
-        <main className="flex">
-          <div className="w-2/3 pr-6">
+        <main className="flex flex-col lg:flex-row">
+          <div className="lg:w-2/3 lg:pr-6">
             <h1 className="text-3xl font-bold mb-4 dark:text-white">
               User experience design fundamentals
             </h1>
@@ -198,7 +207,7 @@ const CourseDetails = () => {
             </div>
           </div>
 
-          <div className="w-1/3 bg-white dark:bg-zinc-800 p-4 rounded-lg shadow">
+          <div className="lg:w-1/3 bg-white dark:bg-zinc-800 p-4 rounded-lg shadow mt-6 lg:mt-0">
             <Image
               src="https://images.unsplash.com/photo-1715985884284-3885ea1731b8?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Course Image"
