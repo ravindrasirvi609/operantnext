@@ -1,126 +1,51 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 
+const menuItems = [
+  { src: "/dashboard.svg", alt: "Dashboard", text: "Dashboard" },
+  { src: "/cash.svg", alt: "Payment Info", text: "Payment Info" },
+  { src: "/pencil.svg", alt: "Registration", text: "Registration" },
+  { src: "/notebook.svg", alt: "Courses", text: "Courses" },
+  { src: "/documentx.svg", alt: "Drop Semester", text: "Drop Semester" },
+  { src: "/equalcircle.svg", alt: "Result", text: "Result" },
+  { src: "/annotation.svg", alt: "Notice", text: "Notice" },
+  { src: "/contactsalt.svg", alt: "Schedule", text: "Schedule" },
+];
+
 const FrameComponent: NextPage = () => {
   return (
-    <div className="self-stretch flex flex-col items-start justify-start gap-[31.3px] text-center text-2xs-4 text-gray-100 font-poppins">
-      <div className="self-stretch flex flex-row items-start justify-start py-0 pr-[9px] pl-2">
-        <div className="flex-1 rounded-[20.84px] [background:linear-gradient(180deg,_#925fe2,_#7042c0)] flex flex-row items-start justify-start py-[13.9px] px-3.5 gap-[8.7px]">
-          <div className="h-[83.4px] w-[83.4px]  relative rounded-[20.84px] [background:linear-gradient(180deg,_#925fe2,_#7042c0)] hidden" />
+    <div className="flex flex-col items-start justify-start gap-8 text-center text-xs text-gray-100 font-poppins">
+      <div className="w-full flex flex-row items-center justify-start py-2 px-2">
+        <div className="flex-1 rounded-lg bg-gradient-to-b from-purple-500 to-purple-700 flex items-center justify-center py-3 px-4">
           <Image
-            className="h-[55.6px] w-[53.8px] cursor-pointer relative z-[1]"
+            className="h-14 w-14 cursor-pointer"
             loading="lazy"
-            alt=""
+            alt="Logo"
             src="/opflogo.png"
-            width={53.8}
-            height={55.6}
+            width={54}
+            height={56}
           />
         </div>
       </div>
-      <div className="flex flex-row items-start cursor-pointer justify-start gap-[7.9px] text-white">
-        <Image
-          className="h-[15.6px] w-[15.6px]  invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/dashboard.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative font-semibold text-black inline-block min-w-[60px]">
-          Dashboard
+
+      {menuItems.map((item, index) => (
+        <div
+          key={index}
+          className="w-full flex flex-row items-center cursor-pointer justify-start gap-2 text-black hover:text-purple-500 transition-colors"
+        >
+          <Image
+            className="h-4 w-4 invert"
+            loading="lazy"
+            alt={item.alt}
+            src={item.src}
+            width={16}
+            height={16}
+          />
+          <div className="relative font-bold  text-lg inline-block">
+            {item.text}
+          </div>
         </div>
-      </div>
-      <div className="flex flex-row items-start cursor-pointer justify-start gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/cash.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative inline-block text-black min-w-[69px]">
-          Payment Info
-        </div>
-      </div>
-      <div className="flex flex-row items-start cursor-pointer justify-start gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/pencil.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative inline-block text-black min-w-[63px]">
-          Registration
-        </div>
-      </div>
-      <div className="flex flex-row items-start cursor-pointer justify-start gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/notebook.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative inline-block text-black min-w-[43px]">
-          Courses
-        </div>
-      </div>
-      <div className="self-stretch flex flex-row items-start cursor-pointer justify-start gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/documentx.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="flex-1 relative text-black inline-block min-w-[78px]">
-          Drop Semester
-        </div>
-      </div>
-      <div className="flex flex-row items-end justify-start cursor-pointer gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/equalcircle.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative inline-block text-black min-w-[32px]">
-          Result
-        </div>
-      </div>
-      <div className="flex flex-row items-start justify-start cursor-pointer gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/annotation.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative inline-block text-black min-w-[34px]">
-          Notice
-        </div>
-      </div>
-      <div className="flex flex-row items-end justify-start cursor-pointer gap-[7.9px]">
-        <Image
-          className="h-[15.6px] w-[15.6px] invert relative overflow-hidden shrink-0"
-          loading="lazy"
-          alt=""
-          src="/contactsalt.svg"
-          width={15.6}
-          height={15.6}
-        />
-        <div className="relative inline-block text-black min-w-[49px]">
-          Schedule
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
