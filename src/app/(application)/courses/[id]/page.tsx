@@ -1,7 +1,11 @@
+"use client";
 import Image from "next/image";
 import React from "react";
+import Rating from "react-rating-stars-component";
 
 const CourseDetails = () => {
+  const rating = 4.6;
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-blue-200 dark:bg-zinc-900">
       <div className="w-full md:w-1/4 bg-white dark:bg-zinc-800 p-4">
@@ -173,24 +177,6 @@ const CourseDetails = () => {
             </p>
           </div>
           <nav className="flex flex-wrap sm:space-x-4 mt-4 sm:mt-0">
-            <a
-              href="#"
-              className="text-zinc-700 dark:text-zinc-300 mr-4 sm:mr-0"
-            >
-              For business
-            </a>
-            <a
-              href="#"
-              className="text-zinc-700 dark:text-zinc-300 mr-4 sm:mr-0"
-            >
-              Teach on Design Academy
-            </a>
-            <a
-              href="#"
-              className="text-zinc-700 dark:text-zinc-300 mr-4 sm:mr-0"
-            >
-              Subscription
-            </a>
             <a href="#" className="text-zinc-700 dark:text-zinc-300">
               <span className="material-icons">
                 <svg
@@ -221,18 +207,22 @@ const CourseDetails = () => {
               designers of the Universe and get a portfolio of your dreams.
             </p>
             <p className="text-zinc-700 dark:text-zinc-300 mb-4">
-              Author:{" "}
+              Teacher name:{" "}
               <a href="#" className="text-blue-500">
                 Brendon Bolton-Korgins
               </a>
             </p>
             <div className="flex items-center mb-4">
-              <span className="text-zinc-700 dark:text-zinc-300">4.6</span>
-              <span className="material-icons text-yellow-500 ml-2">star</span>
-              <span className="material-icons text-yellow-500">star</span>
-              <span className="material-icons text-yellow-500">star</span>
-              <span className="material-icons text-yellow-500">star</span>
-              <span className="material-icons text-zinc-400">star_half</span>
+              <span className="text-zinc-700 dark:text-zinc-300">{rating}</span>
+              <Rating
+                count={5}
+                value={rating}
+                size={24}
+                activeColor="#ffd700"
+                edit={false}
+                isHalf={true}
+                className="ml-2"
+              />
               <a href="#" className="text-blue-500 ml-2">
                 See reviews
               </a>
