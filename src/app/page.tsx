@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import HeaderNav from "./header";
 import FrameComponent from "@/components/frame-componet";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export interface UserData {
   username: string;
@@ -68,17 +69,17 @@ export default function Home() {
           {/* Main Content */}
           <section className="w-full lg:w-3/4 p-6">
             {/* Welcome Section */}
-            <div className="bg-gradient-to-r from-purple-500 to-purple-300 text-white p-8 rounded-lg mb-6 shadow-md">
+            <div className="bg-gradient-to-r from-purple-500 to-purple-300 text-white p-6 md:p-8 rounded-lg mb-6 shadow-md">
               <p>{formattedDate}</p>
-              <h1 className="text-2xl font-bold mt-2">
+              <h1 className="text-xl md:text-2xl font-bold mt-2">
                 Welcome back, {userData?.username || "John"}!
               </h1>
               <p className="text-gray-200">
                 Always stay updated in your student portal
               </p>
-              <div className="relative w-full h-64 mt-6">
+              <div className="relative w-full h-40 md:h-64 mt-6">
                 <Image
-                  className="absolute top-0 left-0"
+                  className="absolute top-0 left-0 w-1/4 h-1/4 md:w-36 md:h-36"
                   loading="lazy"
                   alt="Backpack"
                   src="/backpack@2x.png"
@@ -86,15 +87,36 @@ export default function Home() {
                   height={144}
                 />
                 <Image
-                  className="absolute top-0 left-0"
+                  className="absolute top-0 left-1/4 w-1/2 h-1/2 md:w-72 md:h-72"
                   loading="lazy"
                   alt="Scholar Cap"
                   src="/scholarcap-scroll@2x.png"
                   width={288}
                   height={288}
                 />
+                <div className="absolute top-2 right-2 flex flex-initial">
+                  <button className="bg-blue-500 text-white px-2 py-1 md:px-4 md:py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-600">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="w-4 h-4 md:w-5 md:h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5.121 18.364A9 9 0 1118.364 5.121M12 12v.01M12 16h.01M12 8h.01M16 12h.01M8 12h.01M12 4h.01M12 20h.01"
+                      />
+                    </svg>
+                    <span className="text-xs md:text-base">
+                      Complete Your Profile
+                    </span>
+                  </button>
+                </div>
                 <Image
-                  className="absolute top-0 left-0 rounded-md"
+                  className="absolute top-0 left-3/4 w-3/8 h-3/8 md:w-44 md:h-44 rounded-md"
                   loading="lazy"
                   alt="Student"
                   src="/5-college-student@2x.png"
