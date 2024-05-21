@@ -22,7 +22,23 @@ const config = {
       },
     },
     extend: {
+      filter: {
+        invert: "invert(1)",
+      },
       colors: {
+        thistle: "#e5d5fd",
+        white: "#fff",
+        mediumslateblue: {
+          "100": "#925fe2",
+          "200": "rgba(146, 95, 226, 0.3)",
+        },
+        gray: {
+          "100": "rgba(255, 255, 255, 0.5)",
+          "200": "rgba(255, 255, 255, 0.75)",
+          "300": "rgba(0, 0, 0, 0.5)",
+        },
+        black: "#000",
+        mediumpurple: "rgba(156, 111, 228, 0.3)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,6 +77,9 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "base-6": "15.6px",
+        "base-3": "16.3px",
+        "xl-8": "20.8px",
       },
       keyframes: {
         "accordion-down": {
@@ -78,11 +97,29 @@ const config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        poppins: "Poppins",
+      },
+      fontSize: {
+        "2xs-4": "10.4px",
+        smi: "13px",
+        "xs-7": "11.7px",
+        inherit: "inherit",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      screens: {
+        mq725: {
+          raw: "screen and (max-width: 725px)",
+        },
+        mq650: {
+          raw: "screen and (max-width: 650px)",
+        },
+        mq450: {
+          raw: "screen and (max-width: 450px)",
+        },
       },
     },
   },

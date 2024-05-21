@@ -64,7 +64,7 @@ const ArticleList: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article) => (
-            <Link key={article._id} href={`/articles/${article._id}`}>
+            <Link key={article._id} href={`/article/${article._id}`}>
               <div
                 key={article._id}
                 className="border rounded-lg bg-blue-300 overflow-hidden shadow-md transition duration-300 transform hover:scale-105"
