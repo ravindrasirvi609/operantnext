@@ -67,40 +67,6 @@ export default function Home() {
 
           {/* Main Content */}
           <section className="w-full lg:w-3/4 p-6">
-            {/* Header */}
-            <header className="flex flex-col md:flex-row items-center justify-between mb-6">
-              <input
-                className="w-full md:w-64 border bg-lime-100 rounded-lg p-2 mb-4 md:mb-0"
-                placeholder="Search"
-                type="text"
-              />
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Image
-                    className="rounded-full"
-                    loading="lazy"
-                    alt="User"
-                    src="/frame-19@2x.png"
-                    width={32}
-                    height={32}
-                  />
-                  <div>
-                    <p className="text-black font-semibold">
-                      {userData?.username || "John Doe"}
-                    </p>
-                    <p className="text-gray-400">3rd year</p>
-                  </div>
-                </div>
-                <Image
-                  loading="lazy"
-                  alt="Notifications"
-                  src="/bellringing.svg"
-                  width={16}
-                  height={16}
-                />
-              </div>
-            </header>
-
             {/* Welcome Section */}
             <div className="bg-gradient-to-r from-purple-500 to-purple-300 text-white p-8 rounded-lg mb-6 shadow-md">
               <p>{formattedDate}</p>
@@ -220,7 +186,7 @@ export default function Home() {
                     <Image
                       loading="lazy"
                       alt="Icon"
-                      src="/icon-container1@2x.png"
+                      src="/group-16.svg"
                       width={64}
                       height={64}
                     />
@@ -228,6 +194,82 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Notice Section */}
+            <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+              <h2 className="text-xl font-semibold mb-4">Notice</h2>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
+                  <div className="flex-1">
+                    <p className="text-black font-semibold">
+                      New notice from the management
+                    </p>
+                    <p className="text-gray-400">2 days ago</p>
+                  </div>
+                  <Image
+                    loading="lazy"
+                    alt="Icon"
+                    src="/bellringing.svg"
+                    width={64}
+                    height={64}
+                  />
+                </div>
+                <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
+                  <div className="flex-1">
+                    <p className="text-black font-semibold">
+                      New notice from the management
+                    </p>
+                    <p className="text-gray-400">2 days ago</p>
+                  </div>
+                  <Image
+                    loading="lazy"
+                    alt="Icon"
+                    src="/bellringing.svg"
+                    width={64}
+                    height={64}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Schedule Section */}
+            <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+              <h2 className="text-xl font-semibold mb-4">Schedule</h2>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
+                  <div className="flex-1">
+                    <p className="text-black font-semibold">Class Schedule</p>
+                    <p className="text-gray-400">2 days ago</p>
+                  </div>
+                  <Image
+                    loading="lazy"
+                    alt="Icon"
+                    src="/bellringing.svg"
+                    width={64}
+                    height={64}
+                  />
+                </div>
+                <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
+                  <div className="flex-1">
+                    <p className="text-black font-semibold">Exam Schedule</p>
+                    <p className="text-gray-400">2 days ago</p>
+                  </div>
+                  <Image
+                    loading="lazy"
+                    alt="Icon"
+                    src="/bellringing.svg"
+                    width={64}
+                    height={64}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <footer className="text-center text-gray-400 text-xs mt-8">
+              <p>&copy; 2021 All rights reserved</p>
+              <p>Developed by Ravindra Choudhary</p>
+            </footer>
           </section>
         </main>
       </div>
