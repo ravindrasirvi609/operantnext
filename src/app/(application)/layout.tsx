@@ -9,7 +9,7 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
-      <div>
+      <div className="fixed w-full z-10 top-0">
         <HeaderNav />
       </div>
       <main
