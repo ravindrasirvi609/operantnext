@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Rating from "react-rating-stars-component";
@@ -17,87 +18,24 @@ interface CourseData {
   additionalInfo: string[];
 }
 
-const CourseDetails: React.FC = () => {
+const CourseDetails: React.FC<{ params: { id: string } }> = ({ params }) => {
+  const courseId = params.id;
   const [courseData, setCourseData] = useState<CourseData | null>(null);
   const [showFullContent, setShowFullContent] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data: CourseData = {
-        title: "User experience design fundamentals",
-        description:
-          "Become an advanced UX Designer with the help of the greatest designers of the Universe and get a portfolio of your dreams.",
-        teacher: "Brendon Bolton-Korgins",
-        rating: 4.6,
-        price: 29.99,
-        imageUrl:
-          "https://images.unsplash.com/photo-1715985884284-3885ea1731b8?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        learnings: [
-          "How to use Figma for Essential UX Design & UI Design.",
-          "Build a UX project from beginning to end.",
-          "The dos & donts around choosing fonts for web & mobile apps.",
-          "How to work with UX personas.",
-          "How to make fully interactive prototypes.",
-          "Free UI kits & plugins for Figma which will speed up our workflow dramatically!",
-          "You will be able to add UX designer to your CV.",
-          "How to begin working as a UX Designer using Figma.",
-        ],
-        courseContent: [
-          {
-            chapter: "1. Getting started",
-            lectures: [
-              {
-                title: "1.1 Welcome to our exciting User experience journey!",
-                type: "Free",
-              },
-              {
-                title: "1.2 Getting started with Figma easy.",
-                type: "Preview",
-              },
-              { title: "1.3 Essential tools", type: "02:18" },
-              {
-                title: "1.4 What is the difference between UI and UX in Figma?",
-                type: "04:11",
-              },
-            ],
-          },
-          {
-            chapter: "2. Figma Basics",
-            lectures: [
-              { title: "2.1 Figma Interface Overview", type: "03:45" },
-              { title: "2.2 Working with Shapes", type: "05:20" },
-              { title: "2.3 Understanding Layers", type: "04:10" },
-              { title: "2.4 Utilizing Text Tools", type: "06:00" },
-            ],
-          },
-          {
-            chapter: "3. Advanced Figma",
-            lectures: [
-              { title: "3.1 Prototyping in Figma", type: "07:30" },
-              { title: "3.2 Using Plugins", type: "04:50" },
-              { title: "3.3 Creating Responsive Designs", type: "08:15" },
-              { title: "3.4 Collaborative Design", type: "09:00" },
-            ],
-          },
-        ],
-        additionalInfo: [
-          "English",
-          "Spanish and English subtitles",
-          "30.5 total video lectures",
-          "Certificate after completion",
-          "Access on TV and mobile",
-          "Full lifetime access",
-          "Homework check",
-          "Offline access",
-          "30-day money-back guarantee",
-        ],
-      };
+      const response = await axios.post("/api/course/course-details", {
+        courseId,
+      });
+      const data = await response.data;
+      console.log("data: ", data);
 
       setCourseData(data);
     };
 
     fetchData();
-  }, []);
+  }, [courseId]);
 
   if (!courseData) {
     return <div>Loading...</div>;
@@ -207,21 +145,12 @@ const CourseDetails: React.FC = () => {
             <button className="bg-blue-500 text-white p-2 rounded-lg w-full mb-4">
               Buy this course
             </button>
-            <button className="bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 p-2 rounded-lg w-full mb-4">
-              Add to cart
-            </button>
+
             <ul className="list-disc list-inside text-zinc-700 dark:text-zinc-300 mb-4">
               {courseData.additionalInfo.map((info, index) => (
                 <li key={index}>{info}</li>
               ))}
             </ul>
-            <div className="text-zinc-700 dark:text-zinc-300 mb-4">
-              <p>Educating 5+ people?</p>
-              <p>Get access to 1000+ design courses anytime, anywhere</p>
-            </div>
-            <a href="#" className="text-blue-500">
-              Try business account
-            </a>
           </div>
         </main>
       </div>
