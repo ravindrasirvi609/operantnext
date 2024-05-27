@@ -14,16 +14,56 @@ interface Chapter {
   lectures: Lecture[];
 }
 
+interface LearningOutcome {
+  skill: string;
+  description: string;
+}
+
+interface Competency {
+  skill: string;
+  description: string;
+}
+
+interface Review {
+  name: string;
+  rating: number;
+  review: string;
+}
+
 interface CourseData {
   title: string;
   description: string;
   teacher: string;
+  category: string;
+  duration: string;
+  inLanguage: string;
+  isFree: boolean;
+  courseLevel: string;
+  typicalLearningTime: string;
+  hasDeliveryMode: boolean;
+  requiresSkill: string;
+  level: string;
+  language: string;
+  tags: string[];
+  students: string[];
+  isCourseAlreadyAttempted: boolean;
+  isCourseCompleted: boolean;
   rating: number;
   price: number;
   imageUrl: File | null;
   learnings: string[];
   courseContent: Chapter[];
   additionalInfo: string[];
+  reviewsCount: number;
+  deliveryMode: string;
+  contentMode: string[];
+  learningOutcomes: LearningOutcome[];
+  assessmentMethod: string;
+  financialAssistance: string;
+  competencyRequired: Competency[];
+  requirements: string;
+  educationalAlignment: string[];
+  reviews: Review[];
 }
 
 const CourseForm: React.FC = () => {
@@ -33,6 +73,20 @@ const CourseForm: React.FC = () => {
         title: "",
         description: "",
         teacher: "",
+        category: "",
+        duration: "",
+        inLanguage: "",
+        isFree: false,
+        courseLevel: "",
+        typicalLearningTime: "",
+        hasDeliveryMode: false,
+        requiresSkill: "",
+        level: "",
+        language: "",
+        tags: [],
+        students: [],
+        isCourseAlreadyAttempted: false,
+        isCourseCompleted: false,
         rating: 0,
         price: 0,
         imageUrl: null,
@@ -44,6 +98,16 @@ const CourseForm: React.FC = () => {
           },
         ],
         additionalInfo: [],
+        reviewsCount: 0,
+        deliveryMode: "",
+        contentMode: [],
+        learningOutcomes: [],
+        assessmentMethod: "",
+        financialAssistance: "",
+        competencyRequired: [],
+        requirements: "",
+        educationalAlignment: [],
+        reviews: [],
       },
     });
 
@@ -51,6 +115,7 @@ const CourseForm: React.FC = () => {
     control,
     name: "learnings",
   });
+
   const { fields: chapterFields, append: appendChapter } = useFieldArray({
     control,
     name: "courseContent",
@@ -61,6 +126,27 @@ const CourseForm: React.FC = () => {
       control,
       name: "additionalInfo",
     });
+
+  const { fields: tagFields, append: appendTag } = useFieldArray({
+    control,
+    name: "tags",
+  });
+
+  const { fields: learningOutcomeFields, append: appendLearningOutcome } =
+    useFieldArray({
+      control,
+      name: "learningOutcomes",
+    });
+
+  const { fields: competencyFields, append: appendCompetency } = useFieldArray({
+    control,
+    name: "competencyRequired",
+  });
+
+  const { fields: reviewFields, append: appendReview } = useFieldArray({
+    control,
+    name: "reviews",
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -79,12 +165,45 @@ const CourseForm: React.FC = () => {
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("teacher", data.teacher);
+    formData.append("category", data.category);
+    formData.append("duration", data.duration);
+    formData.append("inLanguage", data.inLanguage);
+    formData.append("isFree", data.isFree.toString());
+    formData.append("courseLevel", data.courseLevel);
+    formData.append("typicalLearningTime", data.typicalLearningTime);
+    formData.append("hasDeliveryMode", data.hasDeliveryMode.toString());
+    formData.append("requiresSkill", data.requiresSkill);
+    formData.append("level", data.level);
+    formData.append("language", data.language);
+    formData.append("tags", JSON.stringify(data.tags));
+    formData.append("students", JSON.stringify(data.students));
+    formData.append(
+      "isCourseAlreadyAttempted",
+      data.isCourseAlreadyAttempted.toString()
+    );
+    formData.append("isCourseCompleted", data.isCourseCompleted.toString());
     formData.append("rating", data.rating.toString());
     formData.append("price", data.price.toString());
     if (data.imageUrl) formData.append("imageUrl", data.imageUrl);
     formData.append("learnings", JSON.stringify(data.learnings));
     formData.append("courseContent", JSON.stringify(data.courseContent));
     formData.append("additionalInfo", JSON.stringify(data.additionalInfo));
+    formData.append("reviewsCount", data.reviewsCount.toString());
+    formData.append("deliveryMode", data.deliveryMode);
+    formData.append("contentMode", JSON.stringify(data.contentMode));
+    formData.append("learningOutcomes", JSON.stringify(data.learningOutcomes));
+    formData.append("assessmentMethod", data.assessmentMethod);
+    formData.append("financialAssistance", data.financialAssistance);
+    formData.append(
+      "competencyRequired",
+      JSON.stringify(data.competencyRequired)
+    );
+    formData.append("requirements", data.requirements);
+    formData.append(
+      "educationalAlignment",
+      JSON.stringify(data.educationalAlignment)
+    );
+    formData.append("reviews", JSON.stringify(data.reviews));
 
     try {
       const response = await axios.post("/api/course/create-course", formData, {
@@ -133,6 +252,127 @@ const CourseForm: React.FC = () => {
           {...register("teacher")}
           className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
         />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Category
+        </label>
+        <input
+          type="text"
+          {...register("category")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Duration
+        </label>
+        <input
+          type="text"
+          {...register("duration")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          In Language
+        </label>
+        <input
+          type="text"
+          {...register("inLanguage")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Is Free
+        </label>
+        <input
+          type="checkbox"
+          {...register("isFree")}
+          className="m-1 py-2 bg-indigo-100 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Course Level
+        </label>
+        <input
+          type="text"
+          {...register("courseLevel")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Typical Learning Time
+        </label>
+        <input
+          type="text"
+          {...register("typicalLearningTime")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Has Delivery Mode
+        </label>
+        <input
+          type="checkbox"
+          {...register("hasDeliveryMode")}
+          className="m-1 py-2 bg-indigo-100 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Requires Skill
+        </label>
+        <input
+          type="text"
+          {...register("requiresSkill")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Level
+        </label>
+        <input
+          type="text"
+          {...register("level")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Language
+        </label>
+        <input
+          type="text"
+          {...register("language")}
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Tags
+        </label>
+        {tagFields.map((item, index) => (
+          <div key={item.id} className="flex items-center mb-2">
+            <input
+              type="text"
+              {...register(`tags.${index}`)}
+              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+            />
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => appendTag("")}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+        >
+          Add Tag
+        </button>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
