@@ -94,7 +94,7 @@ const CourseForm: React.FC = () => {
         courseContent: [
           {
             chapter: "",
-            lectures: [{ title: "", type: "", id: "" }],
+            lectures: [{ id: "", title: "", type: "" }],
           },
         ],
         additionalInfo: [],
@@ -111,41 +111,25 @@ const CourseForm: React.FC = () => {
       },
     });
 
-  const { fields: learningFields, append: appendLearning } = useFieldArray({
-    control,
-    name: "learnings",
-  });
-
   const { fields: chapterFields, append: appendChapter } = useFieldArray({
     control,
-    name: "courseContent",
-  });
-
-  const { fields: additionalInfoFields, append: appendAdditionalInfo } =
-    useFieldArray({
-      control,
-      name: "additionalInfo",
-    });
-
-  const { fields: tagFields, append: appendTag } = useFieldArray({
-    control,
-    name: "tags",
+    name: "courseContent" as const,
   });
 
   const { fields: learningOutcomeFields, append: appendLearningOutcome } =
     useFieldArray({
       control,
-      name: "learningOutcomes",
+      name: "learningOutcomes" as const,
     });
 
   const { fields: competencyFields, append: appendCompetency } = useFieldArray({
     control,
-    name: "competencyRequired",
+    name: "competencyRequired" as const,
   });
 
   const { fields: reviewFields, append: appendReview } = useFieldArray({
     control,
-    name: "reviews",
+    name: "reviews" as const,
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -241,7 +225,7 @@ const CourseForm: React.FC = () => {
         <textarea
           {...register("description")}
           className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
+        ></textarea>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
@@ -285,165 +269,82 @@ const CourseForm: React.FC = () => {
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Is Free
-        </label>
-        <input
-          type="checkbox"
-          {...register("isFree")}
-          className="m-1 py-2 bg-indigo-100 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Course Level
-        </label>
-        <input
-          type="text"
-          {...register("courseLevel")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Typical Learning Time
-        </label>
-        <input
-          type="text"
-          {...register("typicalLearningTime")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Has Delivery Mode
-        </label>
-        <input
-          type="checkbox"
-          {...register("hasDeliveryMode")}
-          className="m-1 py-2 bg-indigo-100 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Requires Skill
-        </label>
-        <input
-          type="text"
-          {...register("requiresSkill")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Level
-        </label>
-        <input
-          type="text"
-          {...register("level")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Language
-        </label>
-        <input
-          type="text"
-          {...register("language")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Tags
-        </label>
-        {tagFields.map((item, index) => (
-          <div key={item.id} className="flex items-center mb-2">
-            <input
-              type="text"
-              {...register(`tags.${index}`)}
-              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => appendTag("")}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
-        >
-          Add Tag
-        </button>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Rating
-        </label>
-        <input
-          type="number"
-          {...register("rating")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Price
-        </label>
-        <input
-          type="number"
-          {...register("price")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
           Image
         </label>
         <input
           type="file"
           onChange={handleFileChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
         />
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Learnings
+          Learning Outcomes
         </label>
-        {learningFields.map((item, index) => (
-          <div key={item.id} className="flex items-center mb-2">
+        {learningOutcomeFields.map((item, index) => (
+          <div key={item.id}>
             <input
               type="text"
-              {...register(`learnings.${index}`)}
+              {...register(`learningOutcomes.${index}.skill`)}
+              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+            />
+            <input
+              type="text"
+              {...register(`learningOutcomes.${index}.description`)}
               className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
             />
           </div>
         ))}
         <button
           type="button"
-          onClick={() => appendLearning("")}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+          onClick={() => appendLearningOutcome({ skill: "", description: "" })}
+          className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
         >
-          Add Learning
+          Add Learning Outcome
         </button>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Course Content
+          Competency Required
+        </label>
+        {competencyFields.map((item, index) => (
+          <div key={item.id}>
+            <input
+              type="text"
+              {...register(`competencyRequired.${index}.skill`)}
+              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+            />
+            <input
+              type="text"
+              {...register(`competencyRequired.${index}.description`)}
+              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+            />
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => appendCompetency({ skill: "", description: "" })}
+          className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
+        >
+          Add Competency
+        </button>
+      </div>
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Chapters
         </label>
         {chapterFields.map((chapter, chapterIndex) => (
-          <div key={chapter.id} className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">{`Chapter ${
-              chapterIndex + 1
-            }`}</label>
+          <div key={chapter.id}>
             <input
               type="text"
               {...register(`courseContent.${chapterIndex}.chapter`)}
               className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
             />
+            <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+              Lectures
+            </label>
             {chapter.lectures.map((lecture, lectureIndex) => (
-              <div key={lecture.id} className="pl-4 mb-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">{`Lecture ${
-                  lectureIndex + 1
-                }`}</label>
+              <div key={lecture.id}>
                 <input
                   type="text"
                   {...register(
@@ -463,7 +364,7 @@ const CourseForm: React.FC = () => {
             <button
               type="button"
               onClick={() => handleAddLecture(chapterIndex)}
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600"
+              className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
             >
               Add Lecture
             </button>
@@ -474,38 +375,17 @@ const CourseForm: React.FC = () => {
           onClick={() =>
             appendChapter({
               chapter: "",
-              lectures: [{ title: "", type: "", id: "" }],
+              lectures: [{ id: "", title: "", type: "" }],
             })
           }
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+          className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
         >
           Add Chapter
         </button>
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Additional Info
-        </label>
-        {additionalInfoFields.map((item, index) => (
-          <div key={item.id} className="flex items-center mb-2">
-            <input
-              type="text"
-              {...register(`additionalInfo.${index}`)}
-              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => appendAdditionalInfo("")}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
-        >
-          Add Info
-        </button>
-      </div>
       <button
         type="submit"
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600"
+        className="w-full py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
       >
         Submit
       </button>

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Student from "./studentModel";
 
+// Schema for course content
 const CourseContentSchema = new mongoose.Schema({
   chapter: { type: String, required: true },
   lectures: [
@@ -11,6 +12,7 @@ const CourseContentSchema = new mongoose.Schema({
   ],
 });
 
+// Schema for reviews
 const ReviewSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -20,6 +22,7 @@ const ReviewSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Schema for learning outcomes
 const LearningOutcomeSchema = new mongoose.Schema(
   {
     skill: { type: String, required: true },
@@ -28,6 +31,7 @@ const LearningOutcomeSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Schema for competencies
 const CompetencySchema = new mongoose.Schema(
   {
     skill: { type: String, required: true },
@@ -36,20 +40,23 @@ const CompetencySchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Main course schema
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  teacher: { type: String, required: true },
+  teacher: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
+    required: true,
+  },
   category: { type: String, required: true },
   duration: { type: String, required: true },
-  inLanguage: { type: String, required: true },
+  language: { type: String, required: true },
   isFree: { type: Boolean, default: false },
-  courseLevel: { type: String, required: true },
+  level: { type: String, required: true },
   typicalLearningTime: { type: String, required: true },
   hasDeliveryMode: { type: Boolean, default: false },
   requiresSkill: { type: String, required: true },
-  level: { type: String, required: true },
-  language: { type: String, required: true },
   tags: { type: [String], default: [] },
   students: [
     {
@@ -57,8 +64,6 @@ const courseSchema = new mongoose.Schema({
       ref: "Student",
     },
   ],
-  isCourseAlreadyAttempted: { type: Boolean, default: false },
-  isCourseCompleted: { type: Boolean, default: false },
   rating: { type: Number, min: 0, max: 5 },
   price: { type: Number, default: 0 },
   imageUrl: { type: String, required: true },
@@ -87,11 +92,7 @@ const courseSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-courseSchema.pre("save", function (next) {
-  this.updatedAt = new Date();
-  next();
-});
-
+// Model creation
 const Courses =
   mongoose.models.Courses || mongoose.model("Courses", courseSchema);
 
