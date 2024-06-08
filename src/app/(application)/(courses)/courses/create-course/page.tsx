@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 interface Lecture {
   id: string;
@@ -14,180 +14,96 @@ interface Chapter {
   lectures: Lecture[];
 }
 
-interface LearningOutcome {
-  skill: string;
-  description: string;
-}
-
-interface Competency {
-  skill: string;
-  description: string;
-}
-
-interface Review {
-  name: string;
-  rating: number;
-  review: string;
-}
-
 interface CourseData {
   title: string;
   description: string;
   teacher: string;
-  category: string;
   duration: string;
-  inLanguage: string;
+  deliveryMode: string;
   isFree: boolean;
-  courseLevel: string;
-  typicalLearningTime: string;
-  hasDeliveryMode: boolean;
-  requiresSkill: string;
-  level: string;
-  language: string;
-  tags: string[];
-  students: string[];
-  isCourseAlreadyAttempted: boolean;
-  isCourseCompleted: boolean;
-  rating: number;
   price: number;
+
   imageUrl: File | null;
-  learnings: string[];
   courseContent: Chapter[];
   additionalInfo: string[];
-  reviewsCount: number;
-  deliveryMode: string;
-  contentMode: string[];
-  learningOutcomes: LearningOutcome[];
-  assessmentMethod: string;
-  financialAssistance: string;
-  competencyRequired: Competency[];
-  requirements: string;
-  educationalAlignment: string[];
-  reviews: Review[];
 }
 
 const CourseForm: React.FC = () => {
-  const { register, handleSubmit, control, reset, setValue } =
-    useForm<CourseData>({
-      defaultValues: {
-        title: "",
-        description: "",
-        teacher: "",
-        category: "",
-        duration: "",
-        inLanguage: "",
-        isFree: false,
-        courseLevel: "",
-        typicalLearningTime: "",
-        hasDeliveryMode: false,
-        requiresSkill: "",
-        level: "",
-        language: "",
-        tags: [],
-        students: [],
-        isCourseAlreadyAttempted: false,
-        isCourseCompleted: false,
-        rating: 0,
-        price: 0,
-        imageUrl: null,
-        learnings: [],
-        courseContent: [
-          {
-            chapter: "",
-            lectures: [{ id: "", title: "", type: "" }],
-          },
-        ],
-        additionalInfo: [],
-        reviewsCount: 0,
-        deliveryMode: "",
-        contentMode: [],
-        learningOutcomes: [],
-        assessmentMethod: "",
-        financialAssistance: "",
-        competencyRequired: [],
-        requirements: "",
-        educationalAlignment: [],
-        reviews: [],
-      },
-    });
+  const { register, handleSubmit, setValue, reset } = useForm<CourseData>();
 
-  const { fields: chapterFields, append: appendChapter } = useFieldArray({
-    control,
-    name: "courseContent" as const,
-  });
-
-  const { fields: learningOutcomeFields, append: appendLearningOutcome } =
-    useFieldArray({
-      control,
-      name: "learningOutcomes" as const,
-    });
-
-  const { fields: competencyFields, append: appendCompetency } = useFieldArray({
-    control,
-    name: "competencyRequired" as const,
-  });
-
-  const { fields: reviewFields, append: appendReview } = useFieldArray({
-    control,
-    name: "reviews" as const,
-  });
+  const [title, setTitle] = useState("");
+  const [imageUrl, setImageUrl] = useState<File | null>(null);
+  const [courseContent, setCourseContent] = useState<Chapter[]>([
+    { chapter: "", lectures: [{ id: `${Date.now()}`, title: "", type: "" }] },
+  ]);
+  const [additionalInfo, setAdditionalInfo] = useState<string[]>([""]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-    setValue("imageUrl", file);
+    setImageUrl(file);
   };
 
   const handleAddLecture = (chapterIndex: number) => {
     const newLecture = { id: `${Date.now()}`, title: "", type: "" };
-    const updatedChapters = [...chapterFields];
+    const updatedChapters = [...courseContent];
     updatedChapters[chapterIndex].lectures.push(newLecture);
-    setValue("courseContent", updatedChapters);
+    setCourseContent(updatedChapters);
   };
 
-  const onSubmit = async (data: CourseData) => {
+  const handleAddChapter = () => {
+    const newChapter = {
+      chapter: "",
+      lectures: [{ id: `${Date.now()}`, title: "", type: "" }],
+    };
+    setCourseContent([...courseContent, newChapter]);
+  };
+
+  const handleAddAdditionalInfo = () => {
+    setAdditionalInfo([...additionalInfo, ""]);
+  };
+
+  const handleInputChange = (
+    chapterIndex: number,
+    lectureIndex: number,
+    field: keyof Lecture,
+    value: string
+  ) => {
+    const updatedChapters = [...courseContent];
+    updatedChapters[chapterIndex].lectures[lectureIndex][field] = value;
+    setCourseContent(updatedChapters);
+  };
+
+  const handleChapterChange = (chapterIndex: number, value: string) => {
+    const updatedChapters = [...courseContent];
+    updatedChapters[chapterIndex].chapter = value;
+    setCourseContent(updatedChapters);
+  };
+
+  const handleAdditionalInfoChange = (index: number, value: string) => {
+    const updatedAdditionalInfo = [...additionalInfo];
+    updatedAdditionalInfo[index] = value;
+    setAdditionalInfo(updatedAdditionalInfo);
+  };
+
+  const onSubmit = async () => {
+    const data: CourseData = {
+      title,
+      imageUrl,
+      courseContent,
+      additionalInfo,
+      description: "",
+      teacher: "",
+      duration: "",
+      deliveryMode: "",
+      isFree: false,
+      price: 0,
+    };
+
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("description", data.description);
-    formData.append("teacher", data.teacher);
-    formData.append("category", data.category);
-    formData.append("duration", data.duration);
-    formData.append("inLanguage", data.inLanguage);
-    formData.append("isFree", data.isFree.toString());
-    formData.append("courseLevel", data.courseLevel);
-    formData.append("typicalLearningTime", data.typicalLearningTime);
-    formData.append("hasDeliveryMode", data.hasDeliveryMode.toString());
-    formData.append("requiresSkill", data.requiresSkill);
-    formData.append("level", data.level);
-    formData.append("language", data.language);
-    formData.append("tags", JSON.stringify(data.tags));
-    formData.append("students", JSON.stringify(data.students));
-    formData.append(
-      "isCourseAlreadyAttempted",
-      data.isCourseAlreadyAttempted.toString()
-    );
-    formData.append("isCourseCompleted", data.isCourseCompleted.toString());
-    formData.append("rating", data.rating.toString());
-    formData.append("price", data.price.toString());
     if (data.imageUrl) formData.append("imageUrl", data.imageUrl);
-    formData.append("learnings", JSON.stringify(data.learnings));
     formData.append("courseContent", JSON.stringify(data.courseContent));
     formData.append("additionalInfo", JSON.stringify(data.additionalInfo));
-    formData.append("reviewsCount", data.reviewsCount.toString());
-    formData.append("deliveryMode", data.deliveryMode);
-    formData.append("contentMode", JSON.stringify(data.contentMode));
-    formData.append("learningOutcomes", JSON.stringify(data.learningOutcomes));
-    formData.append("assessmentMethod", data.assessmentMethod);
-    formData.append("financialAssistance", data.financialAssistance);
-    formData.append(
-      "competencyRequired",
-      JSON.stringify(data.competencyRequired)
-    );
-    formData.append("requirements", data.requirements);
-    formData.append(
-      "educationalAlignment",
-      JSON.stringify(data.educationalAlignment)
-    );
-    formData.append("reviews", JSON.stringify(data.reviews));
 
     try {
       const response = await axios.post("/api/course/create-course", formData, {
@@ -197,6 +113,15 @@ const CourseForm: React.FC = () => {
       });
       console.log(response.data);
       reset();
+      setTitle("");
+      setImageUrl(null);
+      setCourseContent([
+        {
+          chapter: "",
+          lectures: [{ id: `${Date.now()}`, title: "", type: "" }],
+        },
+      ]);
+      setAdditionalInfo([""]);
     } catch (error) {
       console.error(error);
     }
@@ -214,59 +139,12 @@ const CourseForm: React.FC = () => {
         </label>
         <input
           type="text"
-          {...register("title")}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className="m-1 py-2 block w-full bg-indigo-100 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
         />
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Description
-        </label>
-        <textarea
-          {...register("description")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        ></textarea>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Teacher
-        </label>
-        <input
-          type="text"
-          {...register("teacher")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Category
-        </label>
-        <input
-          type="text"
-          {...register("category")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Duration
-        </label>
-        <input
-          type="text"
-          {...register("duration")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          In Language
-        </label>
-        <input
-          type="text"
-          {...register("inLanguage")}
-          className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-        />
-      </div>
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
           Image
@@ -277,86 +155,52 @@ const CourseForm: React.FC = () => {
           className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
         />
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Learning Outcomes
-        </label>
-        {learningOutcomeFields.map((item, index) => (
-          <div key={item.id}>
-            <input
-              type="text"
-              {...register(`learningOutcomes.${index}.skill`)}
-              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-            />
-            <input
-              type="text"
-              {...register(`learningOutcomes.${index}.description`)}
-              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => appendLearningOutcome({ skill: "", description: "" })}
-          className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
-        >
-          Add Learning Outcome
-        </button>
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-          Competency Required
-        </label>
-        {competencyFields.map((item, index) => (
-          <div key={item.id}>
-            <input
-              type="text"
-              {...register(`competencyRequired.${index}.skill`)}
-              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-            />
-            <input
-              type="text"
-              {...register(`competencyRequired.${index}.description`)}
-              className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => appendCompetency({ skill: "", description: "" })}
-          className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
-        >
-          Add Competency
-        </button>
-      </div>
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
           Chapters
         </label>
-        {chapterFields.map((chapter, chapterIndex) => (
-          <div key={chapter.id}>
+        {courseContent.map((chapter, chapterIndex) => (
+          <div key={chapterIndex} className="mb-4">
             <input
               type="text"
-              {...register(`courseContent.${chapterIndex}.chapter`)}
+              value={chapter.chapter}
+              onChange={(e) =>
+                handleChapterChange(chapterIndex, e.target.value)
+              }
               className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
             />
             <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
               Lectures
             </label>
             {chapter.lectures.map((lecture, lectureIndex) => (
-              <div key={lecture.id}>
+              <div key={lecture.id} className="mb-2">
                 <input
                   type="text"
-                  {...register(
-                    `courseContent.${chapterIndex}.lectures.${lectureIndex}.title`
-                  )}
+                  value={lecture.title}
+                  placeholder="Title"
+                  onChange={(e) =>
+                    handleInputChange(
+                      chapterIndex,
+                      lectureIndex,
+                      "title",
+                      e.target.value
+                    )
+                  }
                   className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
                 />
                 <input
                   type="text"
-                  {...register(
-                    `courseContent.${chapterIndex}.lectures.${lectureIndex}.type`
-                  )}
+                  value={lecture.type}
+                  placeholder="Type"
+                  onChange={(e) =>
+                    handleInputChange(
+                      chapterIndex,
+                      lectureIndex,
+                      "type",
+                      e.target.value
+                    )
+                  }
                   className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
                 />
               </div>
@@ -372,17 +216,35 @@ const CourseForm: React.FC = () => {
         ))}
         <button
           type="button"
-          onClick={() =>
-            appendChapter({
-              chapter: "",
-              lectures: [{ id: "", title: "", type: "" }],
-            })
-          }
+          onClick={handleAddChapter}
           className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
         >
           Add Chapter
         </button>
       </div>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+          Additional Info
+        </label>
+        {additionalInfo.map((info, index) => (
+          <input
+            key={index}
+            type="text"
+            value={info}
+            onChange={(e) => handleAdditionalInfoChange(index, e.target.value)}
+            className="m-1 py-2 bg-indigo-100 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-300"
+          />
+        ))}
+        <button
+          type="button"
+          onClick={handleAddAdditionalInfo}
+          className="m-1 py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
+        >
+          Add Additional Info
+        </button>
+      </div>
+
       <button
         type="submit"
         className="w-full py-2 bg-indigo-600 text-white rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-zinc-800"
