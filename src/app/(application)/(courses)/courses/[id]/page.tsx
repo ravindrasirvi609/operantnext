@@ -21,6 +21,8 @@ interface CourseData {
   totalChapters: number;
   totalLectures: number;
   duration: string;
+  isFree: boolean;
+  isJoined: boolean;
 }
 
 const CourseDetails: React.FC<{ params: { id: string } }> = ({ params }) => {
@@ -145,14 +147,29 @@ const CourseDetails: React.FC<{ params: { id: string } }> = ({ params }) => {
               height={200}
               layout="responsive"
             />
-            <div className="text-3xl font-bold mb-4 dark:text-white">
-              ₹{courseData.price}
+
+            <div className="flex items-center space-x-4">
+              {!courseData.isFree ? (
+                <p className="text-green-500 text-xl font-semibold">
+                  Price: ₹{courseData.price}
+                </p>
+              ) : (
+                <p className="text-green-500 text-xl font-semibold">
+                  Free Course
+                </p>
+              )}
+              {courseData.isJoined ? (
+                <p className="text-blue-500 font-bold py-2 px-6 rounded-full">
+                  Already joined
+                </p>
+              ) : (
+                <Payment
+                  price={courseData.price}
+                  id={courseData._id}
+                  enumType="COURSE"
+                />
+              )}
             </div>
-            <Payment
-              price={courseData.price}
-              id={courseData._id}
-              enumType="COURSE"
-            />
 
             <ul className="list-disc list-inside text-zinc-700 dark:text-zinc-300 mb-4">
               {courseData.additionalInfo.map((info, index) => (

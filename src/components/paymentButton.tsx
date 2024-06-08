@@ -29,7 +29,7 @@ export default function Payment({ price, id, enumType }: PaymentProps) {
         currency: "INR",
         payment_capture: 1,
       };
-      const response = await axios.post("/api/payments/razorpay", payload);
+      const response = await axios.post("/api/payments/rozorpay", payload);
       const data = response.data;
 
       const options = {
