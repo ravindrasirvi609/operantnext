@@ -16,6 +16,9 @@ interface CourseData {
     lectures: { title: string; type: string }[];
   }[];
   additionalInfo: string[];
+  totalChapters: number;
+  totalLectures: number;
+  duration: string;
 }
 
 const CourseDetails: React.FC<{ params: { id: string } }> = ({ params }) => {
@@ -88,7 +91,8 @@ const CourseDetails: React.FC<{ params: { id: string } }> = ({ params }) => {
               Course content
             </h2>
             <p className="text-zinc-700 dark:text-zinc-300 mb-4">
-              10 sections • 45 lectures • 30.5 total length
+              {courseData.totalChapters} chapters • {courseData.totalLectures}{" "}
+              lectures • {courseData.duration} total length
             </p>
             <div className="bg-white dark:bg-zinc-800 p-4 rounded-lg shadow">
               {courseData.courseContent

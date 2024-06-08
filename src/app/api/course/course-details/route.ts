@@ -13,7 +13,26 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Course not found", { status: 404 });
     }
 
-    return new NextResponse(JSON.stringify(course), {
+    // Calculate total chapters
+    const totalChapters = course.courseContent.length;
+
+    // Calculate total lectures
+    const totalLectures = course.courseContent.reduce(
+      (total: any, chapter: { lectures: string | any[] }) =>
+        total + chapter.lectures.length,
+      0
+    );
+
+    // Add totalChapters and totalLectures to the response object
+    const courseData = {
+      ...course.toObject(),
+      totalChapters,
+      totalLectures,
+    };
+
+    console.log(courseData);
+
+    return new NextResponse(JSON.stringify(courseData), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
