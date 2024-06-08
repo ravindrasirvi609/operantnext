@@ -48,6 +48,8 @@ const CourseForm: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     setImageUrl(file);
+    setValue("imageUrl", file);
+    console.log("file", file);
   };
 
   const handleAddLecture = (chapterIndex: number) => {
@@ -106,6 +108,7 @@ const CourseForm: React.FC = () => {
     data.courseContent = courseContent;
     data.additionalInfo = additionalInfo;
     data.learnings = learnings;
+    data.imageUrl = imageUrl;
 
     const formData = new FormData();
     formData.append("title", data.title);
