@@ -3,11 +3,11 @@ import Student from "./studentModel";
 
 // Schema for course content
 const CourseContentSchema = new mongoose.Schema({
-  chapter: { type: String, required: true },
+  chapter: { type: String },
   lectures: [
     {
-      title: { type: String, required: true },
-      type: { type: String, required: true },
+      title: { type: String },
+      type: { type: String },
     },
   ],
 });
@@ -15,9 +15,9 @@ const CourseContentSchema = new mongoose.Schema({
 // Schema for reviews
 const ReviewSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    rating: { type: Number, required: true, min: 0, max: 5 },
-    review: { type: String, required: true },
+    name: { type: String },
+    rating: { type: Number, min: 0, max: 5 },
+    review: { type: String },
   },
   { _id: false }
 );
@@ -25,8 +25,8 @@ const ReviewSchema = new mongoose.Schema(
 // Schema for learning outcomes
 const LearningOutcomeSchema = new mongoose.Schema(
   {
-    skill: { type: String, required: true },
-    description: { type: String, required: true },
+    skill: { type: String },
+    description: { type: String },
   },
   { _id: false }
 );
@@ -34,29 +34,28 @@ const LearningOutcomeSchema = new mongoose.Schema(
 // Schema for competencies
 const CompetencySchema = new mongoose.Schema(
   {
-    skill: { type: String, required: true },
-    description: { type: String, required: true },
+    skill: { type: String },
+    description: { type: String },
   },
   { _id: false }
 );
 
 // Main course schema
 const courseSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
+  title: { type: String },
+  description: { type: String },
   teacher: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Teacher",
-    required: true,
+    type: String,
+    default: "Teacher Name",
   },
-  category: { type: String, required: true },
-  duration: { type: String, required: true },
-  language: { type: String, required: true },
+  category: { type: String },
+  duration: { type: String },
+  language: { type: String },
   isFree: { type: Boolean, default: false },
-  level: { type: String, required: true },
-  typicalLearningTime: { type: String, required: true },
+  level: { type: String },
+  typicalLearningTime: { type: String },
   hasDeliveryMode: { type: Boolean, default: false },
-  requiresSkill: { type: String, required: true },
+  requiresSkill: { type: String },
   tags: { type: [String], default: [] },
   students: [
     {
@@ -66,7 +65,7 @@ const courseSchema = new mongoose.Schema({
   ],
   rating: { type: Number, min: 0, max: 5 },
   price: { type: Number, default: 0 },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String },
   learnings: { type: [String], default: [] },
   courseContent: { type: [CourseContentSchema], default: [] },
   additionalInfo: { type: [String], default: [] },
@@ -74,18 +73,16 @@ const courseSchema = new mongoose.Schema({
   deliveryMode: {
     type: String,
     enum: ["Online", "Onsite", "Blended"],
-    required: true,
   },
   contentMode: {
     type: [String],
     enum: ["text", "video", "interactive"],
-    required: true,
   },
   learningOutcomes: { type: [LearningOutcomeSchema], default: [] },
-  assessmentMethod: { type: String, required: true },
+  assessmentMethod: { type: String },
   financialAssistance: { type: String, default: "" },
   competencyRequired: { type: [CompetencySchema], default: [] },
-  requirements: { type: String, required: true },
+  requirements: { type: String },
   educationalAlignment: { type: [String], default: [] },
   reviews: { type: [ReviewSchema], default: [] },
   createdAt: { type: Date, default: Date.now },
