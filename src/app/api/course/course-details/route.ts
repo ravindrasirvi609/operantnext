@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig/dbConfig";
 import Courses from "@/models/courseModel";
+import UserForm from "@/models/studentModel";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
 
 connect();
 
 export async function POST(req: NextRequest) {
   try {
+    const userId = await getDataFromToken(req);
+
+    if (!userId) {
+      return new NextResponse("Authentication required", { status: 401 });
+    }
+
     const { courseId } = await req.json();
     const course = await Courses.findById(courseId);
 
@@ -23,14 +31,32 @@ export async function POST(req: NextRequest) {
       0
     );
 
-    // Add totalChapters and totalLectures to the response object
+    const ObjectId = require("mongoose").Types.ObjectId;
+
+    // Ensure attendees is always an array
+    const attendeesArray = course.attendees || [];
+    const attendeeIds = attendeesArray.map((id: string) => new ObjectId(id));
+    console.log("Attendee IDs:", attendeeIds);
+
+    const users = await UserForm.find({ _id: { $in: attendeeIds } });
+
+    const attendees = users.map((user) => ({
+      personalEmail: user.personalEmail,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      _id: user._id,
+      isJoined: attendeesArray.includes(user._id.toString()),
+    }));
+
     const courseData = {
       ...course.toObject(),
       totalChapters,
       totalLectures,
+      attendees,
+      isJoined: attendees.some(
+        (attendee) => attendee._id.toString() === userId
+      ),
     };
-
-    console.log(courseData);
 
     return new NextResponse(JSON.stringify(courseData), {
       status: 200,
