@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
+import Payment from "@/components/paymentButton";
 
 interface Event {
   location: {
@@ -114,14 +115,7 @@ const EventDetailsPage: React.FC = ({ params }: any) => {
                 Already joined
               </p>
             ) : (
-              <a
-                href={`/rozorpay/${event._id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300 ease-in-out"
-              >
-                Join Event
-              </a>
+              <Payment price={event.price} id={event._id} enumType="EVENT" />
             )}
           </div>
         </div>

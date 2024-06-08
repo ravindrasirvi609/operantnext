@@ -57,6 +57,13 @@ const courseSchema = new mongoose.Schema({
   hasDeliveryMode: { type: Boolean, default: false },
   requiresSkill: { type: String },
   tags: { type: [String], default: [] },
+  capacity: { type: Number, default: 100 },
+  attendees: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
   students: [
     {
       type: mongoose.Schema.Types.ObjectId,

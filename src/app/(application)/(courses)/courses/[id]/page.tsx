@@ -1,9 +1,11 @@
 "use client";
+import Payment from "@/components/paymentButton";
 import axios from "axios";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import Rating from "react-rating-stars-component";
 interface CourseData {
+  _id: string;
   title: string;
   description: string;
   teacher: string;
@@ -144,11 +146,13 @@ const CourseDetails: React.FC<{ params: { id: string } }> = ({ params }) => {
               layout="responsive"
             />
             <div className="text-3xl font-bold mb-4 dark:text-white">
-              ${courseData.price}
+              ₹{courseData.price}
             </div>
-            <button className="bg-blue-500 text-white p-2 rounded-lg w-full mb-4">
-              Buy this course
-            </button>
+            <Payment
+              price={courseData.price}
+              id={courseData._id}
+              enumType="COURSE"
+            />
 
             <ul className="list-disc list-inside text-zinc-700 dark:text-zinc-300 mb-4">
               {courseData.additionalInfo.map((info, index) => (
