@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import Router from "next/router";
 interface PaymentProps {
   price: number;
   id: string;
@@ -17,6 +17,9 @@ export default function Payment({ price, id, enumType }: PaymentProps) {
     initializeRazorpay();
   }, []);
 
+  const handleNavigation = () => {
+    Router.push("/studentProfile/billing");
+  };
   const makePayment = async () => {
     if (!paymentInitialized) {
       Swal.fire("Error", "Razorpay SDK failed to load", "error");
@@ -111,6 +114,7 @@ export default function Payment({ price, id, enumType }: PaymentProps) {
               link.click();
               document.body.removeChild(link);
             }, 1000);
+            handleNavigation();
           } catch (error) {
             console.error("Error downloading invoice:", error);
             Swal.fire(
@@ -120,11 +124,24 @@ export default function Payment({ price, id, enumType }: PaymentProps) {
             );
           }
         },
+        notify: {
+          sms: true,
+          email: true,
+        },
+        reminder_enable: true,
+        options: {
+          checkout: {
+            theme: {
+              hide_topbar: true,
+            },
+          },
+        },
         prefill: {
           name: "Customer Name",
           email: "customer@example.com",
           contact: "8107199052",
         },
+
         notes: {
           address: "Corporate Office",
         },

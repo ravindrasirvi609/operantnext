@@ -21,7 +21,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 
     const courseObject = await req.json();
-    const courseId = courseObject.id;
+
+    const courseId = courseObject.courseId;
 
     const course = await Courses.findById(courseId);
     if (!course) {
