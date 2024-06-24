@@ -7,7 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { DropdownMenuDemo } from "@/components/dropdown";
 import Swal from "sweetalert2";
-import { UserData } from "./page";
+import UserData from "./page";
 
 const studentNavigation = [
   { name: "Conferences", href: "/events" },
@@ -42,19 +42,21 @@ const companyNavigation = [
   { name: "Forums", href: "/forums" },
 ];
 
-const initialUserData: UserData | null = null;
+const initialUserData: typeof UserData | null = null;
 
 export default function HeaderNav() {
   const router = useRouter();
   const [role, setRole] = useState<string | null>();
-  const [userData, setUserData] = useState<UserData | null>(initialUserData);
+  const [userData, setUserData] = useState<typeof UserData | null>(
+    initialUserData
+  );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/api/users/me");
-        const userData: UserData = response.data.data;
+        const userData: typeof UserData = response.data.data;
         const role = localStorage.getItem("role");
         setUserData(userData);
         setRole(role);
