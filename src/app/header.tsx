@@ -94,7 +94,7 @@ export default function HeaderNav() {
       >
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Operant Pharmacy Federation</span>
+            <span className="sr-only">Operant</span>
             <Image
               className="h-9 w-auto"
               src="/opflogo.png"

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -21,7 +21,7 @@ const About: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="py-16 bg-gray-900 text-white">
+    <section id="about" className="py-16 bg-[#252A34] text-[#EAEAEA]">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-bold mb-8 text-center">
           About OperantNext
