@@ -8,14 +8,19 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, "Please provide a email"],
+    required: [true, "Please provide an email"],
     unique: true,
   },
   password: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [
+      function (this: any) {
+        return this?.provider !== "google";
+      },
+      "Please provide a password",
+    ],
   },
-  isVerfied: {
+  isVerified: {
     type: Boolean,
     default: false,
   },
@@ -29,8 +34,13 @@ const userSchema = new mongoose.Schema({
   verifyTokenExpiry: Date,
   role: {
     type: String,
-    enum: ["STUDENT", "COLLEGE", "COMPANY", "TEACHER"],
+    enum: ["STUDENT", "COLLEGE", "COMPANY", "TEACHER", "ADMIN"],
     required: true,
+  },
+  provider: {
+    type: String,
+    enum: ["credentials", "google"],
+    default: "credentials",
   },
 });
 

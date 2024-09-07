@@ -63,8 +63,8 @@ interface IStudent extends Document {
 const studentSchema = new Schema<IStudent>(
   {
     profileImage: { type: String },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
     userTagLine: { type: String },
     personalEmail: { type: String, required: true, unique: true },
     mobileNo: { type: String },

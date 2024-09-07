@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
+import { AuthProvider } from "@/components/AuthProvider";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -60,7 +61,7 @@ export default function RootLayout({
           nunito.variable
         )}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
         <Analytics />
       </body>
     </html>

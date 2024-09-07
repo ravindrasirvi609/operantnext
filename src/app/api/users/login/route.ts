@@ -5,39 +5,49 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 connect();
+
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { email, password, role } = reqBody;
+
+    // Validate input
+    if (!email || !password || !role) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
     const user = await User.findOne({ email });
 
     if (!user) {
       return NextResponse.json(
-        { error: "User Not Registered" },
-        { status: 400 }
+        { error: "Invalid credentials" },
+        { status: 401 }
       );
     }
 
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {
       return NextResponse.json(
-        { error: "Please Enter Valid Password" },
-        { status: 400 }
+        { error: "Invalid credentials" },
+        { status: 401 }
       );
     }
 
-    if (!user.isVerfied) {
+    if (!user.isVerified) {
       return NextResponse.json(
-        { error: "User is not verified yet" },
-        { status: 400 }
+        { error: "User is not verified" },
+        { status: 403 }
       );
     }
 
     // Check user role
     if (user.role !== role) {
       return NextResponse.json(
-        { error: "Invalid Role for this User" },
-        { status: 403 } // 403 Forbidden status code
+        { error: "Invalid role for this user" },
+        { status: 403 }
       );
     }
 
@@ -46,7 +56,7 @@ export async function POST(request: NextRequest) {
       username: user.username,
       email: user.email,
       isVerified: user.isVerified,
-      role: user.role, // Include user role in the token data
+      role: user.role,
     };
 
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
@@ -54,18 +64,26 @@ export async function POST(request: NextRequest) {
     });
 
     const response = NextResponse.json({
-      message: "Login successfully completed",
+      message: "Login successful",
       success: true,
-      data: tokenData,
+      username: user.username,
+      email: user.email,
+      role: user.role,
     });
 
     response.cookies.set("token", token, {
       httpOnly: true,
-      maxAge: 60 * 60 * 24,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
     });
 
     return response;
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: "An unexpected error occurred" },
+      { status: 500 }
+    );
   }
 }
