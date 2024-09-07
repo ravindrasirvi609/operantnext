@@ -18,6 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // Mock data for the student dashboard
 const mockStudentData = {
@@ -71,6 +73,13 @@ const mockStudentData = {
 };
 
 const StudentDashboard: React.FC = () => {
+  const session = useSession();
+  const router = useRouter();
+  if (session.data?.user?.role !== "STUDENT") {
+    router.push("/login");
+    return <div className="flex text-center mx-auto">Redirecting...</div>;
+  }
+
   const [isProfilePublic, setIsProfilePublic] = useState(true);
 
   const Sidebar = () => (

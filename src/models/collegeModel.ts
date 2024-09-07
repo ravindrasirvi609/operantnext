@@ -168,7 +168,7 @@ const collegeSchema = new Schema<ICollege>(
     admissionProcess: { type: String },
     placements: [
       {
-        year: { type: Number, required: true },
+        year: { type: Number },
         averageSalary: { type: Number },
         topRecruiters: [{ type: String }],
       },

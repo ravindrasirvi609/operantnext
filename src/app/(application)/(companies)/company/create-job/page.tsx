@@ -4,6 +4,8 @@ import React, { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { isURL } from "validator";
 import Select from "react-select";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface Skill {
   _id: string;
@@ -14,6 +16,20 @@ interface Skill {
 }
 
 const JobForm = () => {
+  const session = useSession();
+  const router = useRouter();
+  if (session?.data?.user?.role !== "COMPANY") {
+    router.push("/");
+    return (
+      <div className="container mx-auto px-4 py-8 bg-orange-300">
+        <h1 className="text-3xl font-semibold text-center mb-8">Create Job</h1>
+        <p className="text-center">
+          You are not authorized to access this page
+        </p>
+      </div>
+    );
+  }
+
   const {
     register,
     handleSubmit,

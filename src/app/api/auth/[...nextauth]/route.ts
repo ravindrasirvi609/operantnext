@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "@/models/userModel";
 import { connect } from "@/dbConfig/dbConfig";
+import { getSession } from "next-auth/react";
 
 connect();
 const handler = NextAuth({
@@ -82,6 +83,28 @@ const handler = NextAuth({
         session.user.role = token.role;
       }
       return session;
+    },
+
+    async redirect({ url, baseUrl }) {
+      // Custom redirection logic based on user role
+      if (url.startsWith(baseUrl)) {
+        const session = await getSession();
+        if (session?.user?.role) {
+          switch (session.user.role) {
+            case "STUDENT":
+              return `${baseUrl}/student`;
+            case "TEACHER":
+              return `${baseUrl}/teacher`;
+            case "COLLEGE":
+              return `${baseUrl}/college`;
+            case "COMPANY":
+              return `${baseUrl}/company`;
+            default:
+              return baseUrl;
+          }
+        }
+      }
+      return baseUrl;
     },
   },
   pages: {

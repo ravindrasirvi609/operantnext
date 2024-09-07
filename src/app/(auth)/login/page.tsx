@@ -12,7 +12,7 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface UserData {
   email: string;
@@ -28,6 +28,13 @@ export default function LoginPage() {
   const router = useRouter();
   const [providers, setProviders] = useState<Providers | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [user, setUser] = useState<UserData>({
+    email: "",
+    password: "",
+    role: "",
+  });
+  const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -36,15 +43,10 @@ export default function LoginPage() {
     })();
   }, []);
 
-  const [user, setUser] = useState<UserData>({
-    email: "",
-    password: "",
-    role: "",
-  });
-  const [error, setError] = useState<string>("");
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
     try {
       const result = await signIn("credentials", {
         redirect: false,
@@ -60,31 +62,45 @@ export default function LoginPage() {
       }
     } catch (error) {
       setError((error as Error).message || "An error occurred");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 flex items-center justify-center p-4">
       <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md"
+        className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md overflow-hidden relative"
       >
-        <div className="flex flex-col items-center">
+        <motion.div
+          initial={{ y: -50 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
+          className="flex flex-col items-center mb-8"
+        >
           <Image
-            className="h-24 w-24 mb-4 rounded-full shadow-lg"
+            className="h-24 w-24 mb-4 rounded-full shadow-xl"
             src="/opflogo.png"
             alt="OPF Logo"
             height={96}
             width={96}
           />
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">
+          <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Welcome Back
           </h2>
-        </div>
+          <p className="text-gray-600">Sign in to continue your journey</p>
+        </motion.div>
+
         <form onSubmit={handleLogin} className="space-y-6">
-          <div className="relative">
+          <motion.div
+            initial={{ x: -50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="relative"
+          >
             <FaEnvelope className="absolute top-3 left-3 text-gray-400" />
             <input
               id="email"
@@ -92,13 +108,18 @@ export default function LoginPage() {
               type="email"
               autoComplete="email"
               required
-              className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+              className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               placeholder="Email address"
               value={user.email}
               onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
-          </div>
-          <div className="relative">
+          </motion.div>
+          <motion.div
+            initial={{ x: 50, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="relative"
+          >
             <FaLock className="absolute top-3 left-3 text-gray-400" />
             <input
               id="password"
@@ -106,7 +127,7 @@ export default function LoginPage() {
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               required
-              className="pl-10 pr-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+              className="pl-10 pr-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               placeholder="Password"
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
@@ -118,14 +139,19 @@ export default function LoginPage() {
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
-          </div>
-          <div className="relative">
+          </motion.div>
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="relative"
+          >
             <FaUserTag className="absolute top-3 left-3 text-gray-400" />
             <select
               id="role"
               name="role"
               required
-              className="pl-10 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+              className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 appearance-none"
               value={user.role}
               onChange={(e) => setUser({ ...user, role: e.target.value })}
             >
@@ -134,22 +160,38 @@ export default function LoginPage() {
               <option value="TEACHER">Teacher</option>
               <option value="COLLEGE">College</option>
               <option value="COMPANY">Company</option>
-              <option value="ADMIN">Admin</option>
             </select>
-          </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          </motion.div>
+          <AnimatePresence>
+            {error && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-red-500 text-sm"
+              >
+                {error}
+              </motion.p>
+            )}
+          </AnimatePresence>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300"
+            className="w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300"
+            disabled={isLoading}
           >
-            Sign in
+            {isLoading ? "Signing in..." : "Sign in"}
           </motion.button>
         </form>
 
         {providers && (
-          <div className="mt-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="mt-8"
+          >
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300"></div>
@@ -161,27 +203,28 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              {Object.values(providers).map((provider) => (
+            <div className="mt-6">
+              {providers.google && (
                 <motion.button
-                  key={provider.name}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => signIn(provider.id)}
-                  className="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition duration-300"
+                  onClick={() => signIn("google")}
+                  className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300"
                 >
-                  {provider.name === "Google" && (
-                    <FaGoogle className="text-red-500 mr-2" />
-                  )}
-
-                  {provider.name}
+                  <FaGoogle className="text-red-500 mr-2" />
+                  Sign in with Google
                 </motion.button>
-              ))}
+              )}
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <p className="mt-8 text-center text-sm text-gray-600">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="mt-8 text-center text-sm text-gray-600"
+        >
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"
@@ -189,7 +232,7 @@ export default function LoginPage() {
           >
             Sign up here
           </Link>
-        </p>
+        </motion.p>
       </motion.div>
     </div>
   );

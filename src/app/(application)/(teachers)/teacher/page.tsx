@@ -18,6 +18,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // Mock data for the teacher dashboard
 const mockTeacherData = {
@@ -78,6 +80,13 @@ const mockTeacherData = {
 };
 
 const TeacherDashboard: React.FC = () => {
+  const session = useSession();
+  const router = useRouter();
+  if (session.data?.user?.role !== "TEACHER") {
+    router.push("/login");
+    return <div className="flex text-center mx-auto">Redirecting...</div>;
+  }
+
   const [activeTab, setActiveTab] = useState("overview");
 
   const Sidebar = () => (
