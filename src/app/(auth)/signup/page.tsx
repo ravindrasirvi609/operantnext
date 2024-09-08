@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,7 +9,6 @@ import {
   FaEnvelope,
   FaLock,
   FaUserTag,
-  FaGoogle,
   FaEye,
   FaEyeSlash,
   FaUser,
@@ -36,164 +35,143 @@ type ValidationErrors = {
   [key in keyof UserData]?: string;
 };
 
-const colleges = ["College A", "College B", "College C"]; // Add more colleges as needed
+const colleges = ["College A", "College B", "College C"];
 
 export default function SignupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<UserData>({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    username: "",
-    role: "",
-  });
-  const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [isTouched, setIsTouched] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [role, setRole] = useState("");
+
+  const formRef = useRef<HTMLFormElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
+  const roleRef = useRef<HTMLSelectElement>(null);
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
+  const mobileNoRef = useRef<HTMLInputElement>(null);
+  const collegeNameRef = useRef<HTMLSelectElement>(null);
+  const companyNameRef = useRef<HTMLInputElement>(null);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const onSignup = async () => {
-    try {
-      if (user.password !== user.confirmPassword) {
-        setErrors({
-          ...errors,
-          confirmPassword: "Password and Confirm Password must be the same!",
-        });
-        return;
-      }
-      setLoading(true);
-      const response = await axios.post("/api/users/signup", user);
-      Swal.fire(
-        "Success",
-        "User successfully registered. Please verify your account from the received email.",
-        "success"
-      );
-      router.push("/login");
-    } catch (error: any) {
-      Swal.fire(
-        "Registration Failed",
-        error.response?.data?.error || "An error occurred during registration",
-        "error"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const validateForm = (): ValidationErrors => {
+    const newErrors: ValidationErrors = {};
+    const emailRegex = /\S+@\S+\.\S+/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setIsTouched(true);
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
-
-    if (isSubmitted) {
-      validateField(name as keyof UserData, value);
-    }
-  };
-
-  const validateField = (field: keyof UserData, value: string) => {
-    const newErrors = { ...errors };
-
-    switch (field) {
-      case "email":
-        if (!value) {
-          newErrors.email = "Email is required.";
-        } else if (!/\S+@\S+\.\S+/.test(value)) {
-          newErrors.email = "Invalid email address.";
-        } else {
-          delete newErrors.email;
-        }
-        break;
-      case "password":
-        if (!value) {
-          newErrors.password = "Password is required.";
-        } else if (
-          !/^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/.test(value)
-        ) {
-          newErrors.password =
-            "Password must have at least 8 characters, one capital letter, one special symbol, and one number.";
-        } else {
-          delete newErrors.password;
-        }
-        break;
-      case "confirmPassword":
-        if (!value) {
-          newErrors.confirmPassword = "Confirm Password is required.";
-        } else if (value !== user.password) {
-          newErrors.confirmPassword = "Passwords do not match.";
-        } else {
-          delete newErrors.confirmPassword;
-        }
-        break;
-      case "username":
-        if (!value) {
-          newErrors.username = "Username is required.";
-        } else {
-          delete newErrors.username;
-        }
-        break;
-      case "role":
-        if (!value) {
-          newErrors.role = "Role is required.";
-        } else {
-          delete newErrors.role;
-        }
-        break;
-      case "firstName":
-      case "lastName":
-      case "mobileNo":
-      case "collegeName":
-      case "companyName":
-        if (!value) {
-          newErrors[field] = `${
-            field.charAt(0).toUpperCase() +
-            field
-              .slice(1)
-              .replace(/([A-Z])/g, " $1")
-              .trim()
-          } is required.`;
-        } else {
-          delete newErrors[field];
-        }
-        break;
+    if (!emailRef.current?.value) {
+      newErrors.email = "Email is required.";
+    } else if (!emailRegex.test(emailRef.current.value)) {
+      newErrors.email = "Invalid email address.";
     }
 
-    setErrors(newErrors);
+    if (!passwordRef.current?.value) {
+      newErrors.password = "Password is required.";
+    } else if (!passwordRegex.test(passwordRef.current.value)) {
+      newErrors.password =
+        "Password must have at least 8 characters, one capital letter, one special symbol, and one number.";
+    }
+
+    if (passwordRef.current?.value !== confirmPasswordRef.current?.value) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    if (!usernameRef.current?.value) {
+      newErrors.username = "Username is required.";
+    }
+
+    if (!roleRef.current?.value) {
+      newErrors.role = "Role is required.";
+    }
+
+    // Add role-specific validations
+    if (role === "STUDENT" || role === "TEACHER") {
+      if (!firstNameRef.current?.value)
+        newErrors.firstName = "First Name is required.";
+      if (!lastNameRef.current?.value)
+        newErrors.lastName = "Last Name is required.";
+      if (!mobileNoRef.current?.value)
+        newErrors.mobileNo = "Mobile Number is required.";
+      if (role === "TEACHER" && !collegeNameRef.current?.value)
+        newErrors.collegeName = "College Name is required.";
+    } else if (role === "COLLEGE") {
+      if (!collegeNameRef.current?.value)
+        newErrors.collegeName = "College Name is required.";
+      if (!mobileNoRef.current?.value)
+        newErrors.mobileNo = "Mobile Number is required.";
+    } else if (role === "COMPANY") {
+      if (!companyNameRef.current?.value)
+        newErrors.companyName = "Company Name is required.";
+      if (!mobileNoRef.current?.value)
+        newErrors.mobileNo = "Mobile Number is required.";
+    }
+
+    return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSignup = async (e: FormEvent) => {
     e.preventDefault();
-    setIsTouched(true);
-    setIsSubmitted(true);
+    const newErrors = validateForm();
+    setErrors(newErrors);
 
-    Object.keys(user).forEach((key) => {
-      validateField(key as keyof UserData, user[key as keyof UserData] ?? "");
-    });
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        setLoading(true);
+        const userData: UserData = {
+          email: emailRef.current!.value,
+          password: passwordRef.current!.value,
+          confirmPassword: confirmPasswordRef.current!.value,
+          username: usernameRef.current!.value,
+          role: roleRef.current!.value,
+        };
 
-    if (Object.keys(errors).length === 0) {
-      onSignup();
+        if (role === "STUDENT" || role === "TEACHER") {
+          userData.firstName = firstNameRef.current!.value;
+          userData.lastName = lastNameRef.current!.value;
+          userData.mobileNo = mobileNoRef.current!.value;
+          if (role === "TEACHER") {
+            userData.collegeName = collegeNameRef.current!.value;
+          }
+        } else if (role === "COLLEGE") {
+          userData.collegeName = collegeNameRef.current!.value;
+          userData.mobileNo = mobileNoRef.current!.value;
+        } else if (role === "COMPANY") {
+          userData.companyName = companyNameRef.current!.value;
+          userData.mobileNo = mobileNoRef.current!.value;
+        }
+
+        const response = await axios.post("/api/users/signup", userData);
+        Swal.fire(
+          "Success",
+          "User successfully registered. Please verify your account from the received email.",
+          "success"
+        );
+        router.push("/login");
+      } catch (error: any) {
+        Swal.fire(
+          "Registration Failed",
+          error.response?.data?.error ||
+            "An error occurred during registration",
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  useEffect(() => {
-    const isFormFilled = Object.entries(user).every(([key, value]) => {
-      if (user.role === "STUDENT" || user.role === "TEACHER") {
-        return key === "collegeName" || value.length > 0;
-      }
-      return value.length > 0;
-    });
-    setButtonDisabled(!isFormFilled);
-  }, [user]);
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRole(e.target.value);
+  };
 
   const renderRoleSpecificFields = () => {
-    switch (user.role) {
+    switch (role) {
       case "STUDENT":
       case "TEACHER":
         return (
@@ -202,34 +180,30 @@ export default function SignupPage() {
               name="firstName"
               label="First Name"
               icon={<FaUser />}
-              value={user.firstName || ""}
-              onChange={handleInputChange}
+              ref={firstNameRef}
               error={errors.firstName}
             />
             <InputField
               name="lastName"
               label="Last Name"
               icon={<FaUser />}
-              value={user.lastName || ""}
-              onChange={handleInputChange}
+              ref={lastNameRef}
               error={errors.lastName}
             />
             <InputField
               name="mobileNo"
               label="Mobile Number"
               icon={<FaPhone />}
-              value={user.mobileNo || ""}
-              onChange={handleInputChange}
+              ref={mobileNoRef}
               error={errors.mobileNo}
             />
-            {user.role === "TEACHER" && (
+            {role === "TEACHER" && (
               <div className="relative">
                 <FaBuilding className="absolute top-3 left-3 text-gray-400" />
                 <select
                   id="collegeName"
                   name="collegeName"
-                  value={user.collegeName || ""}
-                  onChange={handleInputChange}
+                  ref={collegeNameRef}
                   className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 appearance-none"
                 >
                   <option value="">Select College</option>
@@ -239,7 +213,7 @@ export default function SignupPage() {
                     </option>
                   ))}
                 </select>
-                {isTouched && errors.collegeName && (
+                {errors.collegeName && (
                   <p className="mt-2 text-sm text-red-500">
                     {errors.collegeName}
                   </p>
@@ -255,16 +229,14 @@ export default function SignupPage() {
               name="collegeName"
               label="College Name"
               icon={<FaBuilding />}
-              value={user.collegeName || ""}
-              onChange={handleInputChange}
+              ref={collegeNameRef}
               error={errors.collegeName}
             />
             <InputField
               name="mobileNo"
               label="Mobile Number"
               icon={<FaPhone />}
-              value={user.mobileNo || ""}
-              onChange={handleInputChange}
+              ref={mobileNoRef}
               error={errors.mobileNo}
             />
           </>
@@ -276,16 +248,14 @@ export default function SignupPage() {
               name="companyName"
               label="Company Name"
               icon={<FaBuilding />}
-              value={user.companyName || ""}
-              onChange={handleInputChange}
+              ref={companyNameRef}
               error={errors.companyName}
             />
             <InputField
               name="mobileNo"
               label="Mobile Number"
               icon={<FaPhone />}
-              value={user.mobileNo || ""}
-              onChange={handleInputChange}
+              ref={mobileNoRef}
               error={errors.mobileNo}
             />
           </>
@@ -295,37 +265,28 @@ export default function SignupPage() {
     }
   };
 
-  const InputField = ({
-    name,
-    label,
-    icon,
-    value,
-    onChange,
-    error,
-    type = "text",
-  }: any) => (
-    <motion.div
-      initial={{ x: -50, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: 0.1 }}
-      className="relative"
-    >
-      {React.cloneElement(icon, {
-        className: "absolute top-3 left-3 text-gray-400",
-      })}
-      <input
-        type={type}
-        name={name}
-        id={name}
-        value={value}
-        onChange={onChange}
-        className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-        placeholder={label}
-      />
-      {isTouched && error && (
-        <p className="mt-2 text-sm text-red-500">{error}</p>
-      )}
-    </motion.div>
+  const InputField = React.forwardRef(
+    ({ name, label, icon, error, type = "text" }: any, ref: any) => (
+      <motion.div
+        initial={{ x: -50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        className="relative"
+      >
+        {React.cloneElement(icon, {
+          className: "absolute top-3 left-3 text-gray-400",
+        })}
+        <input
+          type={type}
+          name={name}
+          id={name}
+          ref={ref}
+          className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          placeholder={label}
+        />
+        {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+      </motion.div>
+    )
   );
 
   return (
@@ -334,7 +295,7 @@ export default function SignupPage() {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md overflow-hidden relative"
+        className="bg-white rounded-2xl mt-20 shadow-2xl p-8 w-full max-w-md overflow-hidden relative"
       >
         <motion.div
           initial={{ y: -50 }}
@@ -355,7 +316,7 @@ export default function SignupPage() {
           <p className="text-gray-600">Join us and start your journey</p>
         </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form ref={formRef} onSubmit={onSignup} className="space-y-6">
           <motion.div
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -366,8 +327,8 @@ export default function SignupPage() {
             <select
               id="role"
               name="role"
-              value={user.role}
-              onChange={handleInputChange}
+              ref={roleRef}
+              onChange={handleRoleChange}
               className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 appearance-none"
             >
               <option value="">Select a role</option>
@@ -376,7 +337,7 @@ export default function SignupPage() {
               <option value="COLLEGE">College</option>
               <option value="COMPANY">Company</option>
             </select>
-            {isTouched && errors.role && (
+            {errors.role && (
               <p className="mt-2 text-sm text-red-500">{errors.role}</p>
             )}
           </motion.div>
@@ -385,8 +346,7 @@ export default function SignupPage() {
             name="username"
             label="Username"
             icon={<FaUser />}
-            value={user.username}
-            onChange={handleInputChange}
+            ref={usernameRef}
             error={errors.username}
           />
 
@@ -394,8 +354,7 @@ export default function SignupPage() {
             name="email"
             label="Email address"
             icon={<FaEnvelope />}
-            value={user.email}
-            onChange={handleInputChange}
+            ref={emailRef}
             error={errors.email}
             type="email"
           />
@@ -413,10 +372,9 @@ export default function SignupPage() {
               type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               required
+              ref={passwordRef}
               className="pl-10 pr-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               placeholder="Password"
-              value={user.password}
-              onChange={handleInputChange}
             />
             <button
               type="button"
@@ -425,7 +383,7 @@ export default function SignupPage() {
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
-            {isTouched && errors.password && (
+            {errors.password && (
               <p className="mt-2 text-sm text-red-500">{errors.password}</p>
             )}
           </motion.div>
@@ -434,13 +392,12 @@ export default function SignupPage() {
             name="confirmPassword"
             label="Confirm Password"
             icon={<FaLock />}
-            value={user.confirmPassword}
-            onChange={handleInputChange}
+            ref={confirmPasswordRef}
             error={errors.confirmPassword}
             type={showPassword ? "text" : "password"}
           />
 
-          {user.role && renderRoleSpecificFields()}
+          {role && renderRoleSpecificFields()}
 
           <AnimatePresence>
             {Object.keys(errors).length > 0 && (
@@ -460,9 +417,9 @@ export default function SignupPage() {
             whileTap={{ scale: 0.95 }}
             type="submit"
             className={`w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ${
-              buttonDisabled || loading ? "opacity-50 cursor-not-allowed" : ""
+              loading ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            disabled={buttonDisabled || loading}
+            disabled={loading}
           >
             {loading ? "Signing up..." : "Sign up"}
           </motion.button>

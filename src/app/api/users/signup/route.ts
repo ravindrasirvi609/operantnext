@@ -66,6 +66,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
 
+    // Validate role-specific fields
+    if (!validateRoleSpecificFields(role, reqBody)) {
+      return NextResponse.json(
+        { error: "Missing or invalid role-specific fields" },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -80,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     const savedUser = await createUser(username, email, hashedPassword, role);
 
-    await createRoleSpecificForm(role, savedUser._id, savedUser.email);
+    await createRoleSpecificForm(role, savedUser._id, savedUser.email, reqBody);
 
     await sendVerificationEmail(savedUser.email, savedUser._id);
 
@@ -95,6 +103,26 @@ export async function POST(request: NextRequest) {
       { error: "An error occurred during sign-up" },
       { status: 500 }
     );
+  }
+}
+
+function validateRoleSpecificFields(role: UserRole, reqBody: any): boolean {
+  switch (role) {
+    case "STUDENT":
+      return !!reqBody.firstName && !!reqBody.lastName && !!reqBody.mobileNo;
+    case "COLLEGE":
+      return !!reqBody.collegeName && !!reqBody.mobileNo;
+    case "TEACHER":
+      return (
+        !!reqBody.firstName &&
+        !!reqBody.lastName &&
+        !!reqBody.mobileNo &&
+        !!reqBody.collegeId
+      );
+    case "COMPANY":
+      return !!reqBody.companyName && !!reqBody.mobileNo;
+    default:
+      return true; // For ADMIN, no additional fields are required
   }
 }
 
@@ -118,40 +146,76 @@ async function createUser(
 async function createRoleSpecificForm(
   role: UserRole,
   userId: string,
-  email: string
+  email: string,
+  reqBody: any
 ) {
   switch (role) {
     case "STUDENT":
-      return await createStudentForm(userId, email);
+      return await createStudentForm(userId, email, reqBody);
     case "TEACHER":
-      return await createTeacherForm(userId, email);
+      return await createTeacherForm(userId, email, reqBody);
     case "COMPANY":
-      return await createCompanyForm(userId, email);
+      return await createCompanyForm(userId, email, reqBody);
     case "COLLEGE":
-      return await createCollegeForm(userId, email);
+      return await createCollegeForm(userId, email, reqBody);
     default:
       // For ADMIN, no additional form is created
       return;
   }
 }
 
-async function createStudentForm(userId: string, personalEmail: string) {
-  const studentForm = new Student({ _id: userId, personalEmail });
+async function createStudentForm(
+  userId: string,
+  personalEmail: string,
+  reqBody: any
+) {
+  const studentForm = new Student({
+    _id: userId,
+    personalEmail,
+    firstName: reqBody.firstName,
+    lastName: reqBody.lastName,
+    mobileNo: reqBody.mobileNo,
+  });
   return await studentForm.save();
 }
 
-async function createCollegeForm(userId: string, email: string) {
-  const collegeForm = new College({ _id: userId, email });
+async function createCollegeForm(userId: string, email: string, reqBody: any) {
+  const collegeForm = new College({
+    _id: userId,
+    email,
+    collegeName: reqBody.collegeName,
+    mobileNo: reqBody.mobileNo,
+  });
   return await collegeForm.save();
 }
 
-async function createCompanyForm(companyId: string, email: string) {
-  const companyForm = new Company({ _id: companyId, email });
+async function createCompanyForm(
+  companyId: string,
+  email: string,
+  reqBody: any
+) {
+  const companyForm = new Company({
+    _id: companyId,
+    email,
+    companyName: reqBody.companyName,
+    mobileNo: reqBody.mobileNo,
+  });
   return await companyForm.save();
 }
 
-async function createTeacherForm(teacherId: string, personalEmail: string) {
-  const teacherForm = new Teacher({ _id: teacherId, personalEmail });
+async function createTeacherForm(
+  teacherId: string,
+  personalEmail: string,
+  reqBody: any
+) {
+  const teacherForm = new Teacher({
+    _id: teacherId,
+    personalEmail,
+    firstName: reqBody.firstName,
+    lastName: reqBody.lastName,
+    mobileNo: reqBody.mobileNo,
+    collegeId: reqBody.collegeId,
+  });
   return await teacherForm.save();
 }
 

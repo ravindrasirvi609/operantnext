@@ -18,17 +18,6 @@ interface Skill {
 const JobForm = () => {
   const session = useSession();
   const router = useRouter();
-  if (session?.data?.user?.role !== "COMPANY") {
-    router.push("/");
-    return (
-      <div className="container mx-auto px-4 py-8 bg-orange-300">
-        <h1 className="text-3xl font-semibold text-center mb-8">Create Job</h1>
-        <p className="text-center">
-          You are not authorized to access this page
-        </p>
-      </div>
-    );
-  }
 
   const {
     register,
@@ -66,6 +55,17 @@ const JobForm = () => {
     register("company");
   }, [register]);
 
+  if (session?.data?.user?.role !== "COMPANY") {
+    router.push("/");
+    return (
+      <div className="container mx-auto px-4 py-8 bg-orange-300">
+        <h1 className="text-3xl font-semibold text-center mb-8">Create Job</h1>
+        <p className="text-center">
+          You are not authorized to access this page
+        </p>
+      </div>
+    );
+  }
   const onSubmit = (data: any) => {
     console.log(data);
     const jobData = {

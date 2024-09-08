@@ -75,13 +75,12 @@ const mockStudentData = {
 const StudentDashboard: React.FC = () => {
   const session = useSession();
   const router = useRouter();
+
+  const [isProfilePublic, setIsProfilePublic] = useState(true);
   if (session.data?.user?.role !== "STUDENT") {
     router.push("/login");
     return <div className="flex text-center mx-auto">Redirecting...</div>;
   }
-
-  const [isProfilePublic, setIsProfilePublic] = useState(true);
-
   const Sidebar = () => (
     <div className="bg-gray-100 w-64 min-h-screen p-4 border-r">
       <div className="flex flex-col items-center mb-8">

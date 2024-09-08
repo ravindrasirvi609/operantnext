@@ -58,7 +58,22 @@ export default function LoginPage() {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push("/");
+        switch (user.role) {
+          case "STUDENT":
+            router.push("/student");
+            break;
+          case "TEACHER":
+            router.push("/teacher");
+            break;
+          case "COLLEGE":
+            router.push("/college");
+            break;
+          case "COMPANY":
+            router.push("/company");
+            break;
+          default:
+            router.push("/");
+        }
       }
     } catch (error) {
       setError((error as Error).message || "An error occurred");

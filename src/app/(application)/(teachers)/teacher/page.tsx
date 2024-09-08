@@ -82,13 +82,12 @@ const mockTeacherData = {
 const TeacherDashboard: React.FC = () => {
   const session = useSession();
   const router = useRouter();
+
+  const [activeTab, setActiveTab] = useState("overview");
   if (session.data?.user?.role !== "TEACHER") {
     router.push("/login");
     return <div className="flex text-center mx-auto">Redirecting...</div>;
   }
-
-  const [activeTab, setActiveTab] = useState("overview");
-
   const Sidebar = () => (
     <div className="bg-gray-100 w-64 min-h-screen p-4 border-r">
       <div className="flex flex-col items-center mb-8">
