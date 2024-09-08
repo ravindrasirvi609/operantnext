@@ -104,7 +104,7 @@ const Header = () => {
             <Link href="/" className="flex-shrink-0 flex items-center">
               <h2
                 className={`text-2xl font-bold ${
-                  scrolled ? "text-indigo-600" : "text-white"
+                  scrolled ? "text-indigo-600" : "text-indigo-600"
                 }`}
               >
                 OperantNext
@@ -117,8 +117,8 @@ const Header = () => {
                   href={link.href}
                   className={`flex items-center ${
                     scrolled
-                      ? "text-gray-500 hover:text-gray-900"
-                      : "text-white hover:text-gray-200"
+                      ? "text-gray-700 hover:text-indigo-600"
+                      : "text-gray-700 hover:text-indigo-600"
                   } px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200`}
                 >
                   <link.icon className="h-5 w-5 mr-1" />
@@ -130,19 +130,15 @@ const Header = () => {
           <div className="flex items-center">
             <div className="hidden md:flex md:items-center md:ml-6 md:space-x-4">
               {status === "authenticated" && (
-                <Button variant={scrolled ? "ghost" : "outline"} size="icon">
-                  <Bell
-                    className={`h-5 w-5 ${
-                      scrolled ? "text-gray-500" : "text-white"
-                    }`}
-                  />
+                <Button variant="ghost" size="icon">
+                  <Bell className="h-5 w-5 text-gray-700" />
                 </Button>
               )}
               {status === "authenticated" ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      variant={scrolled ? "ghost" : "outline"}
+                      variant="ghost"
                       className="relative h-8 w-8 rounded-full"
                     >
                       <Avatar className="h-8 w-8">
@@ -181,7 +177,8 @@ const Header = () => {
               ) : (
                 <Button
                   onClick={() => signIn()}
-                  variant={scrolled ? "default" : "outline"}
+                  variant="default"
+                  className="bg-indigo-600 text-white hover:bg-indigo-700"
                 >
                   Sign In
                 </Button>
@@ -189,23 +186,15 @@ const Header = () => {
             </div>
             <div className="flex md:hidden">
               <Button
-                variant={scrolled ? "ghost" : "outline"}
+                variant="ghost"
                 size="icon"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 <span className="sr-only">Open main menu</span>
                 {isMenuOpen ? (
-                  <X
-                    className={`block h-6 w-6 ${
-                      scrolled ? "text-gray-500" : "text-white"
-                    }`}
-                  />
+                  <X className="block h-6 w-6 text-gray-700" />
                 ) : (
-                  <Menu
-                    className={`block h-6 w-6 ${
-                      scrolled ? "text-gray-500" : "text-white"
-                    }`}
-                  />
+                  <Menu className="block h-6 w-6 text-gray-700" />
                 )}
               </Button>
             </div>
@@ -220,7 +209,7 @@ const Header = () => {
               <Link
                 key={link.name}
                 href={link.href}
-                className="items-center text-gray-600 hover:bg-gray-100 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+                className=" items-center text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <link.icon className="h-5 w-5 mr-2" />
@@ -269,7 +258,10 @@ const Header = () => {
               </>
             ) : (
               <div className="px-5 py-4">
-                <Button onClick={() => signIn()} className="w-full">
+                <Button
+                  onClick={() => signIn()}
+                  className="w-full bg-indigo-600 text-white hover:bg-indigo-700"
+                >
                   Sign In
                 </Button>
               </div>

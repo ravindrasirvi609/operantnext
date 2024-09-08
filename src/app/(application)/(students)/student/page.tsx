@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   User,
   Book,
@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { withRoleAuth } from "@/components/withRoleAuth";
 
 // Mock data for the student dashboard
 const mockStudentData = {
@@ -73,14 +74,24 @@ const mockStudentData = {
 };
 
 const StudentDashboard: React.FC = () => {
-  const session = useSession();
-  const router = useRouter();
+  // const { data: session, status } = useSession();
+  // const router = useRouter();
 
   const [isProfilePublic, setIsProfilePublic] = useState(true);
-  if (session.data?.user?.role !== "STUDENT") {
-    router.push("/login");
-    return <div className="flex text-center mx-auto">Redirecting...</div>;
-  }
+  // useEffect(() => {
+  //   if (status === "loading") return;
+  //   if (status === "unauthenticated" || session?.user?.role !== "STUDENT") {
+  //     router.push("/login");
+  //   }
+  // }, [status, session, router]);
+  // if (status === "loading") {
+  //   return <div className="flex text-center mx-auto">Loading...</div>;
+  // }
+  // if (status === "unauthenticated" || session?.user?.role !== "STUDENT") {
+  //   router.push("/login");
+  //   return <div className="flex text-center mx-auto">Redirecting...</div>;
+  // }
+
   const Sidebar = () => (
     <div className="bg-gray-100 w-64 min-h-screen p-4 border-r">
       <div className="flex flex-col items-center mb-8">
@@ -284,4 +295,4 @@ const StudentDashboard: React.FC = () => {
   );
 };
 
-export default StudentDashboard;
+export default withRoleAuth(StudentDashboard, ["STUDENT"]);

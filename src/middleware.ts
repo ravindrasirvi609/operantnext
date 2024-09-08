@@ -7,6 +7,12 @@ const publicPaths = ["/login", "/signup", "/verifyemail", "/admin/login"];
 // Define admin paths that require admin authentication
 const adminPaths = ["/admin", "/admin/dashboard"];
 
+// Define role-based paths
+const studentPaths = ["/student", "/student/dashboard"];
+const collegePaths = ["/college", "/college/dashboard"];
+const teacherPaths = ["/teacher", "/teacher/dashboard"];
+const companyPaths = ["/company", "/company/dashboard"];
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
@@ -18,6 +24,20 @@ export async function middleware(request: NextRequest) {
   // Check if the path is an admin path
   const isAdminPath = adminPaths.some((adminPath) =>
     path.startsWith(adminPath)
+  );
+
+  // Check if the path is a role-specific path
+  const isStudentPath = studentPaths.some((studentPath) =>
+    path.startsWith(studentPath)
+  );
+  const isCollegePath = collegePaths.some((collegePath) =>
+    path.startsWith(collegePath)
+  );
+  const isTeacherPath = teacherPaths.some((teacherPath) =>
+    path.startsWith(teacherPath)
+  );
+  const isCompanyPath = companyPaths.some((companyPath) =>
+    path.startsWith(companyPath)
   );
 
   // Get the NextAuth session token
@@ -36,7 +56,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Redirect logic for other public paths
+  // Redirect logic for public paths
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -49,6 +69,26 @@ export async function middleware(request: NextRequest) {
   // Redirect logic for admin paths
   if (isAdminPath && (!token || token.role !== "ADMIN")) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
+  }
+
+  // Redirect logic for student paths
+  if (isStudentPath && (!token || token.role !== "STUDENT")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Redirect logic for college paths
+  if (isCollegePath && (!token || token.role !== "COLLEGE")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Redirect logic for teacher paths
+  if (isTeacherPath && (!token || token.role !== "TEACHER")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Redirect logic for company paths
+  if (isCompanyPath && (!token || token.role !== "COMPANY")) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Allow the request to proceed if none of the above conditions are met
