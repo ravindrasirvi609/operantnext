@@ -1,280 +1,346 @@
-"use client";
-import { useRouter } from "next/navigation";
+import React from "react";
+import {
+  User,
+  Book,
+  Award,
+  Briefcase,
+  FileText,
+  Star,
+  Activity,
+  Lock,
+  MapPin,
+  Phone,
+  Mail,
+  Calendar,
+  Edit,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-import Image from "next/image";
-import LogoutDialog from "./logoutButton";
-
-interface student {
-  _id: string;
+interface IStudent {
+  profileImage: string;
   firstName: string;
   lastName: string;
+  userTagLine: string;
   personalEmail: string;
   mobileNo: string;
+  aadharNo: string;
+  dob: Date;
   streetAddress: string;
   town: string;
   district: string;
   state: string;
   country: string;
+  education: {
+    secondary: { schoolName: string; marks: number };
+    seniorSecondary: { schoolName: string; marks: number };
+    undergraduate: { collegeName: string; courseName: string; marks: number };
+    postgraduate?: { collegeName: string; courseName: string; marks: number };
+  };
   highestQualification: string;
   university: string;
   workExperience: number;
-  profileImage: string;
+  skills: string[];
+  projects: {
+    title: string;
+    description: string;
+    technologies: string[];
+    link?: string;
+  }[];
+  certifications: { name: string; issuer: string; date: Date }[];
+  achievements: string[];
+  extracurricularActivities: string[];
+  eventsAttended: string[]; // Assuming ObjectId is represented as string
+  privacySettings: { isProfilePublic: boolean; visibleSections: string[] };
 }
 
-export default function StudentProfile() {
-  const router = useRouter();
-  const [userData, setUserData] = useState<student | null>(null);
-  const [data, setData] = useState("nothing");
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-
-  const closeLogoutDialog = () => {
-    setIsLogoutDialogOpen(false);
-  };
-
-  const logout = async () => {
-    try {
-      await axios.get("/api/users/logout");
-      toast.success("Logout successful");
-      router.push("/login");
-    } catch (error: any) {
-      toast.error(error.message);
-    }
-  };
-
-  const getStudentDetails = async () => {
-    try {
-      const res = await axios.get("/api/users/studentDetails");
-      setData(res.data.data.firstName);
-      setUserData(res.data.data);
-    } catch (error) {
-      toast.error("Failed to get user details");
-    }
-  };
-
-  const editProfileRoutinting = () => {
-    router.push("/studentProfile");
-  };
-
-  useEffect(() => {
-    getStudentDetails();
-  }, []);
+const StudentProfile: React.FC<{ student: IStudent }> = ({ student }) => {
+  const fullName = `${student.firstName} ${student.lastName}`;
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-32">
-        <div className="px-4 py-6 sm:px-6">
-          <h1 className="text-3xl font-bold leading-tight text-sky-800">
-            Student Profile
-          </h1>
-        </div>
-      </div>
-      <div className="flex items-center justify-center">
-        <div className="w-2/12 py-6 mx-3">
-          <div className="bg-white shadow-2xl p-3 overflow-hidden sm:rounded-lg">
-            <div className="w-1/2 mx-auto mb-4">
-              <div className="bg-sky-200 rounded-full w-36 h-36 items-center ">
-                {userData?.profileImage ? (
-                  <Image
-                    className="rounded-full"
-                    src={userData?.profileImage}
-                    alt=""
-                    width={144}
-                    height={144}
-                  />
-                ) : (
-                  <Image
-                    className="rounded-full"
-                    src="/user.png"
-                    alt=""
-                    width={144}
-                    height={144}
-                  />
-                )}
+    <div className="container mx-auto p-6">
+      <Card className="w-full">
+        <CardHeader className="relative">
+          <div className="absolute top-4 right-4 space-x-2">
+            <Button variant="outline" size="sm">
+              <Edit className="mr-2 h-4 w-4" /> Edit Profile
+            </Button>
+            <Button variant="outline" size="sm">
+              <Lock className="mr-2 h-4 w-4" /> Privacy Settings
+            </Button>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={student.profileImage} alt={fullName} />
+              <AvatarFallback>
+                {fullName
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle className="text-2xl font-bold">{fullName}</CardTitle>
+              <CardDescription>{student.userTagLine}</CardDescription>
+              <div className="mt-2 flex items-center space-x-2">
+                <MapPin className="h-4 w-4 text-gray-500" />
+                <span className="text-sm text-gray-500">{`${student.town}, ${student.state}, ${student.country}`}</span>
               </div>
             </div>
-            <div className="text-center font-bold text-sky-900 mt-16">
-              {" "}
-              {userData?.firstName} {userData?.lastName}
-            </div>
-            <div className="text-center text-sm text-gray-500 ">
-              dynamic Headline here ... Lorem ipsum dolor sit amet consectetur
-            </div>
-            <div className="flex items-center justify-center mt-3">
-              <button
-                className="bg-sky-200 text-black px-4 py-2 rounded-full"
-                onClick={editProfileRoutinting}
-              >
-                Edit Profile
-              </button>
-            </div>
-            <div className="flex items-center justify-center mt-3">
-              <LogoutDialog
-                isOpen={isLogoutDialogOpen}
-                title="Are you sure you want to logout?"
-                onConfirm={logout}
-                onCancel={closeLogoutDialog}
-                confirmButtonText="Yes"
-                cancelButtonText="No"
-                onLogout={logout}
-              />
-            </div>
           </div>
-        </div>
-        <div className="w-9/12 mx-12 py-6 sm:px-6 lg:px-8">
-          <div className="bg-white shadow-2xl overflow-hidden sm:rounded-lg">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Student Information
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Personal details and application.
-              </p>
-            </div>
-            <div className="border-t border-sky-200">
-              <dl>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Full name
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.firstName} {userData?.lastName}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Email address
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.personalEmail}
-                  </dd>
-                </div>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Mobile Number
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.mobileNo}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Street Address
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.streetAddress}
-                  </dd>
-                </div>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Town</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.town}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    District
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.district}
-                  </dd>
-                </div>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">State</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.state}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
-                  <dt className="text-sm font-medium text-gray-500">Country</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.country}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-2xl overflow-hidden sm:rounded-lg mt-5">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Education
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Education details and application.
-              </p>
-            </div>
-            <div className="border-t border-sky-200">
-              <dl>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Highest Qualification
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.highestQualification}
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
-                  <dt className="text-sm font-medium text-gray-500">
-                    University/Institution
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    {userData?.university}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-2xl overflow-hidden sm:rounded-lg mt-5">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Work Experience
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Work Experience details and application.
-              </p>
-            </div>
-            <div className="border-t border-sky-200">
-              <dl>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Company Name
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    Google
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
-          <div className="bg-white shadow-2xl overflow-hidden sm:rounded-lg mt-5">
-            <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                Attended Events
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                Attended Events details and application.
-              </p>
-            </div>
-            <div className="border-t border-sky-200">
-              <dl>
-                <div className="bg-sky-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-5">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Event Name 1
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    Google
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="education">Education</TabsTrigger>
+              <TabsTrigger value="skills">Skills & Projects</TabsTrigger>
+              <TabsTrigger value="achievements">Achievements</TabsTrigger>
+              <TabsTrigger value="contact">Contact</TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      Personal Information
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <dl className="space-y-2">
+                      <div className="flex">
+                        <dt className="font-semibold w-1/3">Full Name:</dt>
+                        <dd>{fullName}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="font-semibold w-1/3">Date of Birth:</dt>
+                        <dd>{new Date(student.dob).toLocaleDateString()}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="font-semibold w-1/3">
+                          Highest Qualification:
+                        </dt>
+                        <dd>{student.highestQualification}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="font-semibold w-1/3">University:</dt>
+                        <dd>{student.university}</dd>
+                      </div>
+                      <div className="flex">
+                        <dt className="font-semibold w-1/3">
+                          Work Experience:
+                        </dt>
+                        <dd>{student.workExperience} years</dd>
+                      </div>
+                    </dl>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Skills Overview</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {student.skills.map((skill, index) => (
+                        <Badge key={index} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="education">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Educational Background
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {student.education.postgraduate && (
+                      <div>
+                        <h4 className="font-semibold">Postgraduate</h4>
+                        <p>{student.education.postgraduate.collegeName}</p>
+                        <p>{student.education.postgraduate.courseName}</p>
+                        <p>Marks: {student.education.postgraduate.marks}%</p>
+                      </div>
+                    )}
+                    <div>
+                      <h4 className="font-semibold">Undergraduate</h4>
+                      <p>{student.education.undergraduate.collegeName}</p>
+                      <p>{student.education.undergraduate.courseName}</p>
+                      <p>Marks: {student.education.undergraduate.marks}%</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Senior Secondary</h4>
+                      <p>{student.education.seniorSecondary.schoolName}</p>
+                      <p>Marks: {student.education.seniorSecondary.marks}%</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Secondary</h4>
+                      <p>{student.education.secondary.schoolName}</p>
+                      <p>Marks: {student.education.secondary.marks}%</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="skills">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Skills</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {student.skills.map((skill, index) => (
+                        <Badge key={index} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Projects</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[300px]">
+                      {student.projects.map((project, index) => (
+                        <div key={index} className="mb-4">
+                          <h4 className="font-semibold">{project.title}</h4>
+                          <p className="text-sm text-gray-600">
+                            {project.description}
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {project.technologies.map((tech, techIndex) => (
+                              <Badge key={techIndex} variant="outline">
+                                {tech}
+                              </Badge>
+                            ))}
+                          </div>
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500 hover:underline text-sm mt-1 block"
+                            >
+                              View Project
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="achievements">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Achievements</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="list-disc list-inside space-y-2">
+                      {student.achievements.map((achievement, index) => (
+                        <li key={index}>{achievement}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Certifications</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[200px]">
+                      {student.certifications.map((cert, index) => (
+                        <div key={index} className="mb-3">
+                          <h4 className="font-semibold">{cert.name}</h4>
+                          <p className="text-sm text-gray-600">
+                            Issuer: {cert.issuer}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Date: {new Date(cert.date).toLocaleDateString()}
+                          </p>
+                        </div>
+                      ))}
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
+              <Card className="mt-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Extracurricular Activities
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside space-y-2">
+                    {student.extracurricularActivities.map(
+                      (activity, index) => (
+                        <li key={index}>{activity}</li>
+                      )
+                    )}
+                  </ul>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="contact">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Contact Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <dl className="space-y-4">
+                    <div className="flex items-center">
+                      <dt className="font-semibold w-1/4 flex items-center">
+                        <Mail className="mr-2 h-4 w-4" /> Email:
+                      </dt>
+                      <dd>{student.personalEmail}</dd>
+                    </div>
+                    <div className="flex items-center">
+                      <dt className="font-semibold w-1/4 flex items-center">
+                        <Phone className="mr-2 h-4 w-4" /> Mobile:
+                      </dt>
+                      <dd>{student.mobileNo}</dd>
+                    </div>
+                    <div className="flex items-center">
+                      <dt className="font-semibold w-1/4 flex items-center">
+                        <MapPin className="mr-2 h-4 w-4" /> Address:
+                      </dt>
+                      <dd>{`${student.streetAddress}, ${student.town}, ${student.district}, ${student.state}, ${student.country}`}</dd>
+                    </div>
+                  </dl>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline">Download CV</Button>
+          <Button>Connect</Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
-}
+};
+
+export default StudentProfile;

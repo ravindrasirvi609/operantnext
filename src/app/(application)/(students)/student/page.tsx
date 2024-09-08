@@ -12,85 +12,18 @@ import {
   Eye,
   EyeOff,
   Edit,
-  Download,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { withRoleAuth } from "@/components/withRoleAuth";
-
-// Mock data for the student dashboard
-const mockStudentData = {
-  name: "John Doe",
-  college: "University of Technology",
-  course: "Computer Science",
-  year: "3rd Year",
-  profileCompleteness: 75,
-  skills: ["JavaScript", "React", "Node.js", "Python", "Machine Learning"],
-  projects: [
-    {
-      id: 1,
-      name: "E-commerce Website",
-      description: "Built using MERN stack",
-    },
-    {
-      id: 2,
-      name: "Machine Learning Model",
-      description: "Predictive analysis for stock market",
-    },
-  ],
-  achievements: [
-    {
-      id: 1,
-      title: "Hackathon Winner",
-      description: "First place in college annual hackathon",
-    },
-    {
-      id: 2,
-      title: "Dean's List",
-      description: "Maintained a GPA above 3.5 for 2 consecutive semesters",
-    },
-  ],
-  upcomingEvents: [
-    { id: 1, title: "Tech Talk: AI in Healthcare", date: "2024-09-15" },
-    { id: 2, title: "Career Fair", date: "2024-09-20" },
-  ],
-  notifications: [
-    {
-      id: 1,
-      message: "Your profile has been viewed by 3 companies this week",
-      isNew: true,
-    },
-    {
-      id: 2,
-      message: "New internship opportunity matching your skills",
-      isNew: true,
-    },
-    { id: 3, message: "Reminder: Update your project portfolio", isNew: false },
-  ],
-};
+import StudentProfile from "@/components/studentProfile";
+import { mockStudentData, data } from "../../../../../data";
 
 const StudentDashboard: React.FC = () => {
-  // const { data: session, status } = useSession();
-  // const router = useRouter();
-
   const [isProfilePublic, setIsProfilePublic] = useState(true);
-  // useEffect(() => {
-  //   if (status === "loading") return;
-  //   if (status === "unauthenticated" || session?.user?.role !== "STUDENT") {
-  //     router.push("/login");
-  //   }
-  // }, [status, session, router]);
-  // if (status === "loading") {
-  //   return <div className="flex text-center mx-auto">Loading...</div>;
-  // }
-  // if (status === "unauthenticated" || session?.user?.role !== "STUDENT") {
-  //   router.push("/login");
-  //   return <div className="flex text-center mx-auto">Redirecting...</div>;
-  // }
+  const [activeSection, setActiveSection] = useState<string | undefined>();
 
   const Sidebar = () => (
     <div className="bg-gray-100 w-64 min-h-screen p-4 border-r">
@@ -114,7 +47,12 @@ const StudentDashboard: React.FC = () => {
             { name: "Settings", icon: Settings },
           ].map((item) => (
             <li key={item.name} className="mb-2">
-              <button className="flex items-center w-full p-2 rounded hover:bg-gray-200">
+              <button
+                className={`flex items-center w-full p-2 rounded hover:bg-gray-200 ${
+                  activeSection === item.name ? "bg-gray-200" : ""
+                }`}
+                onClick={() => setActiveSection(item.name)}
+              >
                 <item.icon className="mr-2" size={20} />
                 {item.name}
                 <ChevronRight className="ml-auto" size={16} />
@@ -271,26 +209,56 @@ const StudentDashboard: React.FC = () => {
     </Card>
   );
 
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "Profile":
+        return <StudentProfile student={data} />;
+      case "Education":
+        return <h2>Education Section (To be implemented)</h2>;
+      case "Achievements":
+        return <AchievementsSection />;
+      case "Internships":
+        return <h2>Internships Section (To be implemented)</h2>;
+      case "Messages":
+        return <h2>Messages Section (To be implemented)</h2>;
+      case "Notifications":
+        return <NotificationsSection />;
+      case "Settings":
+        return <h2>Settings Section (To be implemented)</h2>;
+      default:
+        return <ProfileOverview />;
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-6">
-          Welcome back, {mockStudentData.name}!
-        </h1>
-        <div className="grid grid-cols-3 gap-6">
-          <div className="col-span-2">
-            <ProfileOverview />
-            <SkillsSection />
-            <ProjectsSection />
-            <AchievementsSection />
+      {!renderActiveSection() ? (
+        <main className="flex-1 p-8 overflow-y-auto">
+          <h1 className="text-3xl font-bold mb-6">
+            Welcome back, {mockStudentData.name}!
+          </h1>
+          <div className="grid grid-cols-3 gap-6">
+            <div className="col-span-2">
+              <ProfileOverview />
+              <SkillsSection />
+              <ProjectsSection />
+              <AchievementsSection />
+            </div>
+            <div className="col-span-1">
+              <UpcomingEvents />
+              <NotificationsSection />
+            </div>
           </div>
-          <div className="col-span-1">
-            <UpcomingEvents />
-            <NotificationsSection />
-          </div>
-        </div>
-      </main>
+        </main>
+      ) : (
+        <main className="flex-1 p-8 overflow-y-auto">
+          <h1 className="text-3xl font-bold mb-6">
+            Welcome back, {mockStudentData.name}!
+          </h1>
+          {renderActiveSection()}
+        </main>
+      )}
     </div>
   );
 };
