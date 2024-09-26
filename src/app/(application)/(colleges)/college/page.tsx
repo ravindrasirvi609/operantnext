@@ -42,101 +42,98 @@ import {
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 
-// Mock data for the college dashboard
-const mockCollegeData = {
-  name: "University of Innovation",
-  type: "Public Research University",
-  location: "Silicon Valley, CA",
-  studentCount: 25000,
-  facultyCount: 1500,
-  departments: 50,
-  verificationRequests: 120,
-  placementRate: 92,
-  averageSalary: 85000,
+// Mock data for the pharmacy college dashboard
+const mockPharmacyData = {
+  name: "Dr. D. Y. Patil Institute of Pharmaceutical Sciences & Research",
+  type: "Pharmacy Education and Research Institute",
+  location: "Pune, Maharashtra, India",
+  studentCount: 1200,
+  facultyCount: 80,
+  departments: 8,
+  verificationRequests: 30,
+  placementRate: 88,
+  averageSalary: 600000,
   upcomingEvents: [
     {
       id: 1,
-      name: "Annual Job Fair",
-      date: "2024-10-15",
-      time: "10:00 AM - 4:00 PM",
+      name: "Pharmacy Career Expo",
+      date: "2024-11-05",
+      time: "9:00 AM - 3:00 PM",
     },
     {
       id: 2,
-      name: "Alumni Networking Event",
-      date: "2024-10-20",
-      time: "6:00 PM - 8:00 PM",
+      name: "Pharma Research Symposium",
+      date: "2024-11-18",
+      time: "2:00 PM - 5:00 PM",
     },
   ],
   recentVerifications: [
     {
       id: 1,
-      name: "Alice Johnson",
-      department: "Computer Science",
+      name: "Rajesh Sharma",
+      department: "Pharmaceutical Chemistry",
       status: "Pending",
     },
     {
       id: 2,
-      name: "Bob Williams",
-      department: "Electrical Engineering",
+      name: "Priya Patil",
+      department: "Pharmacology",
       status: "Verified",
     },
     {
       id: 3,
-      name: "Carol Davis",
-      department: "Business Administration",
+      name: "Anil Desai",
+      department: "Pharmaceutics",
       status: "Pending",
     },
     {
       id: 4,
-      name: "David Brown",
-      department: "Mechanical Engineering",
+      name: "Sunita Rao",
+      department: "Pharmacognosy",
       status: "Verified",
     },
   ],
   topCompanies: [
-    "Tech Innovators Inc.",
-    "Global Finance Group",
-    "EcoSolutions Ltd.",
-    "HealthTech Systems",
+    "Cipla Ltd.",
+    "Sun Pharmaceutical Industries",
+    "Dr. Reddy's Laboratories",
+    "Lupin Pharmaceuticals",
   ],
   notifications: [
     {
       id: 1,
       message:
-        "New student verification request from Computer Science department",
+        "New student verification request from Pharmaceutical Chemistry department",
       isNew: true,
     },
     {
       id: 2,
-      message: "Upcoming deadline for submitting department reports",
+      message: "Reminder: Research Symposium registration ends soon",
       isNew: true,
     },
     {
       id: 3,
-      message: "Career Services update: New partnerships with 5 companies",
+      message: "Placement update: New partnerships with 3 pharma companies",
       isNew: false,
     },
   ],
 };
 
-const CollegeDashboard: React.FC = () => {
+const PharmacyDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
   const Sidebar = () => (
     <div className="bg-indigo-900 text-white w-64 min-h-screen p-4">
       <div className="flex flex-col items-center mb-8">
         <Avatar className="w-24 h-24 mb-4">
-          <AvatarImage
-            src="/placeholder-college-logo.jpg"
-            alt={mockCollegeData.name}
-          />
-          <AvatarFallback>{mockCollegeData.name[0]}</AvatarFallback>
+          <AvatarImage src="/dpu.jpg" alt={mockPharmacyData.name} />
+          <AvatarFallback>{mockPharmacyData.name[0]}</AvatarFallback>
         </Avatar>
         <h2 className="text-xl font-bold text-center">
-          {mockCollegeData.name}
+          {mockPharmacyData.name}
         </h2>
-        <p className="text-sm opacity-75">{mockCollegeData.type}</p>
-        <p className="text-sm opacity-75">{mockCollegeData.location}</p>
+        <p className="text-sm opacity-75">{mockPharmacyData.type}</p>
+        <p className="text-sm opacity-75">{mockPharmacyData.location}</p>
       </div>
       <nav>
         <ul>
@@ -176,25 +173,25 @@ const CollegeDashboard: React.FC = () => {
       {[
         {
           title: "Total Students",
-          value: mockCollegeData.studentCount,
+          value: mockPharmacyData.studentCount,
           icon: Users,
           color: "text-blue-600",
         },
         {
           title: "Faculty Members",
-          value: mockCollegeData.facultyCount,
+          value: mockPharmacyData.facultyCount,
           icon: BookOpen,
           color: "text-green-600",
         },
         {
           title: "Departments",
-          value: mockCollegeData.departments,
+          value: mockPharmacyData.departments,
           icon: Building,
           color: "text-yellow-600",
         },
         {
           title: "Verification Requests",
-          value: mockCollegeData.verificationRequests,
+          value: mockPharmacyData.verificationRequests,
           icon: FileText,
           color: "text-purple-600",
         },
@@ -233,16 +230,16 @@ const CollegeDashboard: React.FC = () => {
             <div className="flex justify-between mb-1">
               <span className="text-sm font-medium">Placement Rate</span>
               <span className="text-sm font-medium">
-                {mockCollegeData.placementRate}%
+                {mockPharmacyData.placementRate}%
               </span>
             </div>
-            <Progress value={mockCollegeData.placementRate} className="h-2" />
+            <Progress value={mockPharmacyData.placementRate} className="h-2" />
           </div>
           <div>
             <div className="flex justify-between mb-1">
               <span className="text-sm font-medium">Average Salary</span>
               <span className="text-sm font-medium">
-                ${mockCollegeData.averageSalary.toLocaleString()}
+                ₹{mockPharmacyData.averageSalary.toLocaleString()}
               </span>
             </div>
             <Progress value={85} className="h-2" />
@@ -274,7 +271,7 @@ const CollegeDashboard: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockCollegeData.recentVerifications.map((verification) => (
+            {mockPharmacyData.recentVerifications.map((verification) => (
               <TableRow key={verification.id}>
                 <TableCell className="font-medium">
                   {verification.name}
@@ -301,149 +298,20 @@ const CollegeDashboard: React.FC = () => {
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
-        <Button variant="outline" className="w-full">
-          View All Verifications
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-
-  const UpcomingEvents = () => (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle>Upcoming Events</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-4">
-          {mockCollegeData.upcomingEvents.map((event) => (
-            <li key={event.id} className="flex justify-between items-center">
-              <div>
-                <h4 className="font-semibold">{event.name}</h4>
-                <p className="text-sm text-gray-600">
-                  {event.date} at {event.time}
-                </p>
-              </div>
-              <Button variant="outline" size="sm">
-                Details
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardFooter>
-        <Button variant="outline" className="w-full">
-          View All Events
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-
-  const TopRecruiters = () => (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle>Top Recruiting Companies</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap gap-2">
-          {mockCollegeData.topCompanies.map((company, index) => (
-            <Badge
-              key={index}
-              variant="secondary"
-              className="text-sm py-1 px-2"
-            >
-              {company}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button variant="outline" className="w-full">
-          View All Partners
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-
-  const NotificationsSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Notifications</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-4">
-          {mockCollegeData.notifications.map((notification) => (
-            <li key={notification.id} className="flex items-start">
-              <Bell className="mr-2 mt-1 flex-shrink-0" size={16} />
-              <div>
-                <p
-                  className={`text-sm ${
-                    notification.isNew ? "font-semibold" : ""
-                  }`}
-                >
-                  {notification.message}
-                </p>
-                {notification.isNew && <Badge variant="secondary">New</Badge>}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardFooter>
-        <Button variant="outline" className="w-full">
-          View All Notifications
-        </Button>
-      </CardFooter>
     </Card>
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">
-            Welcome, {mockCollegeData.name} Admin
-          </h1>
-          <div className="flex space-x-4">
-            <div className="relative">
-              <Search
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <Input
-                className="pl-10"
-                placeholder="Search students, faculty..."
-              />
-            </div>
-            <Button>
-              <Plus className="mr-2" size={20} />
-              Add New Record
-            </Button>
-          </div>
-        </div>
-        {activeTab === "overview" && (
-          <>
-            <CollegeMetrics />
-            <div className="grid grid-cols-3 gap-6">
-              <div className="col-span-2">
-                <PlacementStats />
-                <RecentVerifications />
-              </div>
-              <div className="col-span-1">
-                <UpcomingEvents />
-                <TopRecruiters />
-                <NotificationsSection />
-              </div>
-            </div>
-          </>
-        )}
-        {activeTab !== "overview" && (
-          <p className="text-xl">Content for {activeTab} tab goes here.</p>
-        )}
+      <main className="flex-grow p-6 bg-gray-100">
+        <h1 className="text-2xl font-semibold mb-4">Dashboard</h1>
+        <CollegeMetrics />
+        <PlacementStats />
+        <RecentVerifications />
       </main>
     </div>
   );
 };
 
-export default CollegeDashboard;
+export default PharmacyDashboard;

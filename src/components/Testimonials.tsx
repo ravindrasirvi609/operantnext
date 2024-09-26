@@ -22,7 +22,9 @@ const Testimonials: React.FC = () => {
               improvement in the readiness of graduates who&apos;ve used
               OperantNext. It&apos;s bridging the skills gap effectively.&quot;
             </p>
-            <p className="font-bold">- John Doe, HR Director, PharmaCorp</p>
+            <p className="font-bold">
+              - Ravindra Sirvi, HR Director, PharmaCorp
+            </p>
           </div>
         </div>
       </div>

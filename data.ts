@@ -1,7 +1,7 @@
 export const data = {
   profileImage: "https://example.com/profile.jpg",
   firstName: "Ravindra",
-  lastName: "Choudhary",
+  lastName: "Sirvi",
   userTagLine: "Aspiring Full Stack Developer",
   personalEmail: "ravindra@example.com",
   mobileNo: "9876543210",
@@ -78,7 +78,7 @@ export const data = {
 };
 
 export const mockStudentData = {
-  name: "John Doe",
+  name: "Ravindra Sirvi",
   college: "University of Technology",
   course: "Computer Science",
   year: "3rd Year",

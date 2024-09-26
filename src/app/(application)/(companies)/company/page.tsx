@@ -37,77 +37,78 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-// Mock data for the company dashboard
+// Updated mock data for a pharmaceutical company dashboard
 const mockCompanyData = {
-  name: "TechInnovate Solutions",
-  industry: "Information Technology",
-  location: "San Francisco, CA",
-  employeeCount: 500,
-  activeJobListings: 15,
-  applicationsReceived: 230,
-  interviewsScheduled: 45,
-  offersExtended: 12,
+  name: "BioPharma Research Institute",
+  industry: "Pharmaceuticals & Biotech",
+  location: "Bangalore, Karnataka",
+  employeeCount: 1200,
+  activeJobListings: 8,
+  applicationsReceived: 300,
+  interviewsScheduled: 25,
+  offersExtended: 10,
   upcomingEvents: [
     {
       id: 1,
-      name: "Tech Talk: AI in Business",
-      date: "2024-09-15",
-      time: "2:00 PM",
+      name: "Webinar: AI in Drug Discovery",
+      date: "2024-10-10",
+      time: "11:00 AM",
     },
     {
       id: 2,
-      name: "Career Fair: University of Technology",
-      date: "2024-09-20",
-      time: "10:00 AM",
+      name: "Pharma Innovation Expo",
+      date: "2024-11-15",
+      time: "9:00 AM",
     },
   ],
   recentApplications: [
     {
       id: 1,
-      name: "Alice Johnson",
-      position: "Software Engineer",
+      name: "Dr. Asha Singh",
+      position: "Clinical Research Scientist",
       status: "Under Review",
     },
     {
       id: 2,
-      name: "Bob Williams",
-      position: "Data Scientist",
+      name: "Dr. Ravi Kumar",
+      position: "Pharmacovigilance Officer",
       status: "Interview Scheduled",
     },
     {
       id: 3,
-      name: "Carol Davis",
-      position: "UX Designer",
+      name: "Dr. Sarah Ali",
+      position: "Regulatory Affairs Manager",
       status: "Offer Extended",
     },
     {
       id: 4,
-      name: "David Brown",
-      position: "Product Manager",
+      name: "Dr. David Lee",
+      position: "Pharmaceutical Chemist",
       status: "Application Received",
     },
   ],
   topSkillsInDemand: [
-    "JavaScript",
-    "Python",
-    "Machine Learning",
-    "React",
-    "AWS",
+    "Pharmaceutical Sciences",
+    "Clinical Research",
+    "Regulatory Affairs",
+    "Drug Safety",
+    "Biostatistics",
   ],
   notifications: [
     {
       id: 1,
-      message: "New applicant for Software Engineer position",
+      message: "New applicant for Clinical Research Scientist position",
       isNew: true,
     },
     {
       id: 2,
-      message: "Interview scheduled with Bob Williams for Data Scientist role",
+      message:
+        "Interview scheduled with Dr. Ravi Kumar for Pharmacovigilance Officer role",
       isNew: true,
     },
     {
       id: 3,
-      message: "Career fair registration deadline approaching",
+      message: "Pharma Innovation Expo registration deadline approaching",
       isNew: false,
     },
   ],
@@ -202,7 +203,7 @@ const CompanyDashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{metric.value}</div>
             <p className="text-xs text-muted-foreground">
-              +20% from last month
+              +10% from last month
             </p>
           </CardContent>
         </Card>
@@ -214,7 +215,9 @@ const CompanyDashboard: React.FC = () => {
     <Card className="mb-6">
       <CardHeader>
         <CardTitle>Recent Applications</CardTitle>
-        <CardDescription>A list of recent job applications</CardDescription>
+        <CardDescription>
+          A list of recent job applications in pharmaceutical research roles
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -303,73 +306,15 @@ const CompanyDashboard: React.FC = () => {
     </Card>
   );
 
-  const NotificationsSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Notifications</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-4">
-          {mockCompanyData.notifications.map((notification) => (
-            <li key={notification.id} className="flex items-start">
-              <Bell className="mr-2 mt-1 flex-shrink-0" size={16} />
-              <div>
-                <p
-                  className={`text-sm ${
-                    notification.isNew ? "font-semibold" : ""
-                  }`}
-                >
-                  {notification.message}
-                </p>
-                {notification.isNew && <Badge variant="secondary">New</Badge>}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
-  );
-
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">
-            Welcome, {mockCompanyData.name}!
-          </h1>
-          <div className="flex space-x-4">
-            <div className="relative">
-              <Search
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <Input className="pl-10" placeholder="Search candidates..." />
-            </div>
-            <Button>
-              <Plus className="mr-2" size={20} />
-              Post New Job
-            </Button>
-          </div>
-        </div>
-        {activeTab === "overview" && (
-          <>
-            <RecruitmentMetrics />
-            <div className="grid grid-cols-3 gap-6">
-              <div className="col-span-2">
-                <RecentApplications />
-                <TopSkillsInDemand />
-              </div>
-              <div className="col-span-1">
-                <UpcomingEvents />
-                <NotificationsSection />
-              </div>
-            </div>
-          </>
-        )}
-        {activeTab !== "overview" && (
-          <p className="text-xl">Content for {activeTab} tab goes here.</p>
-        )}
+      <main className="flex-1 p-6 bg-gray-50">
+        <h1 className="text-2xl font-bold mb-6">Pharmaceutical Dashboard</h1>
+        <RecruitmentMetrics />
+        <RecentApplications />
+        <UpcomingEvents />
+        <TopSkillsInDemand />
       </main>
     </div>
   );
